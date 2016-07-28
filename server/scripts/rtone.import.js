@@ -9,15 +9,14 @@ module.exports = {
 };
 
 function importData() {
-  console.log('import RTONE data');
-
   return Installation
             .findAll({
               where: {
                 source: 'rtone'
               },
               include: [{
-                model: Generation
+                model: Generation,
+                attributes: ['datetime']
               }]
             })
             .catch(handleError)
@@ -31,23 +30,18 @@ function beginMigration(installations) {
   // TODO remove this line
   installations = installations.slice(0, 1);
 
-  console.log('==========================================')
-  console.log(installations[0]);
-  console.log('==========================================')
-  return;
-
   installations.forEach(function(installation, index) {
     setTimeout(function() {
-      importInstallationGeneration(installation._id);
+      importInstallationGeneration(installation);
     }, 1000 * index);
   });
 }
 
-function importInstallationGeneration(id) {
-  var url = buildUrl(id);
-console.log(url); return;
+function importInstallationGeneration(installation) {
+  var url = buildUrl(installation._id);
+
   return request(url)
-          .then(parseInstallationData.bind(id))
+          .then(parseInstallationData(installation))
           .then(storeInstallationData);
 }
 
@@ -90,18 +84,19 @@ function buildUrl(deviceId) {
  * [setInstallationData description]
  * @param {[type]} data [description]
  */
-function parseInstallationData(data) {
-  console.log('------------------------------------')
-  console.log(this, data)
-  console.log('------------------------------------')
-  return {
-    id: this._id,
-    data: data
+function parseInstallationData(installation) {
+  return function(data) {
+    if (data) {
+      installation.newData = data;
+    }
+
+    return installation;
   };
 }
 
 function storeInstallationData(installation) {
-  console.log(installation.id, installation.data);
+  // todo: Check new dates, ADD EM ALL!
+  console.log(installation._id, installation.newData);
 }
 
 function getDate(time) {
