@@ -2,7 +2,7 @@
 
 import crypto from 'crypto';
 import request from 'request-promise';
-import {Installation} from '../sqldb';
+import {Generation,Installation} from '../sqldb';
 
 module.exports = {
   importData: importData
@@ -15,22 +15,37 @@ function importData() {
             .findAll({
               where: {
                 source: 'rtone'
-              }
+              },
+              include: [{
+                model: Generation
+              }]
             })
+            .catch(handleError)
             .then(beginMigration);
 }
 
+function handleError(one) {
+  console.error(one)
+}
 function beginMigration(installations) {
-  installations.each(function(installation, index) {
+  // TODO remove this line
+  installations = installations.slice(0, 1);
+
+  console.log('==========================================')
+  console.log(installations[0]);
+  console.log('==========================================')
+  return;
+
+  installations.forEach(function(installation, index) {
     setTimeout(function() {
-      importInstallationGeneration(installation.id);
+      importInstallationGeneration(installation._id);
     }, 1000 * index);
   });
 }
 
 function importInstallationGeneration(id) {
   var url = buildUrl(id);
-
+console.log(url); return;
   return request(url)
           .then(parseInstallationData.bind(id))
           .then(storeInstallationData);
@@ -53,7 +68,7 @@ function buildUrl(deviceId) {
 
   // set a GMT date and control the time
   // must be in the last 10 mins from the GMT server time
-  let time = getCurrentDate();
+  let time = getDate();
 
   // concatenate
   let string = login + password + time;
@@ -76,6 +91,9 @@ function buildUrl(deviceId) {
  * @param {[type]} data [description]
  */
 function parseInstallationData(data) {
+  console.log('------------------------------------')
+  console.log(this, data)
+  console.log('------------------------------------')
   return {
     id: this._id,
     data: data
@@ -86,8 +104,10 @@ function storeInstallationData(installation) {
   console.log(installation.id, installation.data);
 }
 
-function getCurrentDate() {
-  let time = new Date();
+function getDate(time) {
+  if (typeof time === 'undefined') {
+    time = new Date();
+  }
 
   function pad(number) {
     if (number < 10) {

@@ -20,5 +20,6 @@ db.User = db.sequelize.import('../api/user/user.model');
 
 // Insert associations below
 db.Generation.belongsTo(db.Installation);
+db.Installation.hasMany(db.Generation);
 
 module.exports = db;
