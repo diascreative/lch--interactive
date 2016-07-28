@@ -73,7 +73,13 @@ export function index(req, res) {
         [sequelize.fn('sum', sequelize.col('annualPredictedGeneration')), 'annualPredictedGeneration'],
         [sequelize.fn('sum', sequelize.col('capacity')), 'capacity']
       ],
-      group: ['name']
+      group: [
+        'name',
+        'localAuthority',
+        'owner',
+        'ownershipType',
+        'energyType'
+      ]
     })
     .then(respondWithResult(res))
     .catch(handleError(res));

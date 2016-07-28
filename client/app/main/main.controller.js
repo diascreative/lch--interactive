@@ -8,6 +8,7 @@ class MainController {
     this.$http = $http;
     this.$filter = $filter;
 
+    // set our map variables
     this.map = {
       installations: [],
       defaults: {
@@ -29,24 +30,28 @@ class MainController {
     });
   }
 
+  /**
+   * Create map markers from installations array
+   * @param  {Object} installation
+   * @return {Object} map marker
+   */
   _mapInstallationsToMarkers(installation) {
-
-    // 'localAuthority',
-    // 'owner',
-    // 'ownershipType',
-    // 'energyType',
-
     var marker = {
       draggable: false,
       lat: installation.lat,
       lng: installation.lng,
-      message: this._mapHover(installation)
+      message: this._mapPopupHTML(installation)
     };
 
     return marker;
   }
 
-  _mapHover(installation) {
+  /**
+   * Build HMTL for the map marker pop up
+   * @param  {Object} installation
+   * @return {String} html
+   */
+  _mapPopupHTML(installation) {
     var cleanNumbers = {
       name: installation.name,
       capacity: this.$filter('number')(installation.capacity, 0),

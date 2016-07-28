@@ -26,6 +26,7 @@ export default function(sequelize, DataTypes) {
     annualPredictedGeneration: DataTypes.FLOAT,
     capacity: DataTypes.FLOAT,
     energyType: DataTypes.STRING,
+    source: DataTypes.STRING,
 
     // Installation metadata
     info: DataTypes.STRING,

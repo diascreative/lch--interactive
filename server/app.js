@@ -9,6 +9,8 @@ import sqldb from './sqldb';
 import config from './config/environment';
 import http from 'http';
 
+import importScripts from './scripts';
+
 // Populate databases with sample data
 if (config.seedDB) { require('./config/seed'); }
 
@@ -18,9 +20,12 @@ var server = http.createServer(app);
 require('./config/express').default(app);
 require('./routes').default(app);
 
+
+
 // Start server
 function startServer() {
   app.angularFullstack = server.listen(config.port, config.ip, function() {
+    importScripts();
     console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
   });
 }

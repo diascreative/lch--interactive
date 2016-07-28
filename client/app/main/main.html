@@ -1,12 +1,13 @@
 <div class="container">
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-6">
+      Total list : {{$ctrl.map.installations.length}}
+    </div>
+    <div class="col-md-6">
       <leaflet
-        style="float: right; height: 800px; width: 50%"
+        style="float: right; height: 800px; width: 100%"
         markers="$ctrl.map.installations"
         defaults="$ctrl.map.defaults"></leaflet>
-
-      Total list : {{$ctrl.map.installations.length}}
     </div>
   </div>
 </div>

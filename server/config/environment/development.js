@@ -5,18 +5,11 @@
 module.exports = {
 
   // Sequelize connection opions
-  sequelize: {
-    uri: 'sqlite://',
-    options: {
-      logging: false,
-      storage: 'dev.sqlite',
-      define: {
-        timestamps: false
-      }
-    }
+  sql: {
+    dialect: 'mysql'
   },
-
-  // Seed database on startup
+  database: 'lch--interactive',
+  username: 'root',
+  password: '',
   seedDB: true
-
 };
