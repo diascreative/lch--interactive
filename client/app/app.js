@@ -8,7 +8,8 @@ angular.module('lowcarbonhubApp', [
   'ngResource',
   'ngSanitize',
   'ui.router',
-  'validation.match'
+  'validation.match',
+  'leaflet-directive'
 ])
   .config(function($urlRouterProvider, $locationProvider) {
     $urlRouterProvider

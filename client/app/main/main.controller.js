@@ -6,25 +6,38 @@ class MainController {
 
   constructor($http) {
     this.$http = $http;
-    this.awesomeThings = [];
+
+    this.map = {
+      installations: [],
+      defaults: {
+        attributionControl: false,
+        center: {
+          lat: 51.85,
+          lng: -1.26,
+          zoom: 10
+        },
+        zoomControlPosition: 'bottomright',
+        scrollWheelZoom: false
+      }
+    };
   }
 
   $onInit() {
-    this.$http.get('/api/things').then(response => {
-      this.awesomeThings = response.data;
+    this.$http.get('/api/installations').then(response => {
+      this.map.installations = response.data.map(mapInstallationsToMarkers);
     });
   }
+}
 
-  addThing() {
-    if (this.newThing) {
-      this.$http.post('/api/things', { name: this.newThing });
-      this.newThing = '';
-    }
-  }
+function mapInstallationsToMarkers(installation) {
+  var marker = {
+    draggable: false,
+    lat: installation.lat,
+    lng: installation.lng,
+    message: installation.name + ' :: ' + installation._id
+  };
 
-  deleteThing(thing) {
-    this.$http.delete('/api/things/' + thing._id);
-  }
+  return marker;
 }
 
 angular.module('lowcarbonhubApp')
