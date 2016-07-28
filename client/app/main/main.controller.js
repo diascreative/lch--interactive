@@ -4,8 +4,9 @@
 
 class MainController {
 
-  constructor($http) {
+  constructor($http, $filter) {
     this.$http = $http;
+    this.$filter = $filter;
 
     this.map = {
       installations: [],
@@ -24,20 +25,44 @@ class MainController {
 
   $onInit() {
     this.$http.get('/api/installations').then(response => {
-      this.map.installations = response.data.map(mapInstallationsToMarkers);
+      this.map.installations = response.data.map(this._mapInstallationsToMarkers.bind(this));
     });
   }
-}
 
-function mapInstallationsToMarkers(installation) {
-  var marker = {
-    draggable: false,
-    lat: installation.lat,
-    lng: installation.lng,
-    message: installation.name + ' :: ' + installation._id
-  };
+  _mapInstallationsToMarkers(installation) {
 
-  return marker;
+    // 'localAuthority',
+    // 'owner',
+    // 'ownershipType',
+    // 'energyType',
+
+    var marker = {
+      draggable: false,
+      lat: installation.lat,
+      lng: installation.lng,
+      message: this._mapHover(installation)
+    };
+
+    return marker;
+  }
+
+  _mapHover(installation) {
+    var cleanNumbers = {
+      name: installation.name,
+      capacity: this.$filter('number')(installation.capacity, 0),
+      annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0)
+    };
+
+    var html = [
+      '<div>',
+        '<h2>%(name)s</h2>',
+        'capacity: %(capacity)s',
+        '<br>annual predicted generation: %(annualPredictedGeneration)s',
+      '</div>'
+    ].join('');
+
+    return sprintf(html, cleanNumbers);
+  }
 }
 
 angular.module('lowcarbonhubApp')

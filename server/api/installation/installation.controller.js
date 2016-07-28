@@ -10,7 +10,7 @@
 'use strict';
 
 import _ from 'lodash';
-import {Installation} from '../../sqldb';
+import {Installation, sequelize} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -60,7 +60,21 @@ function handleError(res, statusCode) {
 
 // Gets a list of Installations
 export function index(req, res) {
-  return Installation.findAll()
+  return Installation
+    .findAll({
+      attributes: [
+        'name',
+        'localAuthority',
+        'owner',
+        'ownershipType',
+        'energyType',
+        [sequelize.fn('max', sequelize.col('lat')), 'lat'],
+        [sequelize.fn('min', sequelize.col('lng')), 'lng'],
+        [sequelize.fn('sum', sequelize.col('annualPredictedGeneration')), 'annualPredictedGeneration'],
+        [sequelize.fn('sum', sequelize.col('capacity')), 'capacity']
+      ],
+      group: ['name']
+    })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
