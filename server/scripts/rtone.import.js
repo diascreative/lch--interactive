@@ -10,6 +10,9 @@ module.exports = {
 };
 
 function scheduleJobs() {
+  // import data on server start
+  importData();
+
   // import data at 10am and pm every day
   schedule.scheduleJob('0 10,22 * * *', importData);
 }

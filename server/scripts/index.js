@@ -1,12 +1,11 @@
 'use strict';
 
-import _ from 'lodash';
-import {Generation} from '../sqldb';
-
+import OLH from './olh.import';
 import RTONE from './rtone.import';
 
 module.exports = importAllData;
 
 function importAllData() {
+  OLH.scheduleJobs();
   RTONE.scheduleJobs();
 }
