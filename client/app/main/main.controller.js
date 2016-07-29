@@ -8,6 +8,8 @@ class MainController {
     this.$http = $http;
     this.$filter = $filter;
 
+    this.installations = [];
+
     // set our map variables
     this.map = {
       installations: [],
@@ -26,7 +28,21 @@ class MainController {
 
   $onInit() {
     this.$http.get('/api/installations').then(response => {
-      this.map.installations = response.data.map(this._mapInstallationsToMarkers.bind(this));
+      this._installations = response.data;
+      this.map.installations = this._installations.map(this._mapInstallationsToMarkers.bind(this));
+
+      this.$http.get('/api/generations/latest').then(response => {
+        _.each(response.data, (gen) => {
+          _.each(this._installations, (installation) => {
+            if (installation.name === gen.InstallationName) {
+              installation.generated = gen.generated;
+              installation.datetime = gen.datetime;
+            }
+          });
+        });
+
+        this.map.installations = this._installations.map(this._mapInstallationsToMarkers.bind(this));
+      });
     });
   }
 
@@ -55,14 +71,21 @@ class MainController {
     var cleanNumbers = {
       name: installation.name,
       capacity: this.$filter('number')(installation.capacity, 0),
-      annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0)
+      annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0),
+      generated: this.$filter('number')(installation.generated, 0)
     };
+
+    if (installation.datetime) {
+      cleanNumbers.datetime = moment(installation.datetime).fromNow();
+    }
 
     var html = [
       '<div>',
         '<h2>%(name)s</h2>',
         'capacity: %(capacity)s',
         '<br>annual predicted generation: %(annualPredictedGeneration)s',
+        cleanNumbers.generated ? '<br>Was generating %(generated)s W' : '',
+        cleanNumbers.datetime ? ', %(datetime)s' : '',
       '</div>'
     ].join('');
 

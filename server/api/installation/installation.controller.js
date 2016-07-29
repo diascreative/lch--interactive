@@ -9,7 +9,6 @@
 
 'use strict';
 
-import _ from 'lodash';
 import {Installation, sequelize} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {

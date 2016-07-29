@@ -23,6 +23,7 @@ function importData() {
             .findAll({
               attributes: [
                 '_id',
+                'name',
                 'source',
                 [sequelize.fn('max', sequelize.col('Generations.datetime')), 'lastUpdate']
               ],
@@ -118,6 +119,7 @@ function parseInstallationData(installation) {
 
         generations.push({
           InstallationId: installation._id,
+          InstallationName: installation.name,
           datetime: new Date(record.measureDate),
           generated: parseFloat(record.measure)
         })

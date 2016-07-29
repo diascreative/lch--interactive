@@ -12,6 +12,7 @@ export default function(sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.DATE
     },
+    InstallationName: DataTypes.STRING,
     generated: {
       type: DataTypes.DOUBLE,
       allowNull: false,
