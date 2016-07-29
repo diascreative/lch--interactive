@@ -2,7 +2,7 @@
 
 import crypto from 'crypto';
 import request from 'request-promise';
-import {Generation,Installation} from '../sqldb';
+import {Generation,Installation,sequelize} from '../sqldb';
 
 module.exports = {
   importData: importData
@@ -11,13 +11,21 @@ module.exports = {
 function importData() {
   return Installation
             .findAll({
+              attributes: [
+                '_id',
+                'source',
+                [sequelize.fn('max', sequelize.col('Generations.datetime')), 'lastUpdate']
+              ],
               where: {
                 source: 'rtone'
               },
               include: [{
                 model: Generation,
-                attributes: ['datetime']
-              }]
+                attributes: []
+              }],
+              group: [
+                '_id'
+              ]
             })
             .catch(handleError)
             .then(beginMigration);
@@ -26,10 +34,8 @@ function importData() {
 function handleError(one) {
   console.error(one)
 }
-function beginMigration(installations) {
-  // TODO remove this line
-  installations = installations.slice(0, 1);
 
+function beginMigration(installations) {
   installations.forEach(function(installation, index) {
     setTimeout(function() {
       importInstallationGeneration(installation);
@@ -38,26 +44,29 @@ function beginMigration(installations) {
 }
 
 function importInstallationGeneration(installation) {
-  var url = buildUrl(installation._id);
+  var url = buildUrl(installation);
 
   return request(url)
           .then(parseInstallationData(installation))
           .then(storeInstallationData);
 }
 
+function buildUrl(installation) {
+  let deviceId = installation._id;
+  let lastUpdate = new Date(installation.dataValues.lastUpdate);
 
-function buildUrl(deviceId) {
+
   // Get a list of the device's serial numbers
   // let url = `${rootUrl}listDevices?`;
 
-  // // Get device info
+  // Get device info
   // let url = `${rootUrl}getDeviceInfo?serialNumber=${deviceId}`;
 
   // Get device production between dates
   let url = `${rootUrl}getDeviceProduction?serialNumber=${deviceId}` +
             `&startDate=${startDate}&endDate=${endDate}&step=${step}`;
 
-  // // Get device production and radiation between dates
+  // Get device production and radiation between dates
   // let url = `${rootUrl}getDeviceProductionAndRadiation?serialNumber=${deviceId}&startDate=${startDate}&endDate=${endDate}&step=${step}`;
 
   // set a GMT date and control the time
@@ -86,17 +95,31 @@ function buildUrl(deviceId) {
  */
 function parseInstallationData(installation) {
   return function(data) {
+    var generations = [];
+
     if (data) {
-      installation.newData = data;
+      data = JSON.parse(data);
+
+      data.records.forEach(function(record) {
+        if (record.measure === '0.0' ||
+            parseFloat(record.measure) < 0) {
+          return;
+        }
+
+        generations.push({
+          InstallationId: installation._id,
+          datetime: new Date(record.measureDate),
+          generated: parseFloat(record.measure)
+        })
+      });
     }
 
-    return installation;
+    return generations;
   };
 }
 
-function storeInstallationData(installation) {
-  // todo: Check new dates, ADD EM ALL!
-  console.log(installation._id, installation.newData);
+function storeInstallationData(data) {
+  return Generation.bulkCreate(data);
 }
 
 function getDate(time) {
