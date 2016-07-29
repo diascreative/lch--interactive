@@ -8,5 +8,5 @@ import RTONE from './rtone.import';
 module.exports = importAllData;
 
 function importAllData() {
-  return Promise.all([RTONE.importData()]);
+  RTONE.scheduleJobs();
 }

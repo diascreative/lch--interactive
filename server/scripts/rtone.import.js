@@ -2,13 +2,20 @@
 
 import crypto from 'crypto';
 import request from 'request-promise';
+import schedule from 'node-schedule';
 import {Generation,Installation,sequelize} from '../sqldb';
 
 module.exports = {
-  importData: importData
+  scheduleJobs: scheduleJobs
 };
 
+function scheduleJobs() {
+  // import data at 10am and pm every day
+  schedule.scheduleJob('0 10,22 * * *', importData);
+}
+
 function importData() {
+  console.log('Import from RTONE', new Date());
   return Installation
             .findAll({
               attributes: [
