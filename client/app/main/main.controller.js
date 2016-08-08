@@ -42,8 +42,28 @@ class MainController {
         });
 
         this.map.installations = this._installations.map(this._mapInstallationsToMarkers.bind(this));
+
+        this._importGeoJSON();
       });
     });
+  }
+
+  _importGeoJSON() {
+    // Get the countries geojson data from a JSON
+    this.$http.get('assets/json/topo_E07000178.json').success(this._setGeoJSON.bind(this));
+  }
+
+  _setGeoJSON(data) {
+    this.map.geojson = {
+      data: data,
+      style: {
+        fillColor: 'red',
+        weight: 1,
+        opacity: 0.8,
+        color: 'red',
+        fillOpacity: 0.1
+      }
+    };
   }
 
   /**
