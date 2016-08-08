@@ -8,7 +8,7 @@ class MainController {
     this.$http = $http;
     this.$filter = $filter;
 
-    this.installations = [];
+    this._installations = [];
 
     // set our map variables
     this.map = {
@@ -27,10 +27,12 @@ class MainController {
   }
 
   $onInit() {
+    // API call to get the array of installations
     this.$http.get('/api/installations').then(response => {
       this._installations = response.data;
-      this.map.installations = this._installations.map(this._mapInstallationsToMarkers.bind(this));
+      this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
 
+      // API call to get latest generating details
       this.$http.get('/api/generations/latest').then(response => {
         _.each(response.data, (gen) => {
           _.each(this._installations, (installation) => {
@@ -41,29 +43,21 @@ class MainController {
           });
         });
 
-        this.map.installations = this._installations.map(this._mapInstallationsToMarkers.bind(this));
-
-        this._importGeoJSON();
+        this._updateMapMarkers();
       });
     });
+
+    this._importGeoJSON();
   }
 
-  _importGeoJSON() {
-    // Get the countries geojson data from a JSON
-    this.$http.get('assets/json/topo_E07000178.json').success(this._setGeoJSON.bind(this));
-  }
+  /**
+   * Update map markers from this._installations
+   * @return {Array} Map markers
+   */
+  _updateMapMarkers() {
+    this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
 
-  _setGeoJSON(data) {
-    this.map.geojson = {
-      data: data,
-      style: {
-        fillColor: 'red',
-        weight: 1,
-        opacity: 0.8,
-        color: 'red',
-        fillOpacity: 0.1
-      }
-    };
+    return this.map.installations;
   }
 
   /**
@@ -71,13 +65,14 @@ class MainController {
    * @param  {Object} installation
    * @return {Object} map marker
    */
-  _mapInstallationsToMarkers(installation) {
-    var marker = {
-      draggable: false,
-      lat: installation.lat,
-      lng: installation.lng,
-      message: this._mapPopupHTML(installation)
-    };
+  _installationsToMarkers(installation) {
+    var marker = installation;
+
+    marker.draggable = false;
+    marker.lat = installation.lat;
+    marker.lng = installation.lng;
+    marker.message = this._mapPopupHTML(installation);
+    marker.visible = true;
 
     return marker;
   }
@@ -110,6 +105,56 @@ class MainController {
     ].join('');
 
     return sprintf(html, cleanNumbers);
+  }
+
+  /**
+   * Return only visible installations
+   * @return {Array} Visible installations
+   */
+  _getVisibleInstallations() {
+    return _.filter(this.map.installations, installation => installation.visible);
+  }
+
+  /**
+   * Get the total generation from the visible installations
+   * @return {String} $filtered sum
+   */
+  getFilteredTotalGeneration() {
+    let visibleInstallaitons = this._getVisibleInstallations();
+    let total = _.sumBy(visibleInstallaitons, 'generated');
+
+    return this.$filter('number')(total / 1000, 0);
+  }
+
+  /**
+   * Get the number of visible installations
+   * @return {String} $filtered total
+   */
+  getFilteredInstallations() {
+    let total = this._getVisibleInstallations().length;
+
+    return this.$filter('number')(total, 0);
+  }
+
+  /**
+   * Import GeoJSON with the Oxfordshire boarders to highlight it on the map
+   * @return {Promise}
+   */
+  _importGeoJSON() {
+    // Get the countries geojson data from a JSON
+    return this.$http.get('assets/json/topo_E07000178.json')
+            .success(data => {
+              this.map.geojson = {
+                data: data,
+                style: {
+                  fillColor: 'red',
+                  weight: 1,
+                  opacity: 0.8,
+                  color: 'red',
+                  fillOpacity: 0.1
+                }
+              };
+            });
   }
 }
 

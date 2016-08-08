@@ -1,7 +1,14 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
-      Total list : {{$ctrl.map.installations.length}}
+      Together,
+      community energy
+      in Oxfordshire is currently generating:
+      {{$ctrl.getFilteredTotalGeneration()}}
+
+      from
+
+      {{$ctrl.getFilteredInstallations()}}
     </div>
     <div class="col-md-6">
       <leaflet
