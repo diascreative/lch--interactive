@@ -4,7 +4,7 @@
       <h1>Filter</h1>
 
       <h2>Geography</h2>
-      <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities">
+      <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
         <input type="checkbox" name="local-authorities"
           ng-model="localAuthority.checked"
           ng-change="$ctrl.filterInstallations()">
@@ -12,7 +12,7 @@
       </label>
 
       <h2>Ownership</h2>
-      <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership">
+      <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
         <input type="checkbox" name="ownership"
           ng-model="ownership.checked"
           ng-change="$ctrl.filterInstallations()">
@@ -20,7 +20,7 @@
       </label>
 
       <h2>Ownership Type</h2>
-      <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType">
+      <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
         <input type="checkbox" name="ownershipType"
           ng-model="type.checked"
           ng-change="$ctrl.filterInstallations()">
@@ -28,7 +28,7 @@
       </label>
 
       <h2>Energy Type</h2>
-      <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes">
+      <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
         <input type="checkbox" name="energyTypes"
           ng-model="type.checked"
           ng-change="$ctrl.filterInstallations()">

@@ -11,10 +11,10 @@ class MainController {
     this._installations = [];
 
     this.filtersAvailable = {
-      localAuthorities: {},
-      ownership: {},
-      ownershipType: {},
-      energyTypes: {}
+      localAuthorities: [],
+      ownership: [],
+      ownershipType: [],
+      energyTypes: []
     };
 
     // set our map variables
