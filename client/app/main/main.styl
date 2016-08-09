@@ -1,22 +1,12 @@
-.thing-form
-  margin 20px 0
+label
+  display block
 
-#banner
-  border-bottom none
-  margin-top -20px
 
-#banner h1
-  font-size 60px
-  letter-spacing -1px
-  line-height 1
+// Map
+.leaflet-marker-icon
+  opacity .8
+  transition opacity cubic-bezier(0.250, 0.460, 0.450, 0.940) .3s, visibility cubic-bezier(0.250, 0.460, 0.450, 0.940) .3s
 
-.hero-unit
-  background #4393B9
-  color #F5F5F5
-  padding 30px 15px
-  position relative
-  text-align center
-  text-shadow 0 1px 0 rgba(0, 0, 0, 0.1)
-
-.navbar-text
-  margin-left 15px
+  &--hidden
+    opacity 0
+    visibility hidden

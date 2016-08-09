@@ -1,6 +1,20 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
+      <h1>Filter</h1>
+
+      <h2>Geography</h2>
+      <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities">
+        <input type="checkbox" name="local-authorities"
+          ng-model="localAuthority.checked"
+          ng-change="$ctrl.filterInstallations()">
+        {{localAuthority.name}}
+      </label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
       Together,
       community energy
       in Oxfordshire is currently generating:

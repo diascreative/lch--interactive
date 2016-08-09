@@ -10,6 +10,13 @@ class MainController {
 
     this._installations = [];
 
+    this.filtersAvailable = {
+      localAuthorities: {},
+      ownership: {},
+      ownershipType: {},
+      energyTypes: {}
+    };
+
     // set our map variables
     this.map = {
       installations: [],
@@ -56,6 +63,7 @@ class MainController {
    */
   _updateMapMarkers() {
     this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
+    this.filtersAvailable = this._installationsToFilters(this._installations);
 
     return this.map.installations;
   }
@@ -74,7 +82,85 @@ class MainController {
     marker.message = this._mapPopupHTML(installation);
     marker.visible = true;
 
+    marker.icon = {
+      iconUrl: '/assets/images/marker.svg',
+      iconSize: [48, 48]
+    };
+
     return marker;
+  }
+
+
+  /**
+   * Build the filters list from our API data
+   * @param  {Array} of Installation objects
+   * @return {Array} of filters available
+   */
+  _installationsToFilters(installations) {
+    var filters = this.filtersAvailable;
+
+    // clear out old filters
+    _.forEach(filters, function(item, key) {
+      filters[key] = [];
+    });
+
+    // add all the details
+    installations.forEach(installation => {
+      filters.localAuthorities.push({
+        name: installation.localAuthority,
+        checked: false
+      });
+
+      filters.ownership.push({
+        name: installation.owner,
+        checked: false
+      });
+
+      filters.ownershipType.push({
+        name: installation.ownershipType,
+        checked: false
+      });
+
+      filters.energyTypes.push({
+        name: installation.energyType,
+        checked: false
+      });
+
+    });
+
+    // make them unique
+    filters.localAuthorities = _.uniqBy(filters.localAuthorities, 'name');
+    filters.ownership = _.uniqBy(filters.ownership, 'name');
+    filters.ownershipType = _.uniqBy(filters.ownershipType, 'name');
+    filters.energyTypes = _.uniqBy(filters.energyTypes, 'name');
+
+    // return the filters
+    return filters;
+  }
+
+  filterInstallations() {
+    // keep tabs if we're not specifically filtering by anything
+    let filterByLocalAuthority = _.filter(this.filtersAvailable.localAuthorities, la => la.checked);
+
+    return this.map.installations.map(installationMarker => {
+      let inLocalAuthority = !filterByLocalAuthority.length ||
+                              this._installationInLocalAuthority(installationMarker);
+
+      let visible = inLocalAuthority;
+
+      installationMarker.visible = visible;
+      installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
+    });
+  }
+
+  _installationInLocalAuthority(installation) {
+    let filteredLocalAuthorities = this.filtersAvailable.localAuthorities.map(la => {
+        if (la.checked) {
+          return la.name;
+        }
+      });
+
+    return (filteredLocalAuthorities.indexOf(installation.localAuthority) > -1);
   }
 
   /**
