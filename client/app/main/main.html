@@ -36,13 +36,15 @@
       </label>
 
       Together,
-      community energy
-      in Oxfordshire is currently generating:
-      {{$ctrl.getFilteredTotalGeneration()}}
+      {{$ctrl.copyOwnershipType()}}
+      in
+      {{$ctrl.copyArea()}}
+      is currently generating:
+      {{$ctrl.getFilteredTotalGeneration()}}W
 
       from
 
-      {{$ctrl.getFilteredInstallations()}}
+      {{$ctrl.getFilteredInstallations()}} installations
     </div>
     <div class="col-md-6">
       <leaflet

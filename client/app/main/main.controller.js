@@ -255,7 +255,7 @@ class MainController {
     let visibleInstallaitons = this._getVisibleInstallations();
     let total = _.sumBy(visibleInstallaitons, 'generated');
 
-    return this.$filter('number')(total / 1000, 0);
+    return this.$filter('number')(total, 0);
   }
 
   /**
@@ -266,6 +266,37 @@ class MainController {
     let total = this._getVisibleInstallations().length;
 
     return this.$filter('number')(total, 0);
+  }
+
+  copyArea() {
+    let types = this._filteredLocalAuthorities();
+    let str = this._addValuesAsString(types, 'Oxfordshire');
+
+    return str;
+  }
+
+  copyOwnershipType() {
+    let types = this._filteredOwnershipTypes();
+    let str = this._addValuesAsString(types, '');
+
+    return str + ' energy';
+  }
+
+  _addValuesAsString(values, fallback) {
+    if (!values.length) {
+      return fallback;
+    }
+
+    if (values.length === 1) {
+      return values[0];
+    }
+
+    let lastItem = _.last(values);
+    let string = _.initial(values)
+                  .join(', ');
+
+    return string + ' and ' + lastItem;
+
   }
 
   /**
