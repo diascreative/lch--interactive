@@ -140,27 +140,34 @@ class MainController {
 
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
-    let filterByLocalAuthority = _.filter(this.filtersAvailable.localAuthorities, la => la.checked);
+    let filterByLocalAuthority = this._filteredLocalAuthorities();
+    let filterByOwnership = this._filteredOwnerships();
 
     return this.map.installations.map(installationMarker => {
-      let inLocalAuthority = !filterByLocalAuthority.length ||
-                              this._installationInLocalAuthority(installationMarker);
+      let inLa = !filterByLocalAuthority.length ||
+                  (filterByLocalAuthority.indexOf(installationMarker.localAuthority) > -1);
+      let belongsTo = !filterByOwnership.length ||
+                       (filterByOwnership.indexOf(installationMarker.owner) > -1);
 
-      let visible = inLocalAuthority;
+      let visible = inLa && belongsTo;
 
       installationMarker.visible = visible;
       installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
     });
   }
 
-  _installationInLocalAuthority(installation) {
-    let filteredLocalAuthorities = this.filtersAvailable.localAuthorities.map(la => {
-        if (la.checked) {
-          return la.name;
-        }
-      });
+  _filteredLocalAuthorities() {
+    return _.chain(this.filtersAvailable.localAuthorities)
+            .filter(la => la.checked)
+            .map(la => la.name)
+            .value();
+  }
 
-    return (filteredLocalAuthorities.indexOf(installation.localAuthority) > -1);
+  _filteredOwnerships() {
+    return _.chain(this.filtersAvailable.ownership)
+            .filter(owner => owner.checked)
+            .map(owner => owner.name)
+            .value();
   }
 
   /**

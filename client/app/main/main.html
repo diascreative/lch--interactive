@@ -10,11 +10,15 @@
           ng-change="$ctrl.filterInstallations()">
         {{localAuthority.name}}
       </label>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-6">
+      <h2>Ownership</h2>
+      <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership">
+        <input type="checkbox" name="ownership"
+          ng-model="ownership.checked"
+          ng-change="$ctrl.filterInstallations()">
+        {{ownership.name}}
+      </label>
+
       Together,
       community energy
       in Oxfordshire is currently generating:
