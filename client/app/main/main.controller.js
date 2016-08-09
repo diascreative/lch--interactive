@@ -138,6 +138,9 @@ class MainController {
     return filters;
   }
 
+  /**
+   * Filter the visibility of our markers
+   */
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
     let filterByLocalAuthority = this._filteredLocalAuthorities();
@@ -146,22 +149,26 @@ class MainController {
     let filterByEnergyType = this._filteredEnergyTypes();
 
     return this.map.installations.map(installationMarker => {
-      let inLa = !filterByLocalAuthority.length ||
+      let inLas = !filterByLocalAuthority.length ||
                   (filterByLocalAuthority.indexOf(installationMarker.localAuthority) > -1);
       let belongsTo = !filterByOwnership.length ||
                        (filterByOwnership.indexOf(installationMarker.owner) > -1);
       let ownershipType = !filterByOwnershipType.length ||
-                       (filterByOwnershipType.indexOf(installationMarker.ownershipType) > -1);
+                       (filterByOwnershipType.indexOf(installationMarker.owner) > -1);
       let energyType = !filterByEnergyType.length ||
                        (filterByEnergyType.indexOf(installationMarker.energyType) > -1);
 
-      let visible = inLa && belongsTo && ownershipType && energyType;
+      let visible = inLas && belongsTo && ownershipType && energyType;
 
       installationMarker.visible = visible;
       installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
     });
   }
 
+  /**
+   * Get all the names of the Local Authorities we're filtering by
+   * @return {Array} names of the LAs
+   */
   _filteredLocalAuthorities() {
     return _.chain(this.filtersAvailable.localAuthorities)
             .filter(la => la.checked)
@@ -169,6 +176,10 @@ class MainController {
             .value();
   }
 
+  /**
+   * Get all the names of the owners we're filtering by
+   * @return {Array} names of the owners
+   */
   _filteredOwnerships() {
     return _.chain(this.filtersAvailable.ownership)
             .filter(owner => owner.checked)
@@ -176,6 +187,10 @@ class MainController {
             .value();
   }
 
+  /**
+   * Get all the names of the ownership types we're filtering by
+   * @return {Array} names of the ownerships
+   */
   _filteredOwnershipTypes() {
     return _.chain(this.filtersAvailable.ownershipType)
             .filter(type => type.checked)
@@ -183,6 +198,10 @@ class MainController {
             .value();
   }
 
+  /**
+   * Get all the names of the energy types we're filtering by
+   * @return {Array} names of the energy types
+   */
   _filteredEnergyTypes() {
     return _.chain(this.filtersAvailable.energyTypes)
             .filter(type => type.checked)
