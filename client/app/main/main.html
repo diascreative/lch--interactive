@@ -19,6 +19,22 @@
         {{ownership.name}}
       </label>
 
+      <h2>Ownership Type</h2>
+      <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType">
+        <input type="checkbox" name="ownershipType"
+          ng-model="type.checked"
+          ng-change="$ctrl.filterInstallations()">
+        {{type.name}}
+      </label>
+
+      <h2>Energy Type</h2>
+      <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes">
+        <input type="checkbox" name="energyTypes"
+          ng-model="type.checked"
+          ng-change="$ctrl.filterInstallations()">
+        {{type.name}}
+      </label>
+
       Together,
       community energy
       in Oxfordshire is currently generating:

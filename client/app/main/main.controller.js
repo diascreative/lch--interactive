@@ -142,14 +142,20 @@ class MainController {
     // keep tabs if we're not specifically filtering by anything
     let filterByLocalAuthority = this._filteredLocalAuthorities();
     let filterByOwnership = this._filteredOwnerships();
+    let filterByOwnershipType = this._filteredOwnerships();
+    let filterByEnergyType = this._filteredEnergyTypes();
 
     return this.map.installations.map(installationMarker => {
       let inLa = !filterByLocalAuthority.length ||
                   (filterByLocalAuthority.indexOf(installationMarker.localAuthority) > -1);
       let belongsTo = !filterByOwnership.length ||
                        (filterByOwnership.indexOf(installationMarker.owner) > -1);
+      let ownershipType = !filterByOwnershipType.length ||
+                       (filterByOwnershipType.indexOf(installationMarker.ownershipType) > -1);
+      let energyType = !filterByEnergyType.length ||
+                       (filterByEnergyType.indexOf(installationMarker.energyType) > -1);
 
-      let visible = inLa && belongsTo;
+      let visible = inLa && belongsTo && ownershipType && energyType;
 
       installationMarker.visible = visible;
       installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
@@ -167,6 +173,20 @@ class MainController {
     return _.chain(this.filtersAvailable.ownership)
             .filter(owner => owner.checked)
             .map(owner => owner.name)
+            .value();
+  }
+
+  _filteredOwnershipTypes() {
+    return _.chain(this.filtersAvailable.ownershipType)
+            .filter(type => type.checked)
+            .map(type => type.name)
+            .value();
+  }
+
+  _filteredEnergyTypes() {
+    return _.chain(this.filtersAvailable.energyTypes)
+            .filter(type => type.checked)
+            .map(type => type.name)
             .value();
   }
 
