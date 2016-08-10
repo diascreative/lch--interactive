@@ -338,7 +338,7 @@ class MainController {
                   weight: 1,
                   opacity: 0.8,
                   color: 'red',
-                  fillOpacity: 0.1
+                  fillOpacity: 0.05
                 }
               };
             });
