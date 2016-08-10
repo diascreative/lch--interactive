@@ -86,7 +86,7 @@ class MainController {
     marker.icon = {
       type: 'div',
       html: '',
-      iconSize: [48, 48],
+      iconSize: [30, 45],
       popupAnchor: [0, -24]
     };
 
