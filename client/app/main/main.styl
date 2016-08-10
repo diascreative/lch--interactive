@@ -1,11 +1,81 @@
+@font-face
+  font-family FrankfurterSB
+  font-weight normal
+  src url(/assets/fonts/FrankfurterSB-Bold.eot)
+  src url(/assets/fonts/FrankfurterSB-Bold.eot?#iefix) format('embedded-opentype'), url(/assets/fonts/FrankfurterSB-Bold.woff2) format('woff2'), url(/assets/fonts/FrankfurterSB-Bold.woff2) format('woff2'), url(/assets/fonts/FrankfurterSB-Bold.woff) format('woff'), url(/assets/fonts/FrankfurterSB-Bold.ttf) format('truetype')
+
+@font-face
+  font-family LetteraTextStd
+  font-weight normal
+  src url(/assets/fonts/LetteraTextStd-Bold.eot)
+  src url(/assets/fonts/LetteraTextStd-Bold.eot?#iefix) format('embedded-opentype'), url(/assets/fonts/LetteraTextStd-Bold.woff2) format('woff2'), url(/assets/fonts/LetteraTextStd-Bold.woff2) format('woff2'), url(/assets/fonts/LetteraTextStd-Bold.woff) format('woff'), url(/assets/fonts/LetteraTextStd-Bold.ttf) format('truetype')
+
+/*
+ * Layout
+ */
+body,
+html
+  margin 0
+  padding 0
+
+body
+  background #fff
+  color #9B9B9B
+  font 14px/18px 'LetteraTextStd', serif
+  text-rendering optimizeLegibility
+
+*
+  box-sizing border-box
+
+h1
+h2
+h3
+h4
+h5
+  font normal normal 18px/22px 'FrankfurterSB', sans-serif
+  letter-spacing .3px
+
+/*
+ * Filters
+ */
+.logo
+  left 30px
+  position absolute
+  top 30px
+
+.filters
+  background rgba(#fff, .95)
+  box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+  left 0
+  height 100vh
+  max-height 100vh
+  max-width 475px
+  padding 30px 32px 20px 140px
+  position absolute
+  top 0
+  width 100%
+  z-index 100
+
 label
   display block
 
+/*
+ * Map
+ */
+
 $animation-timing = .3s
 
+.map-section
+  height 100vh
+  padding 20px
+  position relative
+  width 100%
 
-// Map
- .leaflet-marker-icon
+.map
+  height 100%
+  width 100%
+
+.leaflet-marker-icon
   background transparent
   border 0
   opacity .8
@@ -19,6 +89,7 @@ $animation-timing = .3s
     transition transform cubic-bezier(.68, -.55, .265, 1.55) $animation-timing
     transform-origin 50% 100%
     width 100%
+    will-change transform
 
   &--hidden
     opacity 0
