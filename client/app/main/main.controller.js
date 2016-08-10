@@ -9,6 +9,7 @@ class MainController {
     this.$filter = $filter;
     this.$location = $location;
 
+    this.isFiltersExpanded = false;
     this._installations = [];
 
     this.filtersAvailable = {
@@ -321,6 +322,10 @@ class MainController {
 
     return string + ' and ' + lastItem;
 
+  }
+
+  toggleFilters() {
+    this.isFiltersExpanded = !this.isFiltersExpanded;
   }
 
   /**

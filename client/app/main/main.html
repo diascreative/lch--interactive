@@ -1,37 +1,48 @@
-<div class="filters">
-  <h1 class="logo"><img src="/assets/images/logo.svg" height="103px" width="103px" alt="low carbon hub"></h1>
+<div class="filters" ng-class="{'filters--expanded': $ctrl.isFiltersExpanded}">
+  <h1 class="logo"><img src="/assets/images/logo.svg" height="90px" width="90px" alt="low carbon hub"></h1>
 
-  <h2>Geography</h2>
-  <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
-    <input type="checkbox" name="local-authorities"
-      ng-model="localAuthority.checked"
-      ng-change="$ctrl.filterInstallations()">
-    {{localAuthority.name}}
-  </label>
+  <h1 class="main-title">PEOPLE'S POWER STATION</h1>
+  <h2 class="strapline">An energy system you can feel good about, for Oxfordshire and the UK.</h2>
 
-  <h2>Ownership</h2>
-  <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
-    <input type="checkbox" name="ownership"
-      ng-model="ownership.checked"
-      ng-change="$ctrl.filterInstallations()">
-    {{ownership.name}}
-  </label>
+  <p class="intro-text">
+    Search the People's Power Station to explore locally owned renewable energy in Oxfordshire.
+  </p>
 
-  <h2>Ownership Type</h2>
-  <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
-    <input type="checkbox" name="ownershipType"
-      ng-model="type.checked"
-      ng-change="$ctrl.filterInstallations()">
-    {{type.name}}
-  </label>
+  <button class="filters__toggle" ng-click="$ctrl.toggleFilters()">Show me by:</button>
 
-  <h2>Energy Type</h2>
-  <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
-    <input type="checkbox" name="energyTypes"
-      ng-model="type.checked"
-      ng-change="$ctrl.filterInstallations()">
-    {{type.name}}
-  </label>
+  <div class="filters__options">
+    <h4>Geography</h4>
+    <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
+      <input type="checkbox" name="local-authorities"
+        ng-model="localAuthority.checked"
+        ng-change="$ctrl.filterInstallations()">
+      {{localAuthority.name}}
+    </label>
+
+    <h4>Ownership</h4>
+    <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
+      <input type="checkbox" name="ownership"
+        ng-model="ownership.checked"
+        ng-change="$ctrl.filterInstallations()">
+      {{ownership.name}}
+    </label>
+
+    <h4>Ownership Type</h4>
+    <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
+      <input type="checkbox" name="ownershipType"
+        ng-model="type.checked"
+        ng-change="$ctrl.filterInstallations()">
+      {{type.name}}
+    </label>
+
+    <h4>Energy Type</h4>
+    <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
+      <input type="checkbox" name="energyTypes"
+        ng-model="type.checked"
+        ng-change="$ctrl.filterInstallations()">
+      {{type.name}}
+    </label>
+  </div>
 </div>
 
 <div class="stats">
@@ -40,7 +51,8 @@
   in
   {{$ctrl.copyArea()}}
   is currently generating:
-  {{$ctrl.getFilteredTotalGeneration()}}W
+
+  <div class="large-text">{{$ctrl.getFilteredTotalGeneration()}}W</div>
 
   from
 
