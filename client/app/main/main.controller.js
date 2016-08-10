@@ -4,9 +4,10 @@
 
 class MainController {
 
-  constructor($http, $filter) {
+  constructor($http, $filter, $location) {
     this.$http = $http;
     this.$filter = $filter;
+    this.$location = $location;
 
     this._installations = [];
 
@@ -101,6 +102,18 @@ class MainController {
   _installationsToFilters(installations) {
     var filters = this.filtersAvailable;
 
+    var hash = this.$location.hash();
+    let savedFilters = [
+      [],[],[],[]
+     ];
+
+    if (hash.indexOf('::') > -1) {
+      let allFilters = hash.split('::');
+      if (allFilters.length === 4) {
+        savedFilters = allFilters.map(type => type.split('+'));
+      }
+    }
+
     // clear out old filters
     _.forEach(filters, function(item, key) {
       filters[key] = [];
@@ -110,22 +123,22 @@ class MainController {
     installations.forEach(installation => {
       filters.localAuthorities.push({
         name: installation.localAuthority,
-        checked: false
+        checked: savedFilters[0].indexOf(installation.localAuthority) > -1
       });
 
       filters.ownership.push({
         name: installation.owner,
-        checked: false
+        checked: savedFilters[1].indexOf(installation.owner) > -1
       });
 
       filters.ownershipType.push({
         name: installation.ownershipType,
-        checked: false
+        checked: savedFilters[2].indexOf(installation.ownershipType) > -1
       });
 
       filters.energyTypes.push({
         name: installation.energyType,
-        checked: false
+        checked: savedFilters[3].indexOf(installation.energyType) > -1
       });
 
     });
@@ -149,6 +162,13 @@ class MainController {
     let filterByOwnership = this._filteredOwnerships();
     let filterByOwnershipType = this._filteredOwnershipTypes();
     let filterByEnergyType = this._filteredEnergyTypes();
+
+    let newHash = filterByLocalAuthority.join('+') + '::' +
+                  filterByOwnership.join('+') + '::' +
+                  filterByOwnershipType.join('+') + '::' +
+                  filterByEnergyType.join('+');
+
+    this.$location.hash(newHash);
 
     return this.map.installations.map(installationMarker => {
       let inLas = !filterByLocalAuthority.length ||

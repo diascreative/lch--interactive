@@ -15,5 +15,7 @@ angular.module('lowcarbonhubApp', [
     $urlRouterProvider
       .otherwise('/');
 
-    $locationProvider.html5Mode(true);
+    $locationProvider
+      .hashPrefix(false)
+      .html5Mode(true);
   });
