@@ -295,7 +295,7 @@ class MainController {
 
   copyArea() {
     let types = this._filteredLocalAuthorities();
-    let str = this._addValuesAsString(types, 'Oxfordshire');
+    let str = this._addValuesAsString(types, 'Oxfordshire', 1);
 
     return str;
   }
@@ -307,13 +307,17 @@ class MainController {
     return str + ' energy';
   }
 
-  _addValuesAsString(values, fallback) {
+  _addValuesAsString(values, fallback, limit = 2) {
     if (!values.length) {
       return fallback;
     }
 
     if (values.length === 1) {
       return values[0];
+    }
+
+    if (values.length > limit) {
+      return `your ${values.length} chosen districts`;
     }
 
     let lastItem = _.last(values);
