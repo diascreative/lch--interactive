@@ -28,6 +28,8 @@ class MainController {
           lng: -1.26,
           zoom: 10
         },
+        minZoom: 9,
+        // tileLayer: 'https://a.tiles.mapbox.com/v4/pirenaq.4122b387/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGlyZW5hcSIsImEiOiJjaWVtbzl2eXgwMDFuc3Rra3RuaWlnNzMxIn0.HxN1ugyk0JzH46gFnb6mXA'
         zoomControlPosition: 'bottomright',
         scrollWheelZoom: false
       }
