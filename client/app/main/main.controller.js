@@ -83,8 +83,10 @@ class MainController {
     marker.visible = true;
 
     marker.icon = {
-      iconUrl: '/assets/images/marker.svg',
-      iconSize: [48, 48]
+      type: 'div',
+      html: '',
+      iconSize: [48, 48],
+      popupAnchor: [0, -24]
     };
 
     return marker;
