@@ -13,7 +13,7 @@
 /* Typography */
 $font-primary = 'LetteraTextStd', serif
 $font-secondary = 'FrankfurterSB', sans-serif
-
+$font-color-primary = #9B9B9B
 /* Colors */
 $color-primary = #24CE7B
 $color-secondary = #35BFAE
@@ -28,7 +28,7 @@ html
 
 body
   background #fff
-  color #9B9B9B
+  color $font-color-primary
   font 14px/18px $font-primary
   text-rendering geometricPrecision
 
@@ -40,10 +40,16 @@ h2
 h3
 h4
 h5
+  color $font-color-primary
   font normal normal 18px/22px $font-secondary
   letter-spacing .3px
   margin 0
   padding 0
+
+h4
+  border-bottom solid 1px $font-color-primary
+  margin 16px 0 10px
+  padding 4px 0
 
 .main-title
   color $color-primary
@@ -87,7 +93,7 @@ div.large-text
   left 0
   max-height 100vh
   max-width 575px
-  padding 30px 32px 20px 140px
+  padding 30px 48px 20px 140px
   position absolute
   top 0
   width 100%
@@ -103,12 +109,12 @@ div.large-text
   &__toggle
     background 0
     border 0
-    border-bottom 1px dashed #9B9B9B
-    color #9B9B9B
+    border-bottom 1px dashed $font-color-primary
+    color $font-color-primary
     cursor pointer
     display block
     font 22px/22px $font-secondary
-    margin 0 0 20px
+    margin 0 0 8px
     padding 8px 0
     text-align left
     width 100%
@@ -122,10 +128,9 @@ div.large-text
       transform translateY(0)
       visibility visible
 
-
-
-label
-  display block
+  label
+    display block
+    margin-bottom 4px
 
 /*
  * Stats
