@@ -147,7 +147,7 @@ class MainController {
     // keep tabs if we're not specifically filtering by anything
     let filterByLocalAuthority = this._filteredLocalAuthorities();
     let filterByOwnership = this._filteredOwnerships();
-    let filterByOwnershipType = this._filteredOwnerships();
+    let filterByOwnershipType = this._filteredOwnershipTypes();
     let filterByEnergyType = this._filteredEnergyTypes();
 
     return this.map.installations.map(installationMarker => {
@@ -156,7 +156,7 @@ class MainController {
       let belongsTo = !filterByOwnership.length ||
                        (filterByOwnership.indexOf(installationMarker.owner) > -1);
       let ownershipType = !filterByOwnershipType.length ||
-                       (filterByOwnershipType.indexOf(installationMarker.owner) > -1);
+                       (filterByOwnershipType.indexOf(installationMarker.ownershipType) > -1);
       let energyType = !filterByEnergyType.length ||
                        (filterByEnergyType.indexOf(installationMarker.energyType) > -1);
 
