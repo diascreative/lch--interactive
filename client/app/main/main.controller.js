@@ -86,6 +86,7 @@ class MainController {
     marker.lng = installation.lng;
     marker.message = this._mapPopupHTML(installation);
     marker.visible = true;
+    marker.generated = 0;
 
     marker.icon = {
       type: 'div',
@@ -283,8 +284,8 @@ class MainController {
    * @return {String} $filtered sum
    */
   getFilteredTotalGeneration() {
-    let visibleInstallaitons = this._getVisibleInstallations();
-    let total = _.sumBy(visibleInstallaitons, 'generated');
+    let visibleInstallations = this._getVisibleInstallations();
+    let total = _.sumBy(visibleInstallations, 'generated');
 
     return this.$filter('number')(total, 0);
   }
