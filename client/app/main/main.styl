@@ -105,9 +105,10 @@ div.large-text
   background rgba(#fff, .95)
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
   left 0
+  height 100vh
   max-height 100vh
   max-width $filter-width
-  overflow hidden
+  overflow auto
   padding 30px 48px 20px
   position absolute
   top 0
@@ -115,34 +116,7 @@ div.large-text
   z-index 100
 
   &__options
-    position absolute
-    opacity 0
-    transform translateX(-100%)
-    transition opacity .3s, transform .3s
-    visibility hidden
-
-  &__toggle
-    background 0
-    border 0
-    border-bottom 1px dashed $font-color-primary
-    color $font-color-primary
-    cursor pointer
-    display block
-    font 22px/22px $font-secondary
-    margin 0 0 8px
-    padding 8px 0
-    text-align left
-    width 100%
-
-  &--expanded
-    height 100vh
-    overflow auto
-
-    .filters__options
-      position relative
-      opacity 1
-      transform translateX(0)
-      visibility visible
+    position relative
 
   .search-by-project
     background url(/assets/images/magnifying-glass.svg) 0 50% no-repeat

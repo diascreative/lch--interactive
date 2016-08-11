@@ -9,7 +9,6 @@ class MainController {
     this.$filter = $filter;
     this.$location = $location;
 
-    this.isFiltersExpanded = true;
     this._installations = [];
     this.search = '';
 
@@ -79,7 +78,7 @@ class MainController {
    * @return {Object} map marker
    */
   _installationsToMarkers(installation) {
-    var marker = installation;
+    const marker = installation;
 
     marker.draggable = false;
     marker.lat = installation.lat;
@@ -105,15 +104,15 @@ class MainController {
    * @return {Array} of filters available
    */
   _installationsToFilters(installations) {
-    var filters = this.filtersAvailable;
+    const filters = this.filtersAvailable;
+    const hash = this.$location.hash();
 
-    var hash = this.$location.hash();
     let savedFilters = [
       [],[],[],[]
      ];
 
     if (hash.indexOf('::') > -1) {
-      let allFilters = hash.split('::');
+      const allFilters = hash.split('::');
       if (allFilters.length === 4) {
         savedFilters = allFilters.map(type => type.split('+'));
       }
@@ -163,34 +162,34 @@ class MainController {
    */
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
-    let filterByLocalAuthority = this._filteredLocalAuthorities();
-    let filterByOwnership = this._filteredOwnerships();
-    let filterByOwnershipType = this._filteredOwnershipTypes();
-    let filterByEnergyType = this._filteredEnergyTypes();
+    const filterByLocalAuthority = this._filteredLocalAuthorities();
+    const filterByOwnership = this._filteredOwnerships();
+    const filterByOwnershipType = this._filteredOwnershipTypes();
+    const filterByEnergyType = this._filteredEnergyTypes();
 
-    let newHash = filterByLocalAuthority.join('+') + '::' +
+    const newHash = filterByLocalAuthority.join('+') + '::' +
                   filterByOwnership.join('+') + '::' +
                   filterByOwnershipType.join('+') + '::' +
                   filterByEnergyType.join('+');
 
-    let freeText = this.search !== '';
-    let searchRegExp = new RegExp(this.search, 'i');
+    const freeText = this.search !== '';
+    const searchRegExp = new RegExp(this.search, 'i');
 
     this.$location.hash(newHash);
 
     return this.map.installations.map(installationMarker => {
-      let inLas = !filterByLocalAuthority.length ||
+      const inLas = !filterByLocalAuthority.length ||
                   (filterByLocalAuthority.indexOf(installationMarker.localAuthority) > -1);
-      let belongsTo = !filterByOwnership.length ||
+      const belongsTo = !filterByOwnership.length ||
                        (filterByOwnership.indexOf(installationMarker.owner) > -1);
-      let ownershipType = !filterByOwnershipType.length ||
+      const ownershipType = !filterByOwnershipType.length ||
                        (filterByOwnershipType.indexOf(installationMarker.ownershipType) > -1);
-      let energyType = !filterByEnergyType.length ||
+      const energyType = !filterByEnergyType.length ||
                        (filterByEnergyType.indexOf(installationMarker.energyType) > -1);
 
-      let nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
+      const nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
 
-      let visible = inLas && belongsTo && ownershipType && energyType && nameMatches;
+      const visible = inLas && belongsTo && ownershipType && energyType && nameMatches;
 
       installationMarker.visible = visible;
       installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
@@ -247,7 +246,7 @@ class MainController {
    * @return {String} html
    */
   _mapPopupHTML(installation) {
-    var cleanNumbers = {
+    const cleanNumbers = {
       name: installation.name,
       capacity: this.$filter('number')(installation.capacity, 0),
       annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0),
@@ -258,7 +257,7 @@ class MainController {
       cleanNumbers.datetime = moment(installation.datetime).fromNow();
     }
 
-    var html = [
+    const html = [
       '<div>',
         '<h2>%(name)s</h2>',
         'capacity: <strong>%(capacity)s</strong> kW',
@@ -284,8 +283,8 @@ class MainController {
    * @return {String} $filtered sum
    */
   getFilteredTotalGeneration() {
-    let visibleInstallations = this._getVisibleInstallations();
-    let total = _.sumBy(visibleInstallations, 'generated');
+    const visibleInstallations = this._getVisibleInstallations();
+    const total = _.sumBy(visibleInstallations, 'generated');
 
     return this.$filter('number')(total, 0);
   }
@@ -295,26 +294,44 @@ class MainController {
    * @return {String} $filtered total
    */
   getFilteredInstallations() {
-    let total = this._getVisibleInstallations().length;
+    const total = this._getVisibleInstallations().length;
 
     return this.$filter('number')(total, 0);
   }
 
+  /**
+   * Build stats copy about the chosen areas
+   * @return {String}
+   * eg. "Oxfordshire"
+   *     "Cherwell District Council"
+   *     "your 2 chosen districts"
+   */
   copyArea() {
-    let types = this._filteredLocalAuthorities();
-    let str = this._addValuesAsString(types, 'Oxfordshire', 1);
+    const types = this._filteredLocalAuthorities();
+
+    if (types.length > 1) {
+      return `your ${types.length} chosen districts`;
+    }
+
+    const str = this._addValuesAsString(types, 'Oxfordshire', 1);
 
     return str;
   }
 
+  /**
+   * Build stats copy about the chosen ownership types
+   * @return {String}
+   * eg. "Commnity"
+   *     "community and council"
+   */
   copyOwnershipType() {
-    let types = this._filteredOwnershipTypes();
-    let str = this._addValuesAsString(types, '');
+    const types = this._filteredOwnershipTypes();
+    const str = this._addValuesAsString(types, '');
 
     return str + ' energy';
   }
 
-  _addValuesAsString(values, fallback, limit = 2) {
+  _addValuesAsString(values, fallback) {
     if (!values.length) {
       return fallback;
     }
@@ -323,20 +340,12 @@ class MainController {
       return values[0];
     }
 
-    if (values.length > limit) {
-      return `your ${values.length} chosen districts`;
-    }
-
-    let lastItem = _.last(values);
-    let string = _.initial(values)
+    const lastItem = _.last(values);
+    const string = _.initial(values)
                   .join(', ');
 
     return string + ' and ' + lastItem;
 
-  }
-
-  toggleFilters() {
-    this.isFiltersExpanded = !this.isFiltersExpanded;
   }
 
   /**
