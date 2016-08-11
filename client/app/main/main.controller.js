@@ -9,7 +9,7 @@ class MainController {
     this.$filter = $filter;
     this.$location = $location;
 
-    this.isFiltersExpanded = false;
+    this.isFiltersExpanded = true;
     this._installations = [];
 
     this.filtersAvailable = {
@@ -26,8 +26,8 @@ class MainController {
         attributionControl: false,
         center: {
           lat: 51.85,
-          lng: -1.26,
-          zoom: 10
+          lng: -1.34,
+          zoom: (window.innerWidth > 1100 ? 10 : 9)
         },
         minZoom: 9,
         // tileLayer: 'https://a.tiles.mapbox.com/v4/pirenaq.4122b387/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGlyZW5hcSIsImEiOiJjaWVtbzl2eXgwMDFuc3Rra3RuaWlnNzMxIn0.HxN1ugyk0JzH46gFnb6mXA'

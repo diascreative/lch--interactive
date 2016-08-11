@@ -1,14 +1,29 @@
 <div class="filters" ng-class="{'filters--expanded': $ctrl.isFiltersExpanded}">
-  <h1 class="logo"><img src="/assets/images/logo.svg" height="90px" width="90px" alt="low carbon hub"></h1>
+  <div class="filters__copy">
+    <h1 class="logo"><img src="/assets/images/logo.svg" height="90px" width="90px" alt="low carbon hub"></h1>
 
-  <h1 class="main-title">PEOPLE'S POWER STATION</h1>
-  <h2 class="strapline">An energy system you can feel good about, for Oxfordshire and the UK.</h2>
+    <h1 class="main-title">PEOPLE'S POWER STATION</h1>
+    <h2 class="strapline">An energy system you can feel good about, for Oxfordshire and the UK.</h2>
 
-  <p class="intro-text">
-    Search the People's Power Station to explore locally owned renewable energy in Oxfordshire.
-  </p>
+  <!--   <p class="intro-text">
+      Search the People's Power Station to explore locally owned renewable energy in Oxfordshire.
+    </p> -->
 
-  <button class="filters__toggle" ng-click="$ctrl.toggleFilters()">Show me by:</button>
+    <div class="stats">
+      Together,
+      {{$ctrl.copyOwnershipType()}}
+      in
+      {{$ctrl.copyArea()}}
+      is currently generating:
+
+      <div class="large-text">{{$ctrl.getFilteredTotalGeneration()}}W</div>
+
+      from
+
+      {{$ctrl.getFilteredInstallations()}} installations
+    </div>
+  </div>
+  <!-- <button class="filters__toggle" ng-click="$ctrl.toggleFilters()">Show me by:</button> -->
 
   <div class="filters__options">
     <h4>Geography</h4>
@@ -27,6 +42,7 @@
       {{ownership.name}}
     </label>
 
+    <div ng-hide="$ctrl.filtersAvailable.ownershipType.length">
     <h4>Ownership Type</h4>
     <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
       <input type="checkbox" name="ownershipType"
@@ -34,6 +50,7 @@
         ng-change="$ctrl.filterInstallations()">
       {{type.name}}
     </label>
+    </div>
 
     <h4>Energy Type</h4>
     <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
@@ -43,20 +60,6 @@
       {{type.name}}
     </label>
   </div>
-</div>
-
-<div class="stats">
-  Together,
-  {{$ctrl.copyOwnershipType()}}
-  in
-  {{$ctrl.copyArea()}}
-  is currently generating:
-
-  <div class="large-text">{{$ctrl.getFilteredTotalGeneration()}}W</div>
-
-  from
-
-  {{$ctrl.getFilteredInstallations()}} installations
 </div>
 
 <div class="map-section">

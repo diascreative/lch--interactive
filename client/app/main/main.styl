@@ -14,9 +14,21 @@
 $font-primary = 'LetteraTextStd', serif
 $font-secondary = 'FrankfurterSB', sans-serif
 $font-color-primary = #9B9B9B
+
 /* Colors */
 $color-primary = #24CE7B
 $color-secondary = #35BFAE
+
+/* Layout */
+$filter-width = 435px
+
+/* mediaqueries */
+$widthMobile = 675px
+$widthTablet = 1024px
+
+$mobile = '(max-width: ' + ($widthMobile - 1) + ')'
+$tablet = '(min-width: ' + ($widthMobile) + ') and (max-width: ' + ($widthTablet - 1) + ')'
+$desktop = '(min-width: ' + $widthTablet + ')'
 
 /*
  * Layout
@@ -30,6 +42,8 @@ body
   background #fff
   color $font-color-primary
   font 14px/18px $font-primary
+  overflow auto
+  overflow-y scroll
   text-rendering geometricPrecision
 
 *
@@ -82,18 +96,19 @@ div.large-text
 /*
  * Filters
  */
+
 .logo
-  left 32px
-  position absolute
-  top 24px
+  float left
+  margin 0 10px 0 0
 
 .filters
   background rgba(#fff, .95)
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
   left 0
   max-height 100vh
-  max-width 575px
-  padding 30px 48px 20px 140px
+  max-width $filter-width
+  overflow hidden
+  padding 30px 48px 20px
   position absolute
   top 0
   width 100%
@@ -102,7 +117,7 @@ div.large-text
   &__options
     position absolute
     opacity 0
-    transform translateY(100%)
+    transform translateX(-100%)
     transition opacity .3s, transform .3s
     visibility hidden
 
@@ -121,11 +136,12 @@ div.large-text
 
   &--expanded
     height 100vh
+    overflow auto
 
     .filters__options
       position relative
       opacity 1
-      transform translateY(0)
+      transform translateX(0)
       visibility visible
 
   label
@@ -140,13 +156,9 @@ div.large-text
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
   color #fff
   font 22px/26px $font-secondary
-  max-width 430px
-  padding 16px 18px
-  position absolute
-  right 30px
-  top 30px
-  width 100%
-  z-index 300
+  margin 20px -48px
+  padding 16px 48px 16px
+  position relative
 
 /*
  * Map
@@ -156,9 +168,10 @@ $animation-timing = .3s
 
 .map-section
   height 100vh
-  padding 20px
+  margin-left $filter-width
+  padding 20px 20px 20px 0
   position relative
-  width 100%
+  width calc(100% - $filter-width)
 
 .map
   height 100%
@@ -188,3 +201,31 @@ $animation-timing = .3s
 
     &:before
       transform scale(0, 0)
+
+
+/*
+ * Tablet
+ */
+@media $tablet
+  .filters
+    max-width none
+    max-height 50vh
+    overflow hidden
+
+    &__copy
+      float left
+
+    &__options
+      float right
+      max-height 100%
+      overflow auto
+
+    &__copy
+    &__options
+      width 40%
+
+  .map-section
+    height 50vh
+    margin 50vh 0 0
+    padding 20px
+    width 100%
