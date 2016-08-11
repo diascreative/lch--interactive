@@ -180,24 +180,29 @@ $animation-timing = .3s
   border 0
   opacity .8
 
-  &:before
+  svg
     background url(/assets/images/marker.svg) 0 0 no-repeat
     background-size 30px 45px
     content ''
     display block
     height 100%
+    left 0
     position absolute
+    top 0
     transition transform cubic-bezier(.68, -.55, .265, 1.55) $animation-timing
     transform-origin 50% 100%
     width 100%
     will-change transform
+
+    path
+      fill #00748D
 
   &--hidden
     opacity 0
     visibility hidden
     transition opacity 1ms $animation-timing, visibility 1ms $animation-timing
 
-    &:before
+    svg
       transform scale(0, 0)
 
 
