@@ -11,6 +11,7 @@ class MainController {
 
     this.isFiltersExpanded = true;
     this._installations = [];
+    this.search = '';
 
     this.filtersAvailable = {
       localAuthorities: [],
@@ -171,6 +172,9 @@ class MainController {
                   filterByOwnershipType.join('+') + '::' +
                   filterByEnergyType.join('+');
 
+    let freeText = this.search !== '';
+    let searchRegExp = new RegExp(this.search, 'i');
+
     this.$location.hash(newHash);
 
     return this.map.installations.map(installationMarker => {
@@ -183,7 +187,9 @@ class MainController {
       let energyType = !filterByEnergyType.length ||
                        (filterByEnergyType.indexOf(installationMarker.energyType) > -1);
 
-      let visible = inLas && belongsTo && ownershipType && energyType;
+      let nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
+
+      let visible = inLas && belongsTo && ownershipType && energyType && nameMatches;
 
       installationMarker.visible = visible;
       installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';

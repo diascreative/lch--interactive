@@ -26,6 +26,10 @@
   <!-- <button class="filters__toggle" ng-click="$ctrl.toggleFilters()">Show me by:</button> -->
 
   <div class="filters__options">
+    <input type="text" placeholder="Search by project" class="search-by-project"
+      ng-model="$ctrl.search"
+      ng-keyup="$ctrl.filterInstallations()">
+
     <h4>Geography</h4>
     <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
       <input type="checkbox" name="local-authorities"
