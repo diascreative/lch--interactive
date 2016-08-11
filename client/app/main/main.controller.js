@@ -91,6 +91,7 @@ class MainController {
       type: 'div',
       html: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="45" viewBox="0 0 40 60"><path fill="#00748D" fill-rule="evenodd" d="M20 60s20-28.954305 20-40C40 8.954305 31.045695 0 20 0S0 8.954305 0 20s20 40 20 40zm0-30c5.5228475 0 10-4.4771525 10-10s-4.4771525-10-10-10-10 4.4771525-10 10 4.4771525 10 10 10z"/></svg>',
       iconSize: [30, 45],
+      iconAnchor: [15, 45],
       popupAnchor: [0, -24]
     };
 
