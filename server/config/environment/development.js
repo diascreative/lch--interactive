@@ -8,8 +8,13 @@ module.exports = {
   sql: {
     dialect: 'mysql'
   },
-  database: 'lch--interactive',
-  username: 'root',
-  password: '',
-  seedDB: true
+  sequelize: {
+    database: 'lch--interactive',
+    username: 'root',
+    password: '',
+    options: {
+      logging: true
+    }
+  },
+  seedDB: false
 };

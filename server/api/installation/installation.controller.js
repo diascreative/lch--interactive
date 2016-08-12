@@ -69,7 +69,9 @@ export function index(req, res) {
         'energyType',
         [sequelize.fn('max', sequelize.col('lat')), 'lat'],
         [sequelize.fn('min', sequelize.col('lng')), 'lng'],
-        [sequelize.fn('sum', sequelize.col('annualPredictedGeneration')), 'annualPredictedGeneration'],
+        [sequelize.fn('sum',
+                        sequelize.col('annualPredictedGeneration')
+                      ), 'annualPredictedGeneration'],
         [sequelize.fn('sum', sequelize.col('capacity')), 'capacity']
       ],
       group: [

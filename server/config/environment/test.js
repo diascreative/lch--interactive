@@ -1,20 +1,21 @@
 'use strict';
 
-// Test specific configuration
-// ===========================
+// Development specific configuration
+// ==================================
 module.exports = {
-  // MongoDB connection options
-  mongo: {
-    uri: 'mongodb://localhost/lowcarbonhub-test'
+
+  // Sequelize connection opions
+  sql: {
+    dialect: 'mysql',
+    logging: false
   },
   sequelize: {
-    uri: 'sqlite://',
+    database: 'lch--interactive--test',
+    username: 'root',
+    password: '',
     options: {
-      logging: false,
-      storage: 'test.sqlite',
-      define: {
-        timestamps: false
-      }
+      logging: false
     }
-  }
+  },
+  seedDB: false
 };

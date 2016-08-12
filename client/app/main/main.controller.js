@@ -44,7 +44,7 @@ class MainController {
       this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
 
       // API call to get latest generating details
-      this.$http.get('/api/generations/latest').then(response => {
+      this.$http.get('/api/generations').then(response => {
         _.each(response.data, (gen) => {
           _.each(this._installations, (installation) => {
             if (installation.name === gen.InstallationName) {
@@ -355,7 +355,7 @@ class MainController {
    */
   _importGeoJSON() {
     // Get the countries geojson data from a JSON
-    return this.$http.get('assets/json/topo_E07000178.json')
+    return this.$http.get('/assets/json/topo_E07000178.json')
             .success(data => {
               this.map.geojson = {
                 data: data,
