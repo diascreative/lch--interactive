@@ -229,12 +229,23 @@ module.exports = function (grunt) {
         exclude: [
           '/json3/',
           '/es5-shim/',
+          'angular-cookies',
+          'angular-sanitize',
           /font-awesome\.css/,
           /bootstrap\.css/
         ]
       },
       client: {
         src: '<%= yeoman.client %>/index.html',
+        ignorePath: '<%= yeoman.client %>/',
+      },
+      clientAdmin: {
+        options: {
+          exclude: [
+          'angular-leaflet-directive'
+          ]
+        },
+        src: '<%= yeoman.client %>/admin/index.html',
         ignorePath: '<%= yeoman.client %>/',
       },
       test: {
@@ -257,7 +268,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.client %>/index.html'],
+      html: ['<%= yeoman.client %>/index.html', '<%= yeoman.client %>/admin/index.html'],
       options: {
         dest: '<%= yeoman.dist %>/<%= yeoman.client %>'
       }
@@ -315,7 +326,7 @@ module.exports = function (grunt) {
     ngconstant: {
       options: {
         name: 'lowcarbonhubApp.constants',
-        dest: '<%= yeoman.client %>/app/app.constant.js',
+        dest: '<%= yeoman.client %>/admin/app.constant.js',
         deps: [],
         wrap: true,
         configPath: '<%= yeoman.server %>/config/environment/shared'
@@ -379,6 +390,7 @@ module.exports = function (grunt) {
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'assets/json/**/*',
+            'admin/index.html',
             'index.html'
           ]
         }, {
@@ -547,7 +559,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.client %>',
-          src: ['{app,components}/**/!(*.spec).js'],
+          src: ['{admin,app,components}/**/!(*.spec).js'],
           dest: '.tmp'
         }]
       },
@@ -609,6 +621,13 @@ module.exports = function (grunt) {
                  '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
                  '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
                ]
+            ],
+          '<%= yeoman.client %>/admin/index.html': [
+               [
+                 '<%= yeoman.client %>/admin/{app,components}/**/!(*.spec|*.mock).js',
+                 '<%= yeoman.client %>/admin/app.constant.js',
+                 '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+               ]
             ]
         }
       },
@@ -648,6 +667,9 @@ module.exports = function (grunt) {
         files: {
           '<%= yeoman.client %>/index.html': [
             '<%= yeoman.client %>/{app,components}/**/*.css'
+          ],
+          '<%= yeoman.client %>/admin/index.html': [
+            '<%= yeoman.client %>/admin/{app,components}/**/*.css'
           ]
         }
       }
@@ -683,6 +705,7 @@ module.exports = function (grunt) {
         'concurrent:server',
         'injector',
         'wiredep:client',
+        'wiredep:clientAdmin',
         'postcss',
         'concurrent:debug'
       ]);
@@ -695,6 +718,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'injector',
       'wiredep:client',
+      'wiredep:clientAdmin',
       'postcss',
       'express:dev',
       'wait',
@@ -752,6 +776,7 @@ module.exports = function (grunt) {
           'concurrent:test',
           'injector',
           'wiredep:client',
+          'wiredep:clientAdmin',
           'postcss',
           'express:dev',
           'protractor'
@@ -806,6 +831,7 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'injector',
     'wiredep:client',
+    'wiredep:clientAdmin',
     'useminPrepare',
     'postcss',
     'ngtemplates',

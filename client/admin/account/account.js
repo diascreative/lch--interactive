@@ -4,13 +4,13 @@ angular.module('lowcarbonhubApp')
   .config(function($stateProvider) {
     $stateProvider
       .state('login', {
-        url: '/login',
+        url: '/admin/login',
         templateUrl: 'app/account/login/login.html',
         controller: 'LoginController',
         controllerAs: 'vm'
       })
       .state('logout', {
-        url: '/logout?referrer',
+        url: '/admin/logout?referrer',
         referrer: 'main',
         template: '',
         controller: function($state, Auth) {
@@ -20,12 +20,6 @@ angular.module('lowcarbonhubApp')
           Auth.logout();
           $state.go(referrer);
         }
-      })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: 'app/account/signup/signup.html',
-        controller: 'SignupController',
-        controllerAs: 'vm'
       })
       .state('settings', {
         url: '/settings',
