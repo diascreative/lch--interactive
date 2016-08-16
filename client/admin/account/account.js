@@ -5,7 +5,7 @@ angular.module('lowcarbonhubApp')
     $stateProvider
       .state('login', {
         url: '/admin/login',
-        templateUrl: 'app/account/login/login.html',
+        templateUrl: 'admin/account/login/login.html',
         controller: 'LoginController',
         controllerAs: 'vm'
       })
@@ -23,7 +23,7 @@ angular.module('lowcarbonhubApp')
       })
       .state('settings', {
         url: '/settings',
-        templateUrl: 'app/account/settings/settings.html',
+        templateUrl: 'admin/account/settings/settings.html',
         controller: 'SettingsController',
         controllerAs: 'vm',
         authenticate: true

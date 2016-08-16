@@ -58,7 +58,7 @@ module.exports = function (grunt) {
     },
     watch: {
       babel: {
-        files: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock).js'],
         tasks: ['newer:babel:client']
       },
       ngconstant: {
@@ -361,6 +361,11 @@ module.exports = function (grunt) {
         src: ['{app,components}/**/*.html'],
         dest: '.tmp/templates.js'
       },
+      clientAdmin: {
+        cwd: '<%= yeoman.client %>',
+        src: ['admin/{app,components}/**/*.html'],
+        dest: '.tmp/admin-templates.js'
+      },
       tmp: {
         cwd: '.tmp',
         src: ['{app,components}/**/*.html'],
@@ -624,8 +629,7 @@ module.exports = function (grunt) {
             ],
           '<%= yeoman.client %>/admin/index.html': [
                [
-                 '<%= yeoman.client %>/admin/{app,components}/**/!(*.spec|*.mock).js',
-                 '<%= yeoman.client %>/admin/app.constant.js',
+                 '<%= yeoman.client %>/admin/**/!(*.spec|*.mock).js',
                  '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
                ]
             ]
@@ -669,7 +673,7 @@ module.exports = function (grunt) {
             '<%= yeoman.client %>/{app,components}/**/*.css'
           ],
           '<%= yeoman.client %>/admin/index.html': [
-            '<%= yeoman.client %>/admin/{app,components}/**/*.css'
+            '<%= yeoman.client %>/admin/**/*.css'
           ]
         }
       }

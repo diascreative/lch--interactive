@@ -11,7 +11,7 @@ angular.module('lowcarbonhubApp', [
 ])
   .config(function($urlRouterProvider, $locationProvider) {
     $urlRouterProvider
-      .otherwise('/admin/login');
+      .otherwise('/admin/');
 
     $locationProvider
       .hashPrefix(false)
