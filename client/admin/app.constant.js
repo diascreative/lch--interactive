@@ -1,7 +1,7 @@
 (function(angular, undefined) {
 'use strict';
 
-angular.module('lowcarbonhubApp.constants', [])
+angular.module('lowcarbonhubAppAdmin.constants', [])
 
 .constant('appConfig', {userRoles:['guest','user','admin']})
 

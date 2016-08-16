@@ -26,7 +26,7 @@ function authInterceptor($rootScope, $q, $cookies, $injector, Util) {
   };
 }
 
-angular.module('lowcarbonhubApp.auth')
+angular.module('lowcarbonhubAppAdmin.auth')
   .factory('authInterceptor', authInterceptor);
 
 })();

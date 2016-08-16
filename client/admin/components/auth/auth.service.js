@@ -183,7 +183,7 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
   return Auth;
 }
 
-angular.module('lowcarbonhubApp.auth')
+angular.module('lowcarbonhubAppAdmin.auth')
   .factory('Auth', AuthService);
 
 })();

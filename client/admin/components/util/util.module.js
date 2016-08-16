@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('lowcarbonhubApp.util', []);
+angular.module('lowcarbonhubAppAdmin.util', []);

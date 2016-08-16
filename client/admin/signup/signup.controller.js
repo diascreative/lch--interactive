@@ -41,5 +41,5 @@ class SignupController {
   }
 }
 
-angular.module('lowcarbonhubApp')
+angular.module('lowcarbonhubAppAdmin')
   .controller('SignupController', SignupController);

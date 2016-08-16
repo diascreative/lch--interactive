@@ -17,5 +17,5 @@ class NavbarController {
   }
 }
 
-angular.module('lowcarbonhubApp')
+angular.module('lowcarbonhubAppAdmin')
   .controller('NavbarController', NavbarController);

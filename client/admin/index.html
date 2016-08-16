@@ -23,17 +23,15 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="lowcarbonhubApp">
+  <body ng-app="lowcarbonhubAppAdmin">
     <!--[if lt IE 7]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <navbar></navbar>
-    <div ui-view="">
-      <a href="/admin/login">login</a>
+    <div ui-view="AdminMainContent">
+      <a ui-sref="admin.login">Login</a>
     </div>
-    ADMIN
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -62,19 +60,18 @@
       <!-- injector:js -->
       <script src="admin/components/auth/auth.module.js"></script>
       <script src="admin/components/util/util.module.js"></script>
+      <script src="admin/components/navbar/navbar.controller.js"></script>
       <script src="admin/components/auth/auth.service.js"></script>
-      <script src="admin/account/signup/signup.controller.js"></script>
-      <script src="admin/admin-app.js"></script>
-      <script src="admin/app.constant.js"></script>
-      <script src="admin/account/account.js"></script>
-      <script src="admin/account/login/login.controller.js"></script>
       <script src="admin/components/auth/interceptor.service.js"></script>
       <script src="admin/components/auth/router.decorator.js"></script>
       <script src="admin/components/auth/user.service.js"></script>
-      <script src="admin/components/navbar/navbar.controller.js"></script>
+      <script src="admin/app.constant.js"></script>
       <script src="admin/components/navbar/navbar.directive.js"></script>
-      <script src="admin/account/settings/settings.controller.js"></script>
+      <script src="admin/admin-app.js"></script>
       <script src="admin/components/util/util.service.js"></script>
+      <script src="admin/login/login.controller.js"></script>
+      <script src="admin/settings/settings.controller.js"></script>
+      <script src="admin/signup/signup.controller.js"></script>
       <!-- endinjector -->
     <!-- endbuild -->
   </body>

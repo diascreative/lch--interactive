@@ -325,7 +325,7 @@ module.exports = function (grunt) {
     // `server/config/environment/shared.js`
     ngconstant: {
       options: {
-        name: 'lowcarbonhubApp.constants',
+        name: 'lowcarbonhubAppAdmin.constants',
         dest: '<%= yeoman.client %>/admin/app.constant.js',
         deps: [],
         wrap: true,

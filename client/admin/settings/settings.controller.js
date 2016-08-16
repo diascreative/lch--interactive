@@ -25,5 +25,5 @@ class SettingsController {
   }
 }
 
-angular.module('lowcarbonhubApp')
+angular.module('lowcarbonhubAppAdmin')
   .controller('SettingsController', SettingsController);

@@ -59,7 +59,7 @@ function UtilService($window) {
   return Util;
 }
 
-angular.module('lowcarbonhubApp.util')
+angular.module('lowcarbonhubAppAdmin.util')
   .factory('Util', UtilService);
 
 })();
