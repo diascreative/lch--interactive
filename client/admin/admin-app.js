@@ -1,38 +1,44 @@
 'use strict';
 
-angular.module('lowcarbonhubApp')
-  .config(function($stateProvider) {
+angular.module('lowcarbonhubAppAdmin', [
+  'lowcarbonhubAppAdmin.auth',
+  'lowcarbonhubAppAdmin.constants',
+  'ngCookies',
+  'ngResource',
+  'ngSanitize',
+  'ui.router',
+  'validation.match'
+])
+.config(function($urlRouterProvider, $locationProvider, $stateProvider) {
+    $urlRouterProvider
+      .otherwise('/admin');
+
+    $locationProvider
+      .hashPrefix(false)
+      .html5Mode(true);
+
     $stateProvider
+      .state('admin', {
+        url: '/admin',
+        authenticate: true
+      })
       .state('login', {
-        url: '/login',
-        templateUrl: 'app/account/login/login.html',
+        url: '/admin/login',
+        templateUrl: 'admin/login/login.html',
         controller: 'LoginController',
         controllerAs: 'vm'
       })
       .state('logout', {
-        url: '/logout?referrer',
-        referrer: 'main',
+        url: '/admin/logout?referrer',
+        referrer: 'admin',
         template: '',
         controller: function($state, Auth) {
           var referrer = $state.params.referrer ||
                           $state.current.referrer ||
-                          'main';
+                          'admin';
           Auth.logout();
           $state.go(referrer);
         }
-      })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: 'app/account/signup/signup.html',
-        controller: 'SignupController',
-        controllerAs: 'vm'
-      })
-      .state('settings', {
-        url: '/settings',
-        templateUrl: 'app/account/settings/settings.html',
-        controller: 'SettingsController',
-        controllerAs: 'vm',
-        authenticate: true
       });
   })
   .run(function($rootScope) {

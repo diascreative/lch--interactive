@@ -180,7 +180,7 @@ $animation-timing = .3s
   border 0
   opacity .8
 
-  svg
+  &:before
     background url(/assets/images/marker.svg) 0 0 no-repeat
     background-size 30px 45px
     content ''
@@ -202,7 +202,7 @@ $animation-timing = .3s
     visibility hidden
     transition opacity 1ms $animation-timing, visibility 1ms $animation-timing
 
-    svg
+    &:before
       transform scale(0, 0)
 
 

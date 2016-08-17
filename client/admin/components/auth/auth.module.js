@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('lowcarbonhubApp.auth', [
-  'lowcarbonhubApp.constants',
-  'lowcarbonhubApp.util',
+angular.module('lowcarbonhubAppAdmin.auth', [
+  'lowcarbonhubAppAdmin.constants',
+  'lowcarbonhubAppAdmin.util',
   'ngCookies',
   'ui.router'
 ])

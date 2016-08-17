@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('lowcarbonhubApp')
+angular.module('lowcarbonhubAppAdmin')
   .directive('navbar', () => ({
-    templateUrl: 'components/navbar/navbar.html',
+    templateUrl: 'admin/components/navbar/navbar.html',
     restrict: 'E',
     controller: 'NavbarController',
     controllerAs: 'nav'

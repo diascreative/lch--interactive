@@ -58,7 +58,7 @@ module.exports = function (grunt) {
     },
     watch: {
       babel: {
-        files: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock).js'],
         tasks: ['newer:babel:client']
       },
       ngconstant: {
@@ -67,13 +67,14 @@ module.exports = function (grunt) {
       },
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-          '!<%= yeoman.client %>/app/app.js'
+          '<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock).js',
+          '!<%= yeoman.client %>/app/app.js',
+          '!<%= yeoman.client %>/admin/admin-app.js'
         ],
         tasks: ['injector:scripts']
       },
       injectCss: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.css'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.css'],
         tasks: ['injector:css']
       },
       mochaTest: {
@@ -81,15 +82,15 @@ module.exports = function (grunt) {
         tasks: ['env:test', 'mochaTest']
       },
       jsTest: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.{spec,mock}.js'],
         tasks: ['newer:jshint:all', 'wiredep:test', 'karma']
       },
       injectStylus: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.styl'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.styl'],
         tasks: ['injector:stylus']
       },
       stylus: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.styl'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.styl'],
         tasks: ['stylus', 'postcss']
       },
       gruntfile: {
@@ -97,8 +98,8 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.{css,html}',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
+          '{.tmp,<%= yeoman.client %>}/{admin,app,components}/**/*.{css,html}',
+          '{.tmp,<%= yeoman.client %>}/{admin,app,components}/**/!(*.spec|*.mock).js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -137,9 +138,9 @@ module.exports = function (grunt) {
         },
         src: ['<%= yeoman.server %>/**/*.{spec,integration}.js']
       },
-      all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock|app.constant).js'],
+      all: ['<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock|app.constant).js'],
       test: {
-        src: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js']
+        src: ['<%= yeoman.client %>/{admin,app,components}/**/*.{spec,mock}.js']
       }
     },
 
@@ -228,13 +229,28 @@ module.exports = function (grunt) {
       options: {
         exclude: [
           '/json3/',
+          'jquery',
           '/es5-shim/',
+          'angular-cookies',
+          'angular-sanitize',
           /font-awesome\.css/,
-          /bootstrap\.css/
+          /bootstrap/
         ]
       },
       client: {
         src: '<%= yeoman.client %>/index.html',
+        ignorePath: '<%= yeoman.client %>/',
+      },
+      clientAdmin: {
+        options: {
+          exclude: [
+          'jquery',
+          '/json3/',
+          '/es5-shim/',
+          'angular-leaflet-directive'
+          ]
+        },
+        src: '<%= yeoman.client %>/admin.html',
         ignorePath: '<%= yeoman.client %>/',
       },
       test: {
@@ -257,7 +273,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.client %>/index.html'],
+      html: ['<%= yeoman.client %>/{index,admin}.html'],
       options: {
         dest: '<%= yeoman.dist %>/<%= yeoman.client %>'
       }
@@ -271,6 +287,7 @@ module.exports = function (grunt) {
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>/<%= yeoman.client %>',
+          '<%= yeoman.dist %>/<%= yeoman.client %>/admin',
           '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images'
         ],
         // This is so we update image references in our ng-templates
@@ -314,8 +331,8 @@ module.exports = function (grunt) {
     // `server/config/environment/shared.js`
     ngconstant: {
       options: {
-        name: 'lowcarbonhubApp.constants',
-        dest: '<%= yeoman.client %>/app/app.constant.js',
+        name: 'lowcarbonhubAppAdmin.constants',
+        dest: '<%= yeoman.client %>/admin/app.constant.js',
         deps: [],
         wrap: true,
         configPath: '<%= yeoman.server %>/config/environment/shared'
@@ -350,6 +367,11 @@ module.exports = function (grunt) {
         src: ['{app,components}/**/*.html'],
         dest: '.tmp/templates.js'
       },
+      clientAdmin: {
+        cwd: '<%= yeoman.client %>admin',
+        src: ['**/*.html'],
+        dest: '.tmp/admin/admin-templates.js'
+      },
       tmp: {
         cwd: '.tmp',
         src: ['{app,components}/**/*.html'],
@@ -379,6 +401,7 @@ module.exports = function (grunt) {
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'assets/json/**/*',
+            'admin.html',
             'index.html'
           ]
         }, {
@@ -400,7 +423,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
-        src: ['{app,components}/**/*.css']
+        src: ['{admin,app,components}/**/*.css']
       }
     },
 
@@ -547,7 +570,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.client %>',
-          src: ['{app,components}/**/!(*.spec).js'],
+          src: ['{admin,app,components}/**/!(*.spec).js'],
           dest: '.tmp'
         }]
       },
@@ -577,7 +600,8 @@ module.exports = function (grunt) {
           "include css": true
         },
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl'
+          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl',
+          '.tmp/admin/admin-app.css' : '<%= yeoman.client %>/admin/admin-app.styl'
         }
       }
     },
@@ -608,6 +632,12 @@ module.exports = function (grunt) {
                [
                  '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
                  '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+               ]
+            ],
+          '<%= yeoman.client %>/admin.html': [
+               [
+                 '<%= yeoman.client %>/admin/**/!(*.spec|*.mock).js',
+                 '!{.tmp,<%= yeoman.client %>}/admin/admin-app.{js,ts}'
                ]
             ]
         }
@@ -648,6 +678,9 @@ module.exports = function (grunt) {
         files: {
           '<%= yeoman.client %>/index.html': [
             '<%= yeoman.client %>/{app,components}/**/*.css'
+          ],
+          '<%= yeoman.client %>/admin.html': [
+            '<%= yeoman.client %>/admin/**/*.css'
           ]
         }
       }
@@ -683,6 +716,7 @@ module.exports = function (grunt) {
         'concurrent:server',
         'injector',
         'wiredep:client',
+        'wiredep:clientAdmin',
         'postcss',
         'concurrent:debug'
       ]);
@@ -695,6 +729,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'injector',
       'wiredep:client',
+      'wiredep:clientAdmin',
       'postcss',
       'express:dev',
       'wait',
@@ -752,6 +787,7 @@ module.exports = function (grunt) {
           'concurrent:test',
           'injector',
           'wiredep:client',
+          'wiredep:clientAdmin',
           'postcss',
           'express:dev',
           'protractor'
@@ -806,6 +842,7 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'injector',
     'wiredep:client',
+    'wiredep:clientAdmin',
     'useminPrepare',
     'postcss',
     'ngtemplates',

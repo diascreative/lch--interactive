@@ -4,7 +4,7 @@ class NavbarController {
   //start-non-standard
   menu = [{
     'title': 'Home',
-    'state': 'main'
+    'state': 'admin'
   }];
 
   isCollapsed = true;
@@ -17,5 +17,5 @@ class NavbarController {
   }
 }
 
-angular.module('lowcarbonhubApp')
+angular.module('lowcarbonhubAppAdmin')
   .controller('NavbarController', NavbarController);

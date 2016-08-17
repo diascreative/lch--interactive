@@ -21,7 +21,7 @@ function UserResource($resource) {
   });
 }
 
-angular.module('lowcarbonhubApp.auth')
+angular.module('lowcarbonhubAppAdmin.auth')
   .factory('User', UserResource);
 
 })();
