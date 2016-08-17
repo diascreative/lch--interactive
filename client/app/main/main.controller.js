@@ -251,7 +251,7 @@ class MainController {
       name: installation.name,
       capacity: this.$filter('number')(installation.capacity, 0),
       annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0),
-      generated: this.$filter('number')(installation.generated, 0)
+      generated: this.$filter('number')(installation.generated / 1000, 2)
     };
 
     if (installation.datetime) {
