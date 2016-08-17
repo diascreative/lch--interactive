@@ -67,13 +67,14 @@ module.exports = function (grunt) {
       },
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-          '!<%= yeoman.client %>/app/app.js'
+          '<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock).js',
+          '!<%= yeoman.client %>/app/app.js',
+          '!<%= yeoman.client %>/admin/admin-app.js'
         ],
         tasks: ['injector:scripts']
       },
       injectCss: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.css'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.css'],
         tasks: ['injector:css']
       },
       mochaTest: {
@@ -81,15 +82,15 @@ module.exports = function (grunt) {
         tasks: ['env:test', 'mochaTest']
       },
       jsTest: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.{spec,mock}.js'],
         tasks: ['newer:jshint:all', 'wiredep:test', 'karma']
       },
       injectStylus: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.styl'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.styl'],
         tasks: ['injector:stylus']
       },
       stylus: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.styl'],
+        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.styl'],
         tasks: ['stylus', 'postcss']
       },
       gruntfile: {
@@ -97,8 +98,8 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.{css,html}',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
+          '{.tmp,<%= yeoman.client %>}/{admin,app,components}/**/*.{css,html}',
+          '{.tmp,<%= yeoman.client %>}/{admin,app,components}/**/!(*.spec|*.mock).js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -137,9 +138,9 @@ module.exports = function (grunt) {
         },
         src: ['<%= yeoman.server %>/**/*.{spec,integration}.js']
       },
-      all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock|app.constant).js'],
+      all: ['<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock|app.constant).js'],
       test: {
-        src: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js']
+        src: ['<%= yeoman.client %>/{admin,app,components}/**/*.{spec,mock}.js']
       }
     },
 
@@ -232,7 +233,7 @@ module.exports = function (grunt) {
           'angular-cookies',
           'angular-sanitize',
           /font-awesome\.css/,
-          /bootstrap\.css/
+          /bootstrap/
         ]
       },
       client: {
@@ -284,6 +285,7 @@ module.exports = function (grunt) {
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>/<%= yeoman.client %>',
+          '<%= yeoman.dist %>/<%= yeoman.client %>/admin',
           '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images'
         ],
         // This is so we update image references in our ng-templates
@@ -364,9 +366,12 @@ module.exports = function (grunt) {
         dest: '.tmp/templates.js'
       },
       clientAdmin: {
-        cwd: '<%= yeoman.client %>',
-        src: ['admin/{app,components}/**/*.html'],
-        dest: '.tmp/admin-templates.js'
+        cwd: '<%= yeoman.client %>admin',
+        src: [
+          '**/*.html',
+          '!index.html'
+        ],
+        dest: '.tmp/admin/admin-templates.js'
       },
       tmp: {
         cwd: '.tmp',
@@ -419,7 +424,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
-        src: ['{app,components}/**/*.css']
+        src: ['{admin,app,components}/**/*.css']
       }
     },
 
@@ -596,7 +601,8 @@ module.exports = function (grunt) {
           "include css": true
         },
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl'
+          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl',
+          '.tmp/admin/admin-app.css' : '<%= yeoman.client %>/admin/admin-app.styl'
         }
       }
     },
