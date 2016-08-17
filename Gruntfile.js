@@ -242,6 +242,8 @@ module.exports = function (grunt) {
       clientAdmin: {
         options: {
           exclude: [
+          '/json3/',
+          '/es5-shim/',
           'angular-leaflet-directive'
           ]
         },
@@ -630,7 +632,7 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/admin/index.html': [
                [
                  '<%= yeoman.client %>/admin/**/!(*.spec|*.mock).js',
-                 '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+                 '!{.tmp,<%= yeoman.client %>}/admin/admin-app.{js,ts}'
                ]
             ]
         }

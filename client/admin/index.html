@@ -31,10 +31,8 @@
     <navbar></navbar>
 
     <!-- Add your site or application content here -->
-    <div ui-view>
-<!--       <a ui-sref="login">Login</a>
-      <a ui-sref="logout">logout</a>
-      <a ui-sref="settings">settings</a> -->
+    <div class="container">
+      <div ui-view>Admin interface</div>
     </div>
 
     <!--[if lt IE 9]>
@@ -44,9 +42,7 @@
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
       <script src="../bower_components/jquery/dist/jquery.js"></script>
-      <script src="../bower_components/es5-shim/es5-shim.js"></script>
       <script src="../bower_components/angular/angular.js"></script>
-      <script src="../bower_components/json3/lib/json3.js"></script>
       <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
       <script src="../bower_components/angular-resource/angular-resource.js"></script>
       <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
@@ -64,18 +60,15 @@
       <!-- injector:js -->
       <script src="admin/components/auth/auth.module.js"></script>
       <script src="admin/components/util/util.module.js"></script>
-      <script src="admin/components/navbar/navbar.controller.js"></script>
-      <script src="admin/components/auth/auth.service.js"></script>
+      <script src="admin/components/auth/user.service.js"></script>
       <script src="admin/components/auth/interceptor.service.js"></script>
       <script src="admin/components/auth/router.decorator.js"></script>
-      <script src="admin/components/auth/user.service.js"></script>
       <script src="admin/app.constant.js"></script>
+      <script src="admin/components/navbar/navbar.controller.js"></script>
       <script src="admin/components/navbar/navbar.directive.js"></script>
-      <script src="admin/admin-app.js"></script>
+      <script src="admin/components/auth/auth.service.js"></script>
       <script src="admin/components/util/util.service.js"></script>
       <script src="admin/login/login.controller.js"></script>
-      <script src="admin/settings/settings.controller.js"></script>
-      <script src="admin/signup/signup.controller.js"></script>
       <!-- endinjector -->
     <!-- endbuild -->
   </body>

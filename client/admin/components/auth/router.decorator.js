@@ -28,7 +28,7 @@ angular.module('lowcarbonhubAppAdmin.auth')
           }
 
           event.preventDefault();
-          $state.go('admin');
+          $state.go('login');
         });
       }
     });
