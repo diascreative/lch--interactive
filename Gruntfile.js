@@ -229,6 +229,7 @@ module.exports = function (grunt) {
       options: {
         exclude: [
           '/json3/',
+          'jquery',
           '/es5-shim/',
           'angular-cookies',
           'angular-sanitize',
@@ -243,12 +244,13 @@ module.exports = function (grunt) {
       clientAdmin: {
         options: {
           exclude: [
+          'jquery',
           '/json3/',
           '/es5-shim/',
           'angular-leaflet-directive'
           ]
         },
-        src: '<%= yeoman.client %>/admin/index.html',
+        src: '<%= yeoman.client %>/admin.html',
         ignorePath: '<%= yeoman.client %>/',
       },
       test: {
@@ -271,7 +273,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.client %>/index.html', '<%= yeoman.client %>/admin/index.html'],
+      html: ['<%= yeoman.client %>/{index,admin}.html'],
       options: {
         dest: '<%= yeoman.dist %>/<%= yeoman.client %>'
       }
@@ -367,10 +369,7 @@ module.exports = function (grunt) {
       },
       clientAdmin: {
         cwd: '<%= yeoman.client %>admin',
-        src: [
-          '**/*.html',
-          '!index.html'
-        ],
+        src: ['**/*.html'],
         dest: '.tmp/admin/admin-templates.js'
       },
       tmp: {
@@ -402,7 +401,7 @@ module.exports = function (grunt) {
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'assets/json/**/*',
-            'admin/index.html',
+            'admin.html',
             'index.html'
           ]
         }, {
@@ -635,7 +634,7 @@ module.exports = function (grunt) {
                  '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
                ]
             ],
-          '<%= yeoman.client %>/admin/index.html': [
+          '<%= yeoman.client %>/admin.html': [
                [
                  '<%= yeoman.client %>/admin/**/!(*.spec|*.mock).js',
                  '!{.tmp,<%= yeoman.client %>}/admin/admin-app.{js,ts}'
@@ -680,7 +679,7 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/index.html': [
             '<%= yeoman.client %>/{app,components}/**/*.css'
           ],
-          '<%= yeoman.client %>/admin/index.html': [
+          '<%= yeoman.client %>/admin.html': [
             '<%= yeoman.client %>/admin/**/*.css'
           ]
         }
