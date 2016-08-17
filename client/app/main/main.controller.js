@@ -251,7 +251,7 @@ class MainController {
       name: installation.name,
       capacity: this.$filter('number')(installation.capacity, 0),
       annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0),
-      generated: this.$filter('number')(installation.generated / 1000, 0)
+      generated: this.$filter('number')(installation.generated, 0)
     };
 
     if (installation.datetime) {
@@ -263,7 +263,7 @@ class MainController {
         '<h2>%(name)s</h2>',
         'capacity: <strong>%(capacity)s</strong> kW',
         '<br>annual predicted generation: <strong>%(annualPredictedGeneration)s</strong> kW',
-        cleanNumbers.generated ? '<br>Was generating <strong>%(generated)s</strong> kW' : '',
+        cleanNumbers.generated && cleanNumbers.datetime ? '<br>Was generating <strong>%(generated)s</strong> kW' : '',
         cleanNumbers.datetime ? ', %(datetime)s' : '',
       '</div>'
     ].join('');
