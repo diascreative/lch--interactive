@@ -360,7 +360,7 @@ class MainController {
    */
   watts(watt, forcedUnit = false) {
     let unit = 'W';
-    let decimalPlaces = 0;
+    let decimalPlaces = 2;
     let returnWatt = watt;
 
     if (forcedUnit && forcedUnit === 'W') {
@@ -373,13 +373,13 @@ class MainController {
       if (watt > 250000) {
         returnWatt = watt / 1000000;
         unit = 'MW';
-      } else if (watt > 250) {
+      } else if (watt > 4000) {
         returnWatt = watt / 1000;
         unit = 'kW';
       }
     }
 
-    if (returnWatt > 10) {
+    if (returnWatt > 10 || unit === 'W') {
       decimalPlaces = 0;
     }
 
