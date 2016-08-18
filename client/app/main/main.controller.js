@@ -14,6 +14,8 @@ class MainController {
     this._installations = [];
     this.search = '';
 
+    this.checkedLocalAuthority = 'all';
+
     this.filtersAvailable = {
       localAuthorities: [],
       ownership: [],
@@ -33,6 +35,8 @@ class MainController {
         },
         minZoom: 9,
         // tileLayer: 'https://a.tiles.mapbox.com/v4/pirenaq.4122b387/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGlyZW5hcSIsImEiOiJjaWVtbzl2eXgwMDFuc3Rra3RuaWlnNzMxIn0.HxN1ugyk0JzH46gFnb6mXA'
+        tileLayer: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        // tileLayer: 'http://{s}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png',
         zoomControlPosition: 'bottomright',
         scrollWheelZoom: false
       }
@@ -138,9 +142,12 @@ class MainController {
     // add all the details
     installations.forEach(installation => {
       filters.localAuthorities.push({
-        name: installation.localAuthority,
-        checked: savedFilters[0].indexOf(installation.localAuthority) > -1
+        name: installation.localAuthority
       });
+
+      if (savedFilters[0][0] === installation.localAuthority) {
+        this.checkedLocalAuthority = installation.localAuthority;
+      }
 
       filters.ownership.push({
         name: installation.owner,
@@ -165,6 +172,10 @@ class MainController {
     filters.ownershipType = _.uniqBy(filters.ownershipType, 'name');
     filters.energyTypes = _.uniqBy(filters.energyTypes, 'name');
 
+    if (this.checkedLocalAuthority !== 'all') {
+      this.loadLocalAreaJSON(this.checkedLocalAuthority);
+    }
+
     // return the filters
     return filters;
   }
@@ -180,12 +191,12 @@ class MainController {
    */
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
-    const filterByLocalAuthority = this._filteredLocalAuthorities();
+    const allLocalAuthorities = this.checkedLocalAuthority === 'all';
     const filterByOwnership = this._filteredOwnerships();
     const filterByOwnershipType = this._filteredOwnershipTypes();
     const filterByEnergyType = this._filteredEnergyTypes();
 
-    const newHash = filterByLocalAuthority.join('+') + '::' +
+    const newHash = this.checkedLocalAuthority + '::' +
                   filterByOwnership.join('+') + '::' +
                   filterByOwnershipType.join('+') + '::' +
                   filterByEnergyType.join('+');
@@ -198,8 +209,8 @@ class MainController {
     this.$location.hash(newHash);
 
     this.map.installations.map((installationMarker, index) => {
-      const inLas = !filterByLocalAuthority.length ||
-                  (filterByLocalAuthority.indexOf(installationMarker.localAuthority) > -1);
+      const inLas = allLocalAuthorities ||
+                    (this.checkedLocalAuthority === installationMarker.localAuthority);
       const belongsTo = !filterByOwnership.length ||
                        (filterByOwnership.indexOf(installationMarker.owner) > -1);
       const ownershipType = !filterByOwnershipType.length ||
@@ -445,28 +456,56 @@ class MainController {
     return cleanWatt + unit;
   }
 
+  loadLocalAreaJSON(name) {
+    if (name === this.checkedLocalAuthority) {
+      const slugName = slug(name).toLowerCase();
+      const url = `/assets/json/${slugName}.json`;
+
+      return this._importGeoJSON(url, 'green', true);
+    }
+
+    if (this.checkedLocalAuthority === 'all') {
+      return this._importGeoJSON();
+    }
+  }
+
   /**
    * Import GeoJSON with the Oxfordshire boarders to highlight it on the map
    * @return {Promise}
    */
-  _importGeoJSON() {
+  _importGeoJSON(url='/assets/json/topo_E07000178.json', fillColor='red', fill=false) {
     // Get the countries geojson data from a JSON
-    return this.$http.get('/assets/json/topo_E07000178.json')
+    return this.$http.get(url)
             .success(data => {
               this.map.geojson = {
                 data: data,
                 style: {
-                  fillColor: 'red',
+                  fillColor: fillColor,
                   weight: 1,
                   opacity: 0.8,
-                  color: 'red',
+                  color: fillColor,
                   fillOpacity: 0.05
                 }
               };
+
+              this.$timeout(() => {
+                const installations = L.geoJson(data);
+                const bounds = installations.getBounds();
+
+                this.map.bounds = {
+                  southWest: {
+                    lat: bounds._southWest.lat,
+                    lng: bounds._southWest.lng
+                  },
+                  northEast: {
+                    lat: bounds._northEast.lat,
+                    lng: bounds._northEast.lng
+                  }
+                };
+              }, 600);
             });
   }
 }
-
 angular.module('lowcarbonhubApp')
   .component('main', {
     templateUrl: 'app/main/main.html',

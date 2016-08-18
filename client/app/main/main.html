@@ -36,10 +36,19 @@
     </ui-select>
 
     <h4>Geography</h4>
+    <label>
+      <input type="radio" name="local-authorities"
+        value="all"
+        checked="checked"
+        ng-model="$ctrl.checkedLocalAuthority"
+        ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
+      All
+    </label>
     <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
-      <input type="checkbox" name="local-authorities"
-        ng-model="localAuthority.checked"
-        ng-change="$ctrl.filterInstallations()">
+      <input type="radio" name="local-authorities"
+        value="{{localAuthority.name}}"
+        ng-model="$ctrl.checkedLocalAuthority"
+        ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
       {{localAuthority.name}}
     </label>
 
@@ -75,5 +84,6 @@
   <leaflet class="map"
     markers="$ctrl.map.installations"
     defaults="$ctrl.map.defaults"
+    bounds="$ctrl.map.bounds"
     geojson="$ctrl.map.geojson"></leaflet>
 </div>
