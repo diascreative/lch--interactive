@@ -232,8 +232,8 @@ module.exports = function (grunt) {
           'jquery',
           '/es5-shim/',
           'angular-cookies',
-          'angular-sanitize',
           /font-awesome\.css/,
+          '/angular-ui-select/dist/select.css',
           /bootstrap/
         ]
       },

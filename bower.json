@@ -15,7 +15,8 @@
     "angular-validation-match": "~1.5.2",
     "angular-leaflet-directive": "^0.10.0",
     "sprintf": "^1.0.3",
-    "moment": "momentjs#^2.14.1"
+    "moment": "momentjs#^2.14.1",
+    "angular-ui-select": "^0.19.4"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.0"

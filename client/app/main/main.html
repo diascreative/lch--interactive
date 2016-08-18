@@ -25,9 +25,15 @@
   </div>
 
   <div class="filters__options">
-    <input type="text" placeholder="Search by project" class="search-by-project"
-      ng-model="$ctrl.search"
-      ng-keyup="$ctrl.filterInstallations()">
+    <ui-select title="Search by project"
+      ng-model="$ctrl.searchInstallation"
+      on-select="$ctrl.filterFreeText($item)">
+      <ui-select-match allow-clear="true"
+        placeholder="Search by project">{{$select.selected.name}}</ui-select-match>
+      <ui-select-choices repeat="installation in $ctrl.map.installations | filter: $select.search">
+        <span ng-bind-html="installation.name | highlight: $select.search"></span>
+      </ui-select-choices>
+    </ui-select>
 
     <h4>Geography</h4>
     <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">

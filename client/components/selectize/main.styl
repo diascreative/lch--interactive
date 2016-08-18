@@ -1,0 +1,58 @@
+.ui-select-container
+  position relative
+
+.ui-select-match
+  .btn.btn-xs.btn-link.pull-right
+    background #fff
+    cursor pointer
+    height 10px
+    margin-top -10px
+    position absolute
+    right 0
+    top 50%
+    width 10px
+
+    &:before
+      content 'x'
+
+.ui-select-bootstrap
+  > .ui-select-choices
+    background #fff
+    border-bottom solid 1px #9B9B9B
+    border-left solid 1px #9B9B9B
+    height auto
+    max-height 200px
+    overflow-x hidden
+    position absolute
+    width 100%
+
+  > .ui-select-no-choice
+    background #fff
+
+  .ui-select-choices-row
+    > span
+      clear both
+      cursor pointer
+      display block
+      padding 3px 20px
+      white-space nowrap
+
+      &:hover
+      &:focus
+        background-color #f5f5f5
+        color #262626
+        text-decoration none
+
+
+.ui-select-offscreen
+  border 0 !important
+  clip rect(0 0 0 0) !important
+  height 1px !important
+  left 0px !important
+  margin 0 !important
+  outline 0 !important
+  overflow hidden !important
+  padding 0 !important
+  position absolute !important
+  top 0px !important
+  width 1px !important

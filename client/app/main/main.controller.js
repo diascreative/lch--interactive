@@ -169,6 +169,12 @@ class MainController {
     return filters;
   }
 
+  filterFreeText(installation=false) {
+    this.search = installation ? installation.name : '';
+
+    return this.filterInstallations();
+  }
+
   /**
    * Filter the visibility of our markers
    */
