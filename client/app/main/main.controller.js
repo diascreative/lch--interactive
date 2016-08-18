@@ -220,7 +220,8 @@ class MainController {
 
       const nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
 
-      const visible = inLas && belongsTo && ownershipType && energyType && nameMatches;
+      const visible = (freeText && nameMatches) ||
+                      (inLas && belongsTo && ownershipType && energyType);
 
       if (visible) {
         visibleItems.push(index);
@@ -473,7 +474,7 @@ class MainController {
    * Import GeoJSON with the Oxfordshire boarders to highlight it on the map
    * @return {Promise}
    */
-  _importGeoJSON(url='/assets/json/topo_E07000178.json', fillColor='red', fill=false) {
+  _importGeoJSON(url='/assets/json/topo_E07000178.json', fillColor='green', fill=false) {
     // Get the countries geojson data from a JSON
     return this.$http.get(url)
             .success(data => {
