@@ -4,10 +4,12 @@
 
 class MainController {
 
-  constructor($http, $filter, $location) {
+  constructor($http, $filter, $location, $scope, $timeout) {
     this.$http = $http;
     this.$filter = $filter;
     this.$location = $location;
+    this.$timeout = $timeout;
+    this.$scope = $scope;
 
     this._installations = [];
     this.search = '';
@@ -57,6 +59,12 @@ class MainController {
         this._updateMapMarkers();
       });
     });
+
+    if (!L.Browser.touch) {
+      this.$scope.$on('leafletDirectiveMarker.mouseover', this.mouseOverMarker.bind(this));
+      this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
+      // this.$on('leafletDirectiveMarker.click', this.clickMarker);
+    }
 
     this._importGeoJSON();
   }
@@ -361,6 +369,39 @@ class MainController {
 
     return string + ' and ' + lastItem;
 
+  }
+
+  /**
+   * Callback on mouse out a map marker
+   * ( Brings up tooltip )
+   * Leaflet by default brings this up on click
+   */
+  mouseOutMarker(e, args) {
+    const marker = this.map.installations[args.modelName];
+    this.currentHoverOver = 'out';
+
+    this.$timeout( () => {
+      if (args.modelName !== this.currentHoverOver) {
+        marker.focus = false;
+      }
+    }, 300);
+  }
+
+  /**
+   * Callback on mouse over a map marker
+   * ( Brings up tooltip )
+   * Leaflet by default brings this up on click
+   */
+  mouseOverMarker(e, args) {
+    let marker = this.map.installations[args.modelName];
+    marker.focus = false;
+    this.currentHoverOver = args.modelName;
+
+    this.$timeout( () => {
+      if (args.modelName === this.currentHoverOver) {
+        marker.focus = true;
+      }
+    }, 300);
   }
 
   /**
