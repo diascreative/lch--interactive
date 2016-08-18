@@ -85,7 +85,10 @@ class MainController {
     marker.lng = installation.lng;
     marker.message = this._mapPopupHTML(installation);
     marker.visible = true;
-    marker.generated = 0;
+
+    if (!marker.generated) {
+      marker.generated = 0;
+    }
 
     marker.icon = {
       type: 'div',
@@ -249,9 +252,9 @@ class MainController {
   _mapPopupHTML(installation) {
     const cleanNumbers = {
       name: installation.name,
-      capacity: this.$filter('number')(installation.capacity, 0),
-      annualPredictedGeneration: this.$filter('number')(installation.annualPredictedGeneration, 0),
-      generated: this.$filter('number')(installation.generated / 1000, 2)
+      capacity: this.watts(installation.capacity),
+      annualPredictedGeneration: this.watts(installation.annualPredictedGeneration) + 'h',
+      generated: this.watts(installation.generated)
     };
 
     if (installation.datetime) {
@@ -261,9 +264,9 @@ class MainController {
     const html = [
       '<div>',
         '<h2>%(name)s</h2>',
-        'capacity: <strong>%(capacity)s</strong> kW',
-        '<br>annual predicted generation: <strong>%(annualPredictedGeneration)s</strong> kW',
-        cleanNumbers.generated && cleanNumbers.datetime ? '<br>Was generating <strong>%(generated)s</strong> kW' : '',
+        'capacity: <strong>%(capacity)s</strong>',
+        '<br>annual predicted generation: <strong>%(annualPredictedGeneration)s</strong>',
+        cleanNumbers.generated && cleanNumbers.datetime ? '<br>Was generating <strong>%(generated)s</strong>' : '',
         cleanNumbers.datetime ? ', %(datetime)s' : '',
       '</div>'
     ].join('');
@@ -287,7 +290,7 @@ class MainController {
     const visibleInstallations = this._getVisibleInstallations();
     const total = _.sumBy(visibleInstallations, 'generated');
 
-    return this.$filter('number')(total, 0);
+    return this.watts(total, 'W');
   }
 
   /**
@@ -347,6 +350,41 @@ class MainController {
 
     return string + ' and ' + lastItem;
 
+  }
+
+  /**
+   * Pretty-print watt
+   * @param  {Integer} watts
+   * @param  {Boolean} force a particular unit
+   * @return {String} pretty-printed reading
+   */
+  watts(watt, forcedUnit = false) {
+    let unit = 'W';
+    let decimalPlaces = 0;
+    let returnWatt = watt;
+
+    if (forcedUnit && forcedUnit === 'W') {
+
+    } else if (forcedUnit && forcedUnit === 'kW') {
+      returnWatt = watt / 1000;
+      unit = 'kW';
+    } else {
+      // not forcing any units
+      if (watt > 250000) {
+        returnWatt = watt / 1000000;
+        unit = 'MW';
+      } else if (watt > 250) {
+        returnWatt = watt / 1000;
+        unit = 'kW';
+      }
+    }
+
+    if (returnWatt > 10) {
+      decimalPlaces = 0;
+    }
+
+    const cleanWatt = this.$filter('number')(returnWatt, decimalPlaces);
+    return cleanWatt + unit;
   }
 
   /**
