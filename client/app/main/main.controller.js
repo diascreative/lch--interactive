@@ -179,9 +179,11 @@ class MainController {
     const freeText = this.search !== '';
     const searchRegExp = new RegExp(this.search, 'i');
 
+    const visibleItems = [];
+
     this.$location.hash(newHash);
 
-    return this.map.installations.map(installationMarker => {
+    this.map.installations.map((installationMarker, index) => {
       const inLas = !filterByLocalAuthority.length ||
                   (filterByLocalAuthority.indexOf(installationMarker.localAuthority) > -1);
       const belongsTo = !filterByOwnership.length ||
@@ -195,9 +197,18 @@ class MainController {
 
       const visible = inLas && belongsTo && ownershipType && energyType && nameMatches;
 
+      if (visible) {
+        visibleItems.push(index);
+      }
+
       installationMarker.visible = visible;
+      installationMarker.focus = false;
       installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
     });
+
+    if (visibleItems.length === 1) {
+      this.map.installations[visibleItems[0]].focus = true;
+    }
   }
 
   /**
