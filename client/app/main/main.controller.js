@@ -14,13 +14,18 @@ class MainController {
     this._installations = [];
     this.search = '';
 
-    this.checkedLocalAuthority = 'all';
-
     this.filtersAvailable = {
       localAuthorities: [],
       ownership: [],
       ownershipType: [],
       energyTypes: []
+    };
+
+    this.filtersChosen = {
+      localAuthorities: 'all',
+      ownership: 'all',
+      ownershipType: 'all',
+      energyType: 'all'
     };
 
     // set our map variables
@@ -146,22 +151,19 @@ class MainController {
       });
 
       if (savedFilters[0][0] === installation.localAuthority) {
-        this.checkedLocalAuthority = installation.localAuthority;
+        this.filtersChosen.localAuthorities = installation.localAuthority;
       }
 
       filters.ownership.push({
-        name: installation.owner,
-        checked: savedFilters[1].indexOf(installation.owner) > -1
+        name: installation.owner
       });
 
       filters.ownershipType.push({
-        name: installation.ownershipType,
-        checked: savedFilters[2].indexOf(installation.ownershipType) > -1
+        name: installation.ownershipType
       });
 
       filters.energyTypes.push({
-        name: installation.energyType,
-        checked: savedFilters[3].indexOf(installation.energyType) > -1
+        name: installation.energyType
       });
 
     });
@@ -172,8 +174,8 @@ class MainController {
     filters.ownershipType = _.uniqBy(filters.ownershipType, 'name');
     filters.energyTypes = _.uniqBy(filters.energyTypes, 'name');
 
-    if (this.checkedLocalAuthority !== 'all') {
-      this.loadLocalAreaJSON(this.checkedLocalAuthority);
+    if (this.filtersChosen.localAuthorities !== 'all') {
+      this.loadLocalAreaJSON(this.filtersChosen.localAuthorities);
     }
 
     // return the filters
@@ -191,15 +193,15 @@ class MainController {
    */
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
-    const allLocalAuthorities = this.checkedLocalAuthority === 'all';
-    const filterByOwnership = this._filteredOwnerships();
-    const filterByOwnershipType = this._filteredOwnershipTypes();
-    const filterByEnergyType = this._filteredEnergyTypes();
+    const allLocalAuthorities = this.filtersChosen.localAuthorities === 'all';
+    const filterByOwnership = this.filtersChosen.ownership === 'all';
+    const filterByOwnershipType = this.filtersChosen.ownershipType === 'all';
+    const filterByEnergyType = this.filtersChosen.energyType === 'all';
 
-    const newHash = this.checkedLocalAuthority + '::' +
-                  filterByOwnership.join('+') + '::' +
-                  filterByOwnershipType.join('+') + '::' +
-                  filterByEnergyType.join('+');
+    const newHash = this.filtersChosen.localAuthorities + '::' +
+                    this.filtersChosen.ownership + '::' +
+                    this.filtersChosen.ownershipType + '::' +
+                    this.filtersChosen.energyType;
 
     const freeText = this.search !== '';
     const searchRegExp = new RegExp(this.search, 'i');
@@ -210,18 +212,18 @@ class MainController {
 
     this.map.installations.map((installationMarker, index) => {
       const inLas = allLocalAuthorities ||
-                    (this.checkedLocalAuthority === installationMarker.localAuthority);
-      const belongsTo = !filterByOwnership.length ||
-                       (filterByOwnership.indexOf(installationMarker.owner) > -1);
-      const ownershipType = !filterByOwnershipType.length ||
-                       (filterByOwnershipType.indexOf(installationMarker.ownershipType) > -1);
-      const energyType = !filterByEnergyType.length ||
-                       (filterByEnergyType.indexOf(installationMarker.energyType) > -1);
+                    (this.filtersChosen.localAuthorities === installationMarker.localAuthority);
+      const belongsTo = filterByOwnership ||
+                        this.filtersChosen.ownership === installationMarker.owner;
+      const ownershipType = filterByOwnershipType ||
+                            this.filtersChosen.ownershipType === installationMarker.ownershipType;
+      const energyType = filterByEnergyType ||
+                         this.filtersChosen.energyType === installationMarker.energyType;
 
       const nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
 
       const visible = (freeText && nameMatches) ||
-                      (inLas && belongsTo && ownershipType && energyType);
+                      (!freeText && inLas && belongsTo && ownershipType && energyType);
 
       if (visible) {
         visibleItems.push(index);
@@ -233,52 +235,12 @@ class MainController {
     });
 
     if (visibleItems.length === 1) {
-      this.map.installations[visibleItems[0]].focus = true;
+      const marker = this.map.installations[visibleItems[0]];
+      marker.focus = true;
+
+      this.map.defaults.center.lat = marker.lat;
+      this.map.defaults.center.lng = marker.lng;
     }
-  }
-
-  /**
-   * Get all the names of the Local Authorities we're filtering by
-   * @return {Array} names of the LAs
-   */
-  _filteredLocalAuthorities() {
-    return _.chain(this.filtersAvailable.localAuthorities)
-            .filter(la => la.checked)
-            .map(la => la.name)
-            .value();
-  }
-
-  /**
-   * Get all the names of the owners we're filtering by
-   * @return {Array} names of the owners
-   */
-  _filteredOwnerships() {
-    return _.chain(this.filtersAvailable.ownership)
-            .filter(owner => owner.checked)
-            .map(owner => owner.name)
-            .value();
-  }
-
-  /**
-   * Get all the names of the ownership types we're filtering by
-   * @return {Array} names of the ownerships
-   */
-  _filteredOwnershipTypes() {
-    return _.chain(this.filtersAvailable.ownershipType)
-            .filter(type => type.checked)
-            .map(type => type.name)
-            .value();
-  }
-
-  /**
-   * Get all the names of the energy types we're filtering by
-   * @return {Array} names of the energy types
-   */
-  _filteredEnergyTypes() {
-    return _.chain(this.filtersAvailable.energyTypes)
-            .filter(type => type.checked)
-            .map(type => type.name)
-            .value();
   }
 
   /**
@@ -348,13 +310,8 @@ class MainController {
    *     "your 2 chosen districts"
    */
   copyArea() {
-    const types = this._filteredLocalAuthorities();
-
-    if (types.length > 1) {
-      return `your ${types.length} chosen districts`;
-    }
-
-    const str = this._addValuesAsString(types, 'Oxfordshire', 1);
+    const str = this.filtersChosen.localAuthorities === 'all' ? 'Oxfordshire' :
+                                this.filtersChosen.localAuthorities;
 
     return str;
   }
@@ -366,10 +323,8 @@ class MainController {
    *     "community and council"
    */
   copyOwnershipType() {
-    const types = this._filteredOwnershipTypes();
-    const str = this._addValuesAsString(types, '');
-
-    return str + ' energy';
+    const msg = (this.filtersChosen.ownershipType === 'all') ? '' : this.filtersChosen.ownershipType;
+    return msg + ' energy';
   }
 
   _addValuesAsString(values, fallback) {
@@ -458,14 +413,14 @@ class MainController {
   }
 
   loadLocalAreaJSON(name) {
-    if (name === this.checkedLocalAuthority) {
+    if (name === this.filtersChosen.localAuthorities) {
       const slugName = slug(name).toLowerCase();
       const url = `/assets/json/${slugName}.json`;
 
       return this._importGeoJSON(url, 'green', true);
     }
 
-    if (this.checkedLocalAuthority === 'all') {
+    if (this.filtersChosen.localAuthorities === 'all') {
       return this._importGeoJSON();
     }
   }

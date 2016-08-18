@@ -40,40 +40,59 @@
       <input type="radio" name="local-authorities"
         value="all"
         checked="checked"
-        ng-model="$ctrl.checkedLocalAuthority"
+        ng-model="$ctrl.filtersChosen.localAuthorities"
         ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
       All
     </label>
     <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
       <input type="radio" name="local-authorities"
         value="{{localAuthority.name}}"
-        ng-model="$ctrl.checkedLocalAuthority"
+        ng-model="$ctrl.filtersChosen.localAuthorities"
         ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
       {{localAuthority.name}}
     </label>
 
     <h4>Ownership</h4>
+    <label>
+      <input type="radio" name="ownership"
+        ng-model="$ctrl.filtersChosen.ownership"
+        value="all"
+        ng-change="$ctrl.filterInstallations()">
+      All
+    </label>
     <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
-      <input type="checkbox" name="ownership"
-        ng-model="ownership.checked"
+      <input type="radio" name="ownership" value="{{ownership.name}}"
+        ng-model="$ctrl.filtersChosen.ownership"
         ng-change="$ctrl.filterInstallations()">
       {{ownership.name}}
     </label>
 
-    <div ng-hide="$ctrl.filtersAvailable.ownershipType.length">
+    <div ng-hide="$ctrl.filtersAvailable.ownershipType.length < 2">
     <h4>Ownership Type</h4>
+    <label>
+      <input type="radio" name="ownershipType" value="all"
+        ng-model="$ctrl.filtersChosen.ownershipType"
+        ng-change="$ctrl.filterInstallations()">
+      All
+    </label>
     <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
-      <input type="checkbox" name="ownershipType"
-        ng-model="type.checked"
+      <input type="radio" name="ownershipType" value="{{type.name}}"
+        ng-model="$ctrl.filtersChosen.ownershipType"
         ng-change="$ctrl.filterInstallations()">
       {{type.name}}
     </label>
     </div>
 
     <h4>Energy Type</h4>
+    <label>
+      <input type="radio" name="energyTypes" value="all"
+        ng-model="$ctrl.filtersChosen.energyType"
+        ng-change="$ctrl.filterInstallations()">
+      All
+    </label>
     <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
-      <input type="checkbox" name="energyTypes"
-        ng-model="type.checked"
+      <input type="radio" name="energyTypes" value="{{type.name}}"
+        ng-model="$ctrl.filtersChosen.energyType"
         ng-change="$ctrl.filterInstallations()">
       {{type.name}}
     </label>
