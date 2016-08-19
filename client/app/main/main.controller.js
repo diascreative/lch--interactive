@@ -13,6 +13,7 @@ class MainController {
 
     this._installations = [];
     this.search = '';
+    this.filterLocation = false;
 
     this.filtersAvailable = {
       localAuthorities: [],
@@ -208,11 +209,22 @@ class MainController {
       const belongsTo = this.belongsTo(installationMarker);
       const ownershipType = this.hasOwnerShipType(installationMarker);
       const energyType = this.hasEnergyType(installationMarker);
-
       const nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
 
-      const visible = (freeText && nameMatches) ||
+      let visible = (freeText && nameMatches) ||
                       (!freeText && inLas && belongsTo && ownershipType && energyType);
+
+      if (visible && this.filterLocation) {
+        // only check the distance if it's visible
+        const distance = this._getDistanceFromLatLonInKm(installationMarker.lat,
+                                                  installationMarker.lng,
+                                                  this.filterLocation.lat,
+                                                  this.filterLocation.lng);
+
+        if (distance > 10) {
+          visible = false;
+        }
+      }
 
       if (visible) {
         visibleItems.push(index);
@@ -500,6 +512,48 @@ class MainController {
                 };
               }, 600);
             });
+  }
+
+  setCoords(address) {
+    if (address.length < 3) {
+      this.filterLocation = false;
+      return this.filterInstallations();
+    }
+
+    const url = `http://nominatim.openstreetmap.org/search?q=${address},uk&format=json`;
+
+    return this.$http.get(url)
+            .success(data => {
+              if (!data.length) {
+                return;
+              }
+
+              this.map.bounds = {};
+
+              this.filterLocation = {
+                lat: parseFloat(data[0].lat, 10),
+                lng: parseFloat(data[0].lon, 10)
+              };
+
+              return this.filterInstallations();
+            });
+  }
+
+  _getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = this._deg2rad(lat2 - lat1);  // deg2rad below
+    var dLon = this._deg2rad(lon2 - lon1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this._deg2rad(lat1)) * Math.cos(this._deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+  _deg2rad(deg) {
+    return deg * (Math.PI / 180);
   }
 }
 angular.module('lowcarbonhubApp')

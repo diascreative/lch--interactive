@@ -24,6 +24,9 @@
     </div>
   </div>
 
+  <input class="postcode-seach" placeholder="Search close to your postcode"
+    ng-change="$ctrl.setCoords($ctrl.address)" ng-model="$ctrl.address">
+
   <div class="filters__options">
     <ui-select title="Search by project"
       ng-model="$ctrl.searchInstallation"
