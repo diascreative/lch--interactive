@@ -112,7 +112,7 @@ class MainController {
       html: '',
       iconSize: [30, 45],
       iconAnchor: [15, 45],
-      popupAnchor: [0, -24]
+      popupAnchor: [0, -45]
     };
 
     return marker;

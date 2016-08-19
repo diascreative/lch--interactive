@@ -141,6 +141,7 @@ div.large-text
     list-style none
     margin 0
     padding 0
+    z-index 2
 
 
   .ui-select-bootstrap .ui-select-choices-row.active > span
@@ -224,6 +225,7 @@ $animation-timing = .3s
   height 100%
   width 100%
 
+/* Map marker */
 .leaflet-marker-icon
   background transparent
   border 0
@@ -254,6 +256,14 @@ $animation-timing = .3s
     &:before
       transform scale(0, 0)
 
+/* Map tooltip */
+.leaflet-popup-content-wrapper
+.leaflet-popup-tip
+  background rgba(#fff, .94)
+  box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+
+.leaflet-popup-content-wrapper
+  border-radius 0
 
 /*
  * Tablet
