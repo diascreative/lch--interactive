@@ -41,7 +41,7 @@
         value="all"
         checked="checked"
         ng-model="$ctrl.filtersChosen.localAuthorities"
-        ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
+        ng-change="$ctrl.filterInstallations(); $ctrl.loadAreaJSON(localAuthority.name)">
       <span></span>
       All
     </label>
@@ -49,7 +49,7 @@
       <input type="radio" name="local-authorities"
         value="{{localAuthority.name}}"
         ng-model="$ctrl.filtersChosen.localAuthorities"
-        ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
+        ng-change="$ctrl.filterInstallations(); $ctrl.loadAreaJSON(localAuthority.name)">
       <span></span>
       {{localAuthority.name}}
     </label>

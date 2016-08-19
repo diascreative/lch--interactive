@@ -69,7 +69,7 @@ class MainController {
 
         this._updateMapMarkers();
         this.filterInstallations();
-        this.loadLocalAreaJSON(this.filtersChosen.localAuthorities);
+        this.loadAreaJSON(this.filtersChosen.localAuthorities);
       });
     });
 
@@ -453,7 +453,12 @@ class MainController {
     return cleanWatt + unit;
   }
 
-  loadLocalAreaJSON(name='all') {
+  /**
+   * Load the GeoJSON for the current area
+   * @param  {String} name of area
+   * @return {Promise}
+   */
+  loadAreaJSON(name='all') {
     const slugName = slug(name).toLowerCase();
     const url = `/assets/json/${slugName}.json`;
 
