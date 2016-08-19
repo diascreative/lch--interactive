@@ -191,11 +191,6 @@ class MainController {
    */
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
-    const allLocalAuthorities = this.filtersChosen.localAuthorities === 'all';
-    const filterByOwnership = this.filtersChosen.ownership === 'all';
-    const filterByOwnershipType = this.filtersChosen.ownershipType === 'all';
-    const filterByEnergyType = this.filtersChosen.energyType === 'all';
-
     const newHash = this.filtersChosen.localAuthorities + '::' +
                     this.filtersChosen.ownership + '::' +
                     this.filtersChosen.ownershipType + '::' +
@@ -209,14 +204,10 @@ class MainController {
     this.$location.hash(newHash);
 
     this.map.installations.map((installationMarker, index) => {
-      const inLas = allLocalAuthorities ||
-                    (this.filtersChosen.localAuthorities === installationMarker.localAuthority);
-      const belongsTo = filterByOwnership ||
-                        this.filtersChosen.ownership === installationMarker.owner;
-      const ownershipType = filterByOwnershipType ||
-                            this.filtersChosen.ownershipType === installationMarker.ownershipType;
-      const energyType = filterByEnergyType ||
-                         this.filtersChosen.energyType === installationMarker.energyType;
+      const inLas = this.isInCurrentLocalAuthority(installationMarker);
+      const belongsTo = this.belongsTo(installationMarker);
+      const ownershipType = this.hasOwnerShipType(installationMarker);
+      const energyType = this.hasEnergyType(installationMarker);
 
       const nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
 
@@ -239,6 +230,58 @@ class MainController {
       this.map.defaults.center.lat = marker.lat;
       this.map.defaults.center.lng = marker.lng;
     }
+  }
+
+  /**
+   * Check if an installation is in the current local authority
+   * @param  {Object} installation
+   * @return {[type]}              [description]
+   */
+  isInCurrentLocalAuthority(installation) {
+    if (this.filtersChosen.localAuthorities === 'all') {
+      return true;
+    }
+
+    return this.filtersChosen.localAuthorities === installation.localAuthority;
+  }
+
+  /**
+   * Check if an installation is in the current local authority
+   * @param  {Object} installation
+   * @return {Boolean}
+   */
+  belongsTo(installation) {
+    if (this.filtersChosen.ownership === 'all') {
+      return true;
+    }
+
+    return this.filtersChosen.ownership === installation.owner;
+  }
+
+  /**
+   * Check if an installation is in the current local authority
+   * @param  {Object} installation
+   * @return {Boolean}
+   */
+  hasOwnerShipType(installation) {
+    if (this.filtersChosen.ownershipType === 'all') {
+      return true;
+    }
+
+    return this.filtersChosen.ownershipType === installation.ownershipType;
+  }
+
+  /**
+   * Check if an installation is in the current local authority
+   * @param  {Object} installation
+   * @return {Boolean}
+   */
+  hasEnergyType(installation) {
+    if (this.filtersChosen.energyType === 'all') {
+      return true;
+    }
+
+    return this.filtersChosen.energyType === installation.energyType;
   }
 
   /**
