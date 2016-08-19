@@ -520,7 +520,7 @@ class MainController {
       return this.filterInstallations();
     }
 
-    const url = `http://nominatim.openstreetmap.org/search?q=${address},uk&format=json`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${address},uk&format=json`;
 
     return this.$http.get(url)
             .success(data => {
