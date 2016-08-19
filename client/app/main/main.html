@@ -42,6 +42,7 @@
         checked="checked"
         ng-model="$ctrl.filtersChosen.localAuthorities"
         ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
+      <span></span>
       All
     </label>
     <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
@@ -49,6 +50,7 @@
         value="{{localAuthority.name}}"
         ng-model="$ctrl.filtersChosen.localAuthorities"
         ng-change="$ctrl.filterInstallations(); $ctrl.loadLocalAreaJSON(localAuthority.name)">
+      <span></span>
       {{localAuthority.name}}
     </label>
 
@@ -58,12 +60,14 @@
         ng-model="$ctrl.filtersChosen.ownership"
         value="all"
         ng-change="$ctrl.filterInstallations()">
+      <span></span>
       All
     </label>
     <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
       <input type="radio" name="ownership" value="{{ownership.name}}"
         ng-model="$ctrl.filtersChosen.ownership"
         ng-change="$ctrl.filterInstallations()">
+      <span></span>
       {{ownership.name}}
     </label>
 
@@ -73,12 +77,14 @@
       <input type="radio" name="ownershipType" value="all"
         ng-model="$ctrl.filtersChosen.ownershipType"
         ng-change="$ctrl.filterInstallations()">
+      <span></span>
       All
     </label>
     <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
       <input type="radio" name="ownershipType" value="{{type.name}}"
         ng-model="$ctrl.filtersChosen.ownershipType"
         ng-change="$ctrl.filterInstallations()">
+      <span></span>
       {{type.name}}
     </label>
     </div>
@@ -88,12 +94,14 @@
       <input type="radio" name="energyTypes" value="all"
         ng-model="$ctrl.filtersChosen.energyType"
         ng-change="$ctrl.filterInstallations()">
+      <span></span>
       All
     </label>
     <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
       <input type="radio" name="energyTypes" value="{{type.name}}"
         ng-model="$ctrl.filtersChosen.energyType"
         ng-change="$ctrl.filterInstallations()">
+      <span></span>
       {{type.name}}
     </label>
   </div>

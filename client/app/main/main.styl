@@ -148,6 +148,38 @@ div.large-text
     display block
     margin-bottom 4px
 
+  input[type='radio']
+    position absolute
+    vertical-align middle
+    visibility hidden
+
+    + span
+      border 2px solid $font-color-primary
+      border-radius 50%
+      display inline-block
+      height 1em
+      position relative
+      vertical-align middle
+      width 1em
+
+      &:before
+        background $color-primary
+        border-radius 50%
+        content ''
+        height 0.6em
+        left 50%
+        margin -0.3em 0 0 -0.3em
+        position absolute
+        top 50%
+        transform scale(0, 0)
+        transform-origin 50% 50%
+        transition transform .6s cubic-bezier(0, 0, .25, 1)
+        width 0.6em
+
+    &:checked + span:before
+      transform scale(1, 1)
+      transition transform .6s cubic-bezier(.25, 1, 0, 0)
+
 /*
  * Stats
  */
