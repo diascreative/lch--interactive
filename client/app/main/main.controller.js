@@ -49,10 +49,12 @@ class MainController {
   }
 
   $onInit() {
+
+    this._setSavedFilters();
+
     // API call to get the array of installations
     this.$http.get('/api/installations').then(response => {
       this._installations = response.data;
-      this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
 
       // API call to get latest generating details
       this.$http.get('/api/generations').then(response => {
@@ -66,6 +68,8 @@ class MainController {
         });
 
         this._updateMapMarkers();
+        this.filterInstallations();
+        this.loadLocalAreaJSON(this.filtersChosen.localAuthorities);
       });
     });
 
@@ -74,8 +78,6 @@ class MainController {
       this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
       // this.$on('leafletDirectiveMarker.click', this.clickMarker);
     }
-
-    this._importGeoJSON();
   }
 
   /**
@@ -101,7 +103,7 @@ class MainController {
     marker.lat = installation.lat;
     marker.lng = installation.lng;
     marker.message = this._mapPopupHTML(installation);
-    marker.visible = true;
+    marker.visible = false;
 
     if (!marker.generated) {
       marker.generated = 0;
@@ -118,6 +120,22 @@ class MainController {
     return marker;
   }
 
+  _setSavedFilters() {
+    const hash = this.$location.hash();
+    const allFilters = hash.split('::');
+
+    if (allFilters.length !== 4) {
+      return;
+    }
+
+    this.filtersChosen = {
+      localAuthorities: allFilters[0],
+      ownership: allFilters[1],
+      ownershipType: allFilters[2],
+      energyType: allFilters[3]
+    };
+  }
+
 
   /**
    * Build the filters list from our API data
@@ -126,18 +144,6 @@ class MainController {
    */
   _installationsToFilters(installations) {
     const filters = this.filtersAvailable;
-    const hash = this.$location.hash();
-
-    let savedFilters = [
-      [],[],[],[]
-     ];
-
-    if (hash.indexOf('::') > -1) {
-      const allFilters = hash.split('::');
-      if (allFilters.length === 4) {
-        savedFilters = allFilters.map(type => type.split('+'));
-      }
-    }
 
     // clear out old filters
     _.forEach(filters, function(item, key) {
@@ -149,10 +155,6 @@ class MainController {
       filters.localAuthorities.push({
         name: installation.localAuthority
       });
-
-      if (savedFilters[0][0] === installation.localAuthority) {
-        this.filtersChosen.localAuthorities = installation.localAuthority;
-      }
 
       filters.ownership.push({
         name: installation.owner
@@ -173,10 +175,6 @@ class MainController {
     filters.ownership = _.uniqBy(filters.ownership, 'name');
     filters.ownershipType = _.uniqBy(filters.ownershipType, 'name');
     filters.energyTypes = _.uniqBy(filters.energyTypes, 'name');
-
-    if (this.filtersChosen.localAuthorities !== 'all') {
-      this.loadLocalAreaJSON(this.filtersChosen.localAuthorities);
-    }
 
     // return the filters
     return filters;
@@ -323,8 +321,8 @@ class MainController {
    *     "community and council"
    */
   copyOwnershipType() {
-    const msg = (this.filtersChosen.ownershipType === 'all') ? '' : this.filtersChosen.ownershipType;
-    return msg + ' energy';
+    const m = (this.filtersChosen.ownershipType === 'all') ? '' : this.filtersChosen.ownershipType;
+    return m + ' energy';
   }
 
   _addValuesAsString(values, fallback) {
@@ -353,7 +351,7 @@ class MainController {
     const marker = this.map.installations[args.modelName];
     this.currentHoverOver = 'out';
 
-    this.$timeout( () => {
+    this.$timeout(() => {
       if (args.modelName !== this.currentHoverOver) {
         marker.focus = false;
       }
@@ -370,7 +368,7 @@ class MainController {
     marker.focus = false;
     this.currentHoverOver = args.modelName;
 
-    this.$timeout( () => {
+    this.$timeout(() => {
       if (args.modelName === this.currentHoverOver) {
         marker.focus = true;
       }
@@ -412,24 +410,18 @@ class MainController {
     return cleanWatt + unit;
   }
 
-  loadLocalAreaJSON(name) {
-    if (name === this.filtersChosen.localAuthorities) {
-      const slugName = slug(name).toLowerCase();
-      const url = `/assets/json/${slugName}.json`;
+  loadLocalAreaJSON(name='all') {
+    const slugName = slug(name).toLowerCase();
+    const url = `/assets/json/${slugName}.json`;
 
-      return this._importGeoJSON(url, 'green', true);
-    }
-
-    if (this.filtersChosen.localAuthorities === 'all') {
-      return this._importGeoJSON();
-    }
+    return this._importGeoJSON(url);
   }
 
   /**
    * Import GeoJSON with the Oxfordshire boarders to highlight it on the map
    * @return {Promise}
    */
-  _importGeoJSON(url='/assets/json/topo_E07000178.json', fillColor='green', fill=false) {
+  _importGeoJSON(url='/assets/json/all.json', fillColor='green') {
     // Get the countries geojson data from a JSON
     return this.$http.get(url)
             .success(data => {
