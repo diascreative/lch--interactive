@@ -335,11 +335,11 @@ class MainController {
       generated: this.watts(installation.generated)
     };
 
-    const hasData = cleanNumbers.generated && cleanNumbers.datetime;
-
     if (installation.datetime) {
       cleanNumbers.datetime = moment(installation.datetime).fromNow();
     }
+
+    const hasData = cleanNumbers.generated && cleanNumbers.datetime;
 
     const html = [
       '<div>',
