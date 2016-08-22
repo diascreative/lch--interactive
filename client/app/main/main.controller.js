@@ -15,6 +15,19 @@ class MainController {
     this.search = '';
     this.filterLocation = false;
 
+    this._postCodeMatches = [
+        new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d[A-Z]{2})$/i), // SW1A+1AA
+        new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d)$/i),         // SW1A+1
+        new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*$/i)              // SW1A
+      ];
+
+    this._postCodeRadius = [
+      2,
+      10,
+      15,
+      40
+    ];
+
     this.filtersAvailable = {
       localAuthorities: [],
       ownership: [],
@@ -40,9 +53,9 @@ class MainController {
           zoom: (window.innerWidth > 1100 ? 10 : 9)
         },
         minZoom: 9,
-        // tileLayer: 'https://a.tiles.mapbox.com/v4/pirenaq.4122b387/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGlyZW5hcSIsImEiOiJjaWVtbzl2eXgwMDFuc3Rra3RuaWlnNzMxIn0.HxN1ugyk0JzH46gFnb6mXA'
+        //jscs:disable maximumLineLength
         tileLayer: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-        // tileLayer: 'http://{s}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png',
+        //jscs:enable maximumLineLength
         zoomControlPosition: 'bottomright',
         scrollWheelZoom: false
       }
@@ -199,6 +212,19 @@ class MainController {
 
     const freeText = this.search !== '';
     const searchRegExp = new RegExp(this.search, 'i');
+    const locationLength = this.address ? this.address.length : 0;
+    let locationRadiusIndex = 3;
+
+    if (locationLength > 1) {
+      for (let i = 0, len = this._postCodeMatches.length; i < len; i++) {
+        if (this.address.match(this._postCodeMatches[i])) {
+          locationRadiusIndex = i;
+          break;
+        }
+      }
+    }
+
+    let locationRadius = this._postCodeRadius[locationRadiusIndex];
 
     const visibleItems = [];
 
@@ -214,14 +240,14 @@ class MainController {
       let visible = (freeText && nameMatches) ||
                       (!freeText && inLas && belongsTo && ownershipType && energyType);
 
-      if (visible && this.filterLocation) {
+      if (visible && locationLength > 1) {
         // only check the distance if it's visible
         const distance = this._getDistanceFromLatLonInKm(installationMarker.lat,
                                                   installationMarker.lng,
                                                   this.filterLocation.lat,
                                                   this.filterLocation.lng);
 
-        if (distance > 10) {
+        if (distance > locationRadius) {
           visible = false;
         }
       }
@@ -309,6 +335,8 @@ class MainController {
       generated: this.watts(installation.generated)
     };
 
+    const hasData = cleanNumbers.generated && cleanNumbers.datetime;
+
     if (installation.datetime) {
       cleanNumbers.datetime = moment(installation.datetime).fromNow();
     }
@@ -318,8 +346,8 @@ class MainController {
         '<h2>%(name)s</h2>',
         'capacity: <strong>%(capacity)s</strong>',
         '<br>annual predicted generation: <strong>%(annualPredictedGeneration)s</strong>',
-        cleanNumbers.generated && cleanNumbers.datetime ? '<br>Was generating <strong>%(generated)s</strong>' : '',
-        cleanNumbers.datetime ? ', %(datetime)s' : '',
+        hasData ? '<br>Was generating <strong>%(generated)s</strong>' : '',
+        hasData ? ', %(datetime)s' : '',
       '</div>'
     ].join('');
 
@@ -515,12 +543,28 @@ class MainController {
   }
 
   setCoords(address) {
-    if (address.length < 3) {
+    if (address.length < 2) {
       this.filterLocation = false;
       return this.filterInstallations();
     }
 
-    const url = `https://nominatim.openstreetmap.org/search?q=${address},uk&format=json`;
+    let postcode = address.toUpperCase();
+
+    if (postcode.length > 2) {
+      let parts;
+
+      for (let i = 0, len = this._postCodeMatches.length; i < len; i++) {
+        parts = postcode.match(this._postCodeMatches[i]);
+
+        if (parts) {
+          parts.shift();
+          postcode = parts.join(' ');
+          break;
+        }
+      }
+    }
+
+    const url = `//nominatim.openstreetmap.org/search?q=${postcode},Oxfordshire,uk&format=json`;
 
     return this.$http.get(url)
             .success(data => {
