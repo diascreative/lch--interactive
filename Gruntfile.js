@@ -601,8 +601,15 @@ module.exports = function (grunt) {
         },
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl',
+          '.tmp/app/critical.css' : '<%= yeoman.client %>/components/critical.styl',
           '.tmp/admin/admin-app.css' : '<%= yeoman.client %>/admin/admin-app.styl'
         }
+      }
+    },
+
+    inline: {
+      dist: {
+        src: '.tmp/index.html'
       }
     },
 
@@ -658,7 +665,9 @@ module.exports = function (grunt) {
         files: {
           '<%= yeoman.client %>/app/app.styl': [
             '<%= yeoman.client %>/{app,components}/**/*.styl',
-            '!<%= yeoman.client %>/app/app.styl'
+            '!<%= yeoman.client %>/app/app.styl',
+            '!<%= yeoman.client %>/components/_variables.styl',
+            '!<%= yeoman.client %>/components/critical.styl'
           ]
         }
       },
@@ -856,6 +865,7 @@ module.exports = function (grunt) {
     'babel:server',
     'cdnify',
     'cssmin',
+    'inline',
     'uglify',
     'filerev',
     'usemin'

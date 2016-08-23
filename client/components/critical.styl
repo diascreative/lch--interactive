@@ -1,0 +1,31 @@
+@import '../components/_variables.styl'
+
+.graphic
+  min-height 90vh
+  width  100%
+
+.loading
+  font-size 200%
+  color $color-primary
+
+  animation loader 1.2s infinite
+  background: radial-gradient(closest-side, currentColor calc(100% - 1px), transparent) 0 50%,
+        radial-gradient(closest-side, currentColor calc(100% - 1px), transparent) 1.25em 50%,
+        radial-gradient(closest-side, currentColor calc(100% - 1px), transparent) 2.25em 50%;
+  background-size 1em 1em, .5em .5em, .5em .5em
+  background-repeat no-repeat
+  height 1em
+  left  50%
+  margin  -.5em 0 0 -1.5em
+  position  absolute
+  top  50%
+  width 3em
+
+@keyframes loader
+  33%
+    background-size .5em .5em, 1em 1em, .5em .5em
+    background-position .25em 50%, 1em 50%, 2.25em 50%
+
+  66%
+    background-size .5em .5em, .5em .5em, 1em 1em
+    background-position .25em 50%, 1.25em 50%, 2em 50%

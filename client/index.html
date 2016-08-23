@@ -10,47 +10,9 @@
     <title>LCH Interactive</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <style type="text/css">
-    /**
-     * Pure CSS loader that doesn't even need a pseudo-element, only with background images
-     */
 
-    @keyframes loader {
-      33% {
-        background-size: .5em .5em, 1em 1em, .5em .5em;
-        background-position: .25em 50%, 1em 50%, 2.25em 50%;
-      }
+    <link rel="stylesheet" href="app/critical.css?__inline=true">
 
-      66% {
-        background-size: .5em .5em, .5em .5em, 1em 1em;
-        background-position: .25em 50%, 1.25em 50%, 2em 50%;
-      }
-    }
-
-    .graphic {
-      min-height: 90vh;
-      width:  100%;
-    }
-
-    .loading {
-      font-size: 200%; /* size of loader */
-      color: #24CE7B; /* color of loader */
-
-
-      animation: loader 1.2s infinite;
-      background: radial-gradient(closest-side, currentColor calc(100% - 1px), transparent) 0 50%,
-            radial-gradient(closest-side, currentColor calc(100% - 1px), transparent) 1.25em 50%,
-            radial-gradient(closest-side, currentColor calc(100% - 1px), transparent) 2.25em 50%;
-      background-size: 1em 1em, .5em .5em, .5em .5em;
-      background-repeat: no-repeat;
-      height: 1em;
-      left:  50%;
-      margin:  -.5em 0 0 -1.5em;
-      position:  absolute;
-      top:  50%;
-      width: 3em;
-    }
-    </style>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
