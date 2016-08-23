@@ -100,7 +100,8 @@ export function show(req, res) {
       group: [
         'datetime'
       ],
-      limit: 50
+      limit: 50,
+      order: 'datetime DESC'
     })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))

@@ -53,7 +53,7 @@ class MainController {
             ticks: {
               fontColor: '#fff',
               callback: function(value) {
-                return moment(value).format('Do MMM');
+                return moment(value).fromNow();
               }
             }
           }],
@@ -128,6 +128,8 @@ class MainController {
 
     return this.$http.get(url)
             .success(data => {
+              data.reverse();
+
               this.graph.labels = data.map(item => {
                 return item.datetime;
               });
