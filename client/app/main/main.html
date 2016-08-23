@@ -24,10 +24,17 @@
     </div>
   </div>
 
-  <input class="postcode-seach" placeholder="Search close to your postcode"
-    ng-change="$ctrl.setCoords($ctrl.address)" ng-model="$ctrl.address">
-
   <div class="filters__options">
+    <p>
+      Search the People’s Power Station to explore locally owned renewable energy in Oxfordshire.
+    </p>
+
+    <p>
+      The database showcases the renewable energy projects belonging to the Low Carbon Hub and some
+      of of our partners.  Plans are underway to plug in all Oxfordshire’s locally owned energy
+      projects – watch this space!
+    </p>
+
     <ui-select title="Search by project"
       ng-model="$ctrl.searchInstallation"
       on-select="$ctrl.filterFreeText($item)">
@@ -48,6 +55,9 @@
       <span></span>
       All
     </label>
+
+    <p>or by a local authority area</p>
+
     <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
       <input type="radio" name="local-authorities"
         value="{{localAuthority.name}}"
@@ -56,6 +66,9 @@
       <span></span>
       {{localAuthority.name}}
     </label>
+
+    or your can <input class="postcode-seach" placeholder="search near your postcode"
+    ng-change="$ctrl.setCoords($ctrl.address)" ng-model="$ctrl.address">
 
     <h4>Ownership</h4>
     <label>

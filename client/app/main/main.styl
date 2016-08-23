@@ -107,8 +107,8 @@ div.large-text
   background rgba(#fff, .95)
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
   left 0
-  height 100vh
-  max-height 100vh
+  height calc(100vh - 76px)
+  max-height calc(100vh - 76px)
   max-width $filter-width
   overflow auto
   padding 30px 48px 20px
@@ -121,6 +121,17 @@ div.large-text
     position relative
 
   .postcode-seach
+    border 0
+    border-bottom solid 1px #D0D3D5
+    display inline-block
+    font-size 16px
+    letter-spacing -.36px
+    line-height 22px
+    height 32px
+    max-width 220px
+    padding 5px 10px
+    width 100%
+
   .ui-select-toggle
   .ui-select-search
     background transparent url(/assets/images/magnifying-glass.svg) 0 50% no-repeat
@@ -216,7 +227,8 @@ $animation-timing = .3s
   transition transform 1s cubic-bezier(0, 0, .25, 1)
 
 .map-section
-  height 100vh
+  box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+  height calc(100vh - 76px)
   margin-left $filter-width
   padding 20px 20px 20px 0
   position relative
