@@ -417,6 +417,11 @@ module.exports = function (grunt) {
             '<%= yeoman.server %>/**/*',
             '!<%= yeoman.server %>/config/local.env.sample.js'
           ]
+        }, {
+          expand: true,
+          cwd: '.tmp/app',
+          dest: '<%= yeoman.dist %>/<%= yeoman.client %>/app',
+          src: ['critical.css']
         }]
       },
       styles: {
@@ -609,7 +614,10 @@ module.exports = function (grunt) {
 
     inline: {
       dist: {
-        src: '.tmp/index.html'
+        options:{
+          cssmin: true
+        },
+        src: '<%= yeoman.dist %>/<%= yeoman.client %>/index.html'
       }
     },
 
