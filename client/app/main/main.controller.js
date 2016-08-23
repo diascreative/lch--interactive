@@ -43,10 +43,20 @@ class MainController {
     };
 
     this.graph = {
+      colors: ['#ffffff'],
       data: [],
       labels: [],
+      series: ['Series A'],
       pointRadius: 0,
       options: {
+        elements: {
+          line: {
+            borderWidth: 3
+          },
+          point: {
+            radius: 0
+          }
+        },
         scales: {
           xAxes: [{
             beginAtZero: false,
@@ -54,7 +64,11 @@ class MainController {
               fontColor: '#fff',
               callback: function(value) {
                 return moment(value).fromNow();
-              }
+              },
+              maxTicksLimit: 7
+            },
+            gridLines: {
+              display: false
             }
           }],
           yAxes: [{
@@ -64,6 +78,9 @@ class MainController {
               callback: function(value) {
                 return value / 1000;
               }
+            },
+            gridLines: {
+              display: false
             }
           }]
         }

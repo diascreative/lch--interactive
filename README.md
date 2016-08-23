@@ -18,6 +18,12 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 
 2. Run `bower install` to install front-end dependencies.
 
+3. Our Chart.js dependency is a little silly, update its bower file
+
+```
+"main": "./dist/Chart.min.js",
+```
+
 3. Run `grunt serve` to start the development server. It should automatically open the client in your browser when ready.
 
 ## Build & development
