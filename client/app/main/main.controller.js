@@ -17,12 +17,14 @@ class MainController {
 
     this._postCodeMatches = [
         new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d[A-Z]{2})$/i), // SW1A+1AA
+        new RegExp(/^([A-Z]{1,2}\d\d)$/i),                         // OX25
         new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d)$/i),         // SW1A+1
         new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*$/i)              // SW1A
       ];
 
     this._postCodeRadius = [
       2,
+      15,
       10,
       15,
       40
