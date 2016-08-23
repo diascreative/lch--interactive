@@ -10,17 +10,31 @@
     </p> -->
 
     <div class="stats">
-      Together,
-      {{$ctrl.copyOwnershipType()}}
-      in
-      {{$ctrl.copyArea()}}
-      is currently generating:
+      <p>
+        <span class="large-text">{{$ctrl.getFilteredTotalYearlyGeneration()}}</span> each year from
+      </p>
 
-      <div class="large-text">{{$ctrl.getFilteredTotalGeneration()}}</div>
+      <p>
+        from
+        <span class="large-text">{{$ctrl.getFilteredInstallations()}}</span>
+        {{$ctrl.copyOwnershipType()}} installations in
+      </p>
 
-      from
+      <p>
+        {{$ctrl.copyArea()}}
+      </p>
 
-      {{$ctrl.getFilteredInstallations()}} installations
+      <p>
+        <span class="large-text">{{$ctrl.getFilteredTotalCapacity()}}</span> generating capacity
+      </p>
+
+      <p>enough to save XXX tonnes of CO2 each year.</p>
+
+      <p>
+        That’s the equivalent of<br>
+        XXXX [fridge freezers for a day]  and meets<br>
+        XXX people’s share of Oxfordshire’s energy need.
+      </p>
 
       <div class="graph" ng-if="$ctrl.graph.data.length">
         <canvas class="chart chart-line" style="width: 100%; height: 200px"

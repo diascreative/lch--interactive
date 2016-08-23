@@ -432,6 +432,28 @@ class MainController {
   }
 
   /**
+   * Get the total capacity from the visible installations
+   * @return {String} $filtered sum
+   */
+  getFilteredTotalCapacity() {
+    const visibleInstallations = this._getVisibleInstallations();
+    const total = _.sumBy(visibleInstallations, 'capacity');
+
+    return this.watts(total);
+  }
+
+  /**
+   * Get the total annual predicted generation from the visible installations
+   * @return {String} $filtered sum
+   */
+  getFilteredTotalYearlyGeneration() {
+    const visibleInstallations = this._getVisibleInstallations();
+    const total = _.sumBy(visibleInstallations, 'annualPredictedGeneration');
+
+    return this.watts(total) + 'h';
+  }
+
+  /**
    * Get the total generation from the visible installations
    * @return {String} $filtered sum
    */
@@ -474,7 +496,7 @@ class MainController {
    */
   copyOwnershipType() {
     const m = (this.filtersChosen.ownershipType === 'all') ? '' : this.filtersChosen.ownershipType;
-    return m + ' energy';
+    return m + ' renewable energy';
   }
 
   _addValuesAsString(values, fallback) {
