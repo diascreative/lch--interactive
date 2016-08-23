@@ -51,7 +51,7 @@ class MainController {
       options: {
         elements: {
           line: {
-            borderWidth: 3
+            borderWidth: 0
           },
           point: {
             radius: 0
@@ -72,6 +72,11 @@ class MainController {
             }
           }],
           yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'generation (MW)    ',
+              fontColor: '#fff'
+            },
             beginAtZero: false,
             ticks: {
               fontColor: '#fff',
