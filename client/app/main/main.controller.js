@@ -42,6 +42,34 @@ class MainController {
       energyType: 'all'
     };
 
+    this.graph = {
+      data: [],
+      labels: [],
+      pointRadius: 0,
+      options: {
+        scales: {
+          xAxes: [{
+            beginAtZero: false,
+            ticks: {
+              fontColor: '#fff',
+              callback: function(value) {
+                return moment(value).format('Do MMM');
+              }
+            }
+          }],
+          yAxes: [{
+            beginAtZero: false,
+            ticks: {
+              fontColor: '#fff',
+              callback: function(value) {
+                return value / 1000;
+              }
+            }
+          }]
+        }
+      }
+    };
+
     // set our map variables
     this.map = {
       installations: [],
@@ -90,8 +118,25 @@ class MainController {
     if (!L.Browser.touch) {
       this.$scope.$on('leafletDirectiveMarker.mouseover', this.mouseOverMarker.bind(this));
       this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
-      // this.$on('leafletDirectiveMarker.click', this.clickMarker);
+      this.$scope.$on('leafletDirectiveMarker.click', this.clickMarker.bind(this));
     }
+  }
+
+  clickMarker(e, args) {
+    const marker = this.map.installations[args.modelName];
+    const url = `/api/installations/${marker.name}`;
+
+    return this.$http.get(url)
+            .success(data => {
+              this.graph.labels = data.map(item => {
+                return item.datetime;
+              });
+
+              this.graph.data = data.map(item => {
+                return item.generated;
+              });
+            });
+
   }
 
   /**

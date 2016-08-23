@@ -9,7 +9,7 @@
 
 'use strict';
 
-import {Installation, sequelize} from '../../sqldb';
+import {Installation, Generation, sequelize} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -88,11 +88,20 @@ export function index(req, res) {
 
 // Gets a single Installation from the DB
 export function show(req, res) {
-  return Installation.find({
-    where: {
-      _id: req.params.id
-    }
-  })
+  return Generation
+    .findAll({
+      where: {
+        InstallationName: req.params.id
+      },
+      attributes: [
+        'datetime',
+        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+      ],
+      group: [
+        'datetime'
+      ],
+      limit: 50
+    })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
