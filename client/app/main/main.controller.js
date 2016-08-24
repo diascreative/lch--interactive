@@ -136,6 +136,7 @@ class MainController {
         this._updateMapMarkers();
         this.filterInstallations();
         this.loadAreaJSON(this.filtersChosen.localAuthorities);
+        this.loadHistoricData();
       });
     });
 
@@ -148,7 +149,25 @@ class MainController {
 
   clickMarker(e, args) {
     const marker = this.map.installations[args.modelName];
-    const url = `/api/installations/${marker.name}`;
+    const url = `/api/generations/historic/${marker.name}`;
+
+    return this.$http.get(url)
+            .success(data => {
+              data.reverse();
+
+              this.graph.labels = data.map(item => {
+                return item.datetime;
+              });
+
+              this.graph.data = data.map(item => {
+                return item.generated;
+              });
+            });
+
+  }
+
+  loadHistoricData() {
+    const url = `/api/generations/historic`;
 
     return this.$http.get(url)
             .success(data => {

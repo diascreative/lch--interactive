@@ -1,11 +1,13 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/generations              ->  index
+ * GET     /api/generations/historic     ->  historic
+ * GET     /api/generations/historic/:id     ->  singleHistoric
  */
 
 'use strict';
 
-import {sequelize} from '../../sqldb';
+import {Generation, sequelize} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -60,4 +62,46 @@ export function index(req, res) {
     .then(respondWithResult(res))
     .catch(handleError(res));
 
+}
+
+// Gets a single Installation from the DB
+export function historic(req, res) {
+  return Generation
+    .findAll({
+      attributes: [
+        [sequelize.fn('max', sequelize.col('datetime')), 'datetime'],
+        [sequelize.fn('date_format', sequelize.col('datetime'), '%h-%Y-%m-%d'), 'date_col_formed'],
+        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+      ],
+      group: [
+        'date_col_formed'
+      ],
+      limit: 100,
+      order: 'datetime DESC'
+    })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Gets a single Installation from the DB
+export function historicSingle(req, res) {
+  return Generation
+    .findAll({
+      where: {
+        InstallationName: req.params.name
+      },
+      attributes: [
+        'datetime',
+        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+      ],
+      group: [
+        'datetime'
+      ],
+      limit: 100,
+      order: 'datetime DESC'
+    })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 }
