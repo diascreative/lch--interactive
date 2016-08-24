@@ -12,7 +12,6 @@ class MainController {
     this.$scope = $scope;
 
     this._installations = [];
-    this.search = '';
     this.filterLocation = false;
 
     this._postCodeMatches = [
@@ -287,10 +286,14 @@ class MainController {
     return filters;
   }
 
-  filterFreeText(installation=false) {
-    this.search = installation ? installation.name : '';
-
-    return this.filterInstallations();
+  /**
+   * Select an installation from the free text search
+   * @param  {Object} marker
+   */
+  filterFreeText(marker = false) {
+    if (marker) {
+      this._centerOnMarker(marker);
+    }
   }
 
   /**
@@ -303,8 +306,6 @@ class MainController {
                     this.filtersChosen.ownershipType + '::' +
                     this.filtersChosen.energyType;
 
-    const freeText = this.search !== '';
-    const searchRegExp = new RegExp(this.search, 'i');
     const locationLength = this.address ? this.address.length : 0;
     let locationRadiusIndex = 3;
 
@@ -328,10 +329,8 @@ class MainController {
       const belongsTo = this.belongsTo(installationMarker);
       const ownershipType = this.hasOwnerShipType(installationMarker);
       const energyType = this.hasEnergyType(installationMarker);
-      const nameMatches = !freeText || installationMarker.name.search(searchRegExp) > -1;
 
-      let visible = (freeText && nameMatches) ||
-                      (!freeText && inLas && belongsTo && ownershipType && energyType);
+      let visible =inLas && belongsTo && ownershipType && energyType;
 
       if (visible && locationLength > 1) {
         // only check the distance if it's visible
@@ -356,13 +355,21 @@ class MainController {
 
     if (visibleItems.length === 1) {
       const marker = this.map.installations[visibleItems[0]];
-      marker.focus = true;
-
-      this.map.defaults.center.lat = marker.lat;
-      this.map.defaults.center.lng = marker.lng;
+      this._centerOnMarker(marker);
     }
 
     this.loadHistoricData();
+  }
+
+  /**
+   * Show a marker and move the map to its coordinates
+   * @param  {Object} marker
+   */
+  _centerOnMarker(marker) {
+    marker.focus = true;
+    marker.visible = true;
+    this.map.defaults.center.lat = marker.lat;
+    this.map.defaults.center.lng = marker.lng;
   }
 
   /**
