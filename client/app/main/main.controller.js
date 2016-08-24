@@ -206,12 +206,13 @@ class MainController {
     marker.draggable = false;
     marker.lat = installation.lat;
     marker.lng = installation.lng;
-    marker.message = this._mapPopupHTML(installation);
     marker.visible = false;
 
     if (!marker.generated) {
       marker.generated = 0;
     }
+
+    marker.capacity = marker.capacity * 1000;
 
     marker.icon = {
       type: 'div',
@@ -220,6 +221,8 @@ class MainController {
       iconAnchor: [15, 45],
       popupAnchor: [0, -45]
     };
+
+    marker.message = this._mapPopupHTML(marker);
 
     return marker;
   }
