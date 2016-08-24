@@ -658,6 +658,10 @@ class MainController {
   _setMapBounds() {
     const visibleInstallations = this._getVisibleInstallations();
 
+    if (!visibleInstallations.length) {
+      return;
+    }
+
     this.map.bounds = {
       southWest: {
         lat: _.minBy(visibleInstallations, 'lat').lat,
