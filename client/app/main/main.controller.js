@@ -358,6 +358,7 @@ class MainController {
       this._centerOnMarker(marker);
     }
 
+    this._setMapBounds();
     this.loadHistoricData();
   }
 
@@ -647,23 +648,26 @@ class MainController {
                   fillOpacity: 0.05
                 }
               };
-
-              this.$timeout(() => {
-                const installations = L.geoJson(data);
-                const bounds = installations.getBounds();
-
-                this.map.bounds = {
-                  southWest: {
-                    lat: bounds._southWest.lat,
-                    lng: bounds._southWest.lng
-                  },
-                  northEast: {
-                    lat: bounds._northEast.lat,
-                    lng: bounds._northEast.lng
-                  }
-                };
-              }, 600);
             });
+  }
+
+  /**
+   * Set the map to encapsulate all the visible markers as best as possible
+   * for the window size
+   */
+  _setMapBounds() {
+    const visibleInstallations = this._getVisibleInstallations();
+
+    this.map.bounds = {
+      southWest: {
+        lat: _.minBy(visibleInstallations, 'lat').lat,
+        lng: _.minBy(visibleInstallations, 'lng').lng
+      },
+      northEast: {
+        lat: _.maxBy(visibleInstallations, 'lat').lat + 0.0261,
+        lng: _.maxBy(visibleInstallations, 'lng').lng
+      }
+    };
   }
 
   setCoords(address) {
