@@ -7,7 +7,7 @@
 
 'use strict';
 
-import {Generation, sequelize} from '../../sqldb';
+import {Installation, Generation, sequelize} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -64,27 +64,70 @@ export function index(req, res) {
 
 }
 
-// Gets a single Installation from the DB
+// Gets the historic data for filtered installations
 export function historic(req, res) {
-  return Generation
-    .findAll({
-      attributes: [
-        [sequelize.fn('max', sequelize.col('datetime')), 'datetime'],
-        [sequelize.fn('date_format', sequelize.col('datetime'), '%h-%Y-%m-%d'), 'date_col_formed'],
-        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
-      ],
-      group: [
-        'date_col_formed'
-      ],
-      limit: 100,
-      order: 'datetime DESC'
-    })
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  const localAuthorities = req.query.localAuthorities;
+  const owner = req.query.ownership;
+  const ownershipType = req.query.ownershipType;
+  const energyType = req.query.energyType;
+
+  let whereFilter = {};
+
+  if (localAuthorities && localAuthorities !== 'all') {
+    whereFilter.localAuthority = localAuthorities;
+  }
+
+  if (owner && owner !== 'all') {
+    whereFilter.owner = owner;
+  }
+
+  if (ownershipType && ownershipType !== 'all') {
+    whereFilter.ownershipType = ownershipType;
+  }
+
+  if (energyType && energyType !== 'all') {
+    whereFilter.energyType = energyType;
+  }
+
+  return Installation.findAll({
+    attributes: ['_id'],
+    where: whereFilter
+  })
+  .then(historicMultiple(whereFilter))
+  .then(respondWithResult(res))
+  .catch(handleError(res));
 }
 
-// Gets a single Installation from the DB
+function historicMultiple(whereFilter) {
+  return function(installationIds=[]) {
+    let where = {};
+
+    if (Object.getOwnPropertyNames(whereFilter).length > 0) {
+        const ids = installationIds.map(installation => {
+        return installation.dataValues._id
+      });
+
+      where.InstallationId = ids;
+    }
+
+    return Generation
+      .findAll({
+        attributes: [
+          [sequelize.fn('max', sequelize.col('datetime')), 'datetime'],
+          [sequelize.fn('date_format', sequelize.col('datetime'), '%Y%m%d%h'), 'date_col_formed'],
+          [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+        ],
+        where: where,
+        group: [
+          'date_col_formed'
+        ],
+        limit: 100,
+        order: 'datetime DESC'
+      });
+  }
+}
+
+// Gets the historic data for an installation
 export function historicSingle(req, res) {
   return Generation
     .findAll({

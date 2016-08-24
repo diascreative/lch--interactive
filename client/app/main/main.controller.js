@@ -136,7 +136,6 @@ class MainController {
         this._updateMapMarkers();
         this.filterInstallations();
         this.loadAreaJSON(this.filtersChosen.localAuthorities);
-        this.loadHistoricData();
       });
     });
 
@@ -168,8 +167,9 @@ class MainController {
 
   loadHistoricData() {
     const url = `/api/generations/historic`;
+    const data = this.filtersChosen;
 
-    return this.$http.get(url)
+    return this.$http.get(url, {params: data})
             .success(data => {
               data.reverse();
 
@@ -358,6 +358,8 @@ class MainController {
       this.map.defaults.center.lat = marker.lat;
       this.map.defaults.center.lng = marker.lng;
     }
+
+    this.loadHistoricData();
   }
 
   /**
