@@ -9,33 +9,16 @@
 
 'use strict';
 
+const bluebird = require('bluebird');
 import {Installation, Generation, sequelize} from '../../sqldb';
+import config from '../../config/environment';
+import redisClient from '../../redis';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
       res.status(statusCode).json(entity);
-    }
-  };
-}
-
-function saveUpdates(updates) {
-  return function(entity) {
-    return entity.updateAttributes(updates)
-      .then(updated => {
-        return updated;
-      });
-  };
-}
-
-function removeEntity(res) {
-  return function(entity) {
-    if (entity) {
-      return entity.destroy()
-        .then(() => {
-          res.status(204).end();
-        });
     }
   };
 }
@@ -57,31 +40,42 @@ function handleError(res, statusCode) {
   };
 }
 
+/**
+ * Check if we have cached an API response
+ * @param  {String} redisKey
+ * @return {Promise}
+ */
+function getCache(redisKey) {
+  if (!config.redis.enabled) {
+    return bluebird.delay(1);
+  }
+
+  return redisClient.getAsync(redisKey)
+}
+
+/**
+ * Cache an API response
+ * @param  {String} redisKey
+ * @param  {Number}  cacheExpiry
+ * @return {Array} Respose
+ */
+function cacheResponse(redisKey=false, cacheExpiry=900) {
+  return function(entity) {
+    if (redisKey && entity) {
+      redisClient.set(redisKey, JSON.stringify(entity));
+      redisClient.expire(redisKey, cacheExpiry);
+    }
+
+    return entity;
+  }
+}
+
 // Gets a list of Installations
 export function index(req, res) {
-  return Installation
-    .findAll({
-      attributes: [
-        'name',
-        'localAuthority',
-        'owner',
-        'ownershipType',
-        'energyType',
-        [sequelize.fn('max', sequelize.col('lat')), 'lat'],
-        [sequelize.fn('min', sequelize.col('lng')), 'lng'],
-        [sequelize.fn('sum',
-                        sequelize.col('annualPredictedGeneration')
-                      ), 'annualPredictedGeneration'],
-        [sequelize.fn('sum', sequelize.col('capacity')), 'capacity']
-      ],
-      group: [
-        'name',
-        'localAuthority',
-        'owner',
-        'ownershipType',
-        'energyType'
-      ]
-    })
+  const redisKey = `${config.redis.key}::installation--index`;
+
+  return getCache(redisKey)
+    .then(queryGetInstallations(redisKey))
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -108,37 +102,35 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
-// Creates a new Installation in the DB
-export function create(req, res) {
-  return Installation.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
-}
+function queryGetInstallations(redisKey) {
+  return function(cached) {
+    if (cached) {
+      return JSON.parse(cached);
+    }
 
-// Updates an existing Installation in the DB
-export function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+    return Installation
+      .findAll({
+        attributes: [
+          'name',
+          'localAuthority',
+          'owner',
+          'ownershipType',
+          'energyType',
+          [sequelize.fn('max', sequelize.col('lat')), 'lat'],
+          [sequelize.fn('min', sequelize.col('lng')), 'lng'],
+          [sequelize.fn('sum',
+                          sequelize.col('annualPredictedGeneration')
+                        ), 'annualPredictedGeneration'],
+          [sequelize.fn('sum', sequelize.col('capacity')), 'capacity']
+        ],
+        group: [
+          'name',
+          'localAuthority',
+          'owner',
+          'ownershipType',
+          'energyType'
+        ]
+      })
+      .then(cacheResponse(redisKey, 86400));
   }
-  return Installation.find({
-    where: {
-      _id: req.params.id
-    }
-  })
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-// Deletes a Installation from the DB
-export function destroy(req, res) {
-  return Installation.find({
-    where: {
-      _id: req.params.id
-    }
-  })
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
 }

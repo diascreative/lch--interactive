@@ -38,6 +38,11 @@ function handleError(res, statusCode) {
   };
 }
 
+/**
+ * Check if we have cached an API response
+ * @param  {String} redisKey
+ * @return {Promise}
+ */
 function getCache(redisKey) {
   if (!config.redis.enabled) {
     return bluebird.delay(1);
