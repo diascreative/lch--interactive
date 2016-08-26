@@ -20,11 +20,11 @@ function respondWithResult(res, statusCode) {
   };
 }
 
-function cacheResponse(redisKey=false) {
+function cacheResponse(redisKey=false, cacheExpiry=900) {
   return function(entity) {
     if (redisKey && entity) {
       redisClient.set(redisKey, JSON.stringify(entity));
-      redisClient.expire(redisKey, 10);
+      redisClient.expire(redisKey, cacheExpiry);
     }
 
     return entity;
@@ -48,38 +48,10 @@ function handleError(res, statusCode) {
   };
 }
 
-function getLiveGenerations(redisKey) {
-  return function(cached) {
-    if (cached) {
-      return JSON.parse(cached);
-    }
-
-    var superQuery = `
-    SELECT
-      MAX(\`datetime\`) AS \`datetime\`,
-      SUM(\`generated\`) AS \`generated\`,
-      InstallationName
-    FROM
-        Generations a
-        inner join
-            (
-              SELECT
-                MAX(\`datetime\`) as \`max_datetime\`, InstallationId
-              FROM
-                \`Generations\`
-              GROUP BY
-                InstallationId
-            ) as b on
-            a.InstallationId = b.InstallationId AND a.datetime = b.max_datetime
-    GROUP BY InstallationName
-    ORDER BY InstallationName
-    `;
-
-    return sequelize.query(superQuery, { type: sequelize.QueryTypes.SELECT})
-      .then(cacheResponse(redisKey));
-  }
-}
-
+/**
+ * /api/generations
+ * Return the latest generation data for all installations
+ */
 export function index(req, res) {
   const redisKey = `${config.redis.key}::generation--index`;
 
@@ -91,7 +63,10 @@ export function index(req, res) {
 
 }
 
-// Gets the historic data for filtered installations
+/**
+ * /api/generations/historic
+ * Gets the historic data for filtered installations
+ */
 export function historic(req, res) {
   const localAuthorities = req.query.localAuthorities;
   const owner = req.query.ownership;
@@ -125,6 +100,68 @@ export function historic(req, res) {
   .catch(handleError(res));
 }
 
+/**
+ * /api/generations/historic/:id
+ * Gets the historic data for an installation
+ */
+export function historicSingle(req, res) {
+  return Generation
+    .findAll({
+      where: {
+        InstallationName: req.params.name
+      },
+      attributes: [
+        'datetime',
+        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+      ],
+      group: [
+        'datetime'
+      ],
+      limit: 100,
+      order: 'datetime DESC'
+    })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+
+/**
+ * Get the latest live data for each installation
+ * @param  {String} redisKey if we do a DB query, we'll cache the response
+ */
+function getLiveGenerations(redisKey) {
+  return function(cached) {
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    var superQuery = `
+    SELECT
+      MAX(\`datetime\`) AS \`datetime\`,
+      SUM(\`generated\`) AS \`generated\`,
+      InstallationName
+    FROM
+        Generations a
+        inner join
+            (
+              SELECT
+                MAX(\`datetime\`) as \`max_datetime\`, InstallationId
+              FROM
+                \`Generations\`
+              GROUP BY
+                InstallationId
+            ) as b on
+            a.InstallationId = b.InstallationId AND a.datetime = b.max_datetime
+    GROUP BY InstallationName
+    ORDER BY InstallationName
+    `;
+
+    return sequelize.query(superQuery, { type: sequelize.QueryTypes.SELECT})
+      .then(cacheResponse(redisKey));
+  }
+}
+
 function historicMultiple(whereFilter) {
   return function(installationIds=[]) {
     let where = {};
@@ -152,26 +189,4 @@ function historicMultiple(whereFilter) {
         order: 'datetime DESC'
       });
   }
-}
-
-// Gets the historic data for an installation
-export function historicSingle(req, res) {
-  return Generation
-    .findAll({
-      where: {
-        InstallationName: req.params.name
-      },
-      attributes: [
-        'datetime',
-        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
-      ],
-      group: [
-        'datetime'
-      ],
-      limit: 100,
-      order: 'datetime DESC'
-    })
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
 }
