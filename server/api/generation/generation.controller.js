@@ -7,6 +7,7 @@
 
 'use strict';
 
+const bluebird = require('bluebird');
 import {Installation, Generation, sequelize} from '../../sqldb';
 import config from '../../config/environment';
 import redisClient from '../../redis';
@@ -18,17 +19,6 @@ function respondWithResult(res, statusCode) {
       res.status(statusCode).json(entity);
     }
   };
-}
-
-function cacheResponse(redisKey=false, cacheExpiry=900) {
-  return function(entity) {
-    if (redisKey && entity) {
-      redisClient.set(redisKey, JSON.stringify(entity));
-      redisClient.expire(redisKey, cacheExpiry);
-    }
-
-    return entity;
-  }
 }
 
 function handleEntityNotFound(res) {
@@ -48,6 +38,31 @@ function handleError(res, statusCode) {
   };
 }
 
+function getCache(redisKey) {
+  if (!config.redis.enabled) {
+    return bluebird.delay(1);
+  }
+
+  return redisClient.getAsync(redisKey)
+}
+
+/**
+ * Cache an API response
+ * @param  {String} redisKey
+ * @param  {Number}  cacheExpiry
+ * @return {Array} Respose
+ */
+function cacheResponse(redisKey=false, cacheExpiry=900) {
+  return function(entity) {
+    if (redisKey && entity) {
+      redisClient.set(redisKey, JSON.stringify(entity));
+      redisClient.expire(redisKey, cacheExpiry);
+    }
+
+    return entity;
+  }
+}
+
 /**
  * /api/generations
  * Return the latest generation data for all installations
@@ -55,8 +70,8 @@ function handleError(res, statusCode) {
 export function index(req, res) {
   const redisKey = `${config.redis.key}::generation--index`;
 
-  return redisClient.getAsync(redisKey)
-    .then(getLiveGenerations(redisKey))
+  return getCache(redisKey)
+    .then(queryLiveGenerations(redisKey))
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -75,6 +90,8 @@ export function historic(req, res) {
 
   let whereFilter = {};
 
+  const redisKey = `${config.redis.key}::generation--historic-${localAuthorities}-${owner}-${ownershipType}-${energyType}`;
+
   if (localAuthorities && localAuthorities !== 'all') {
     whereFilter.localAuthority = localAuthorities;
   }
@@ -91,13 +108,10 @@ export function historic(req, res) {
     whereFilter.energyType = energyType;
   }
 
-  return Installation.findAll({
-    attributes: ['_id'],
-    where: whereFilter
-  })
-  .then(historicMultiple(whereFilter))
-  .then(respondWithResult(res))
-  .catch(handleError(res));
+  return getCache(redisKey)
+    .then(queryHistoricMultiple(whereFilter, redisKey))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 }
 
 /**
@@ -105,21 +119,11 @@ export function historic(req, res) {
  * Gets the historic data for an installation
  */
 export function historicSingle(req, res) {
-  return Generation
-    .findAll({
-      where: {
-        InstallationName: req.params.name
-      },
-      attributes: [
-        'datetime',
-        [sequelize.fn('sum', sequelize.col('generated')), 'generated']
-      ],
-      group: [
-        'datetime'
-      ],
-      limit: 100,
-      order: 'datetime DESC'
-    })
+  const installationName = req.params.name;
+  const redisKey = `${config.redis.key}::generation--installation-${installationName}`;
+
+  return getCache(redisKey)
+    .then(queryHistoricSingle(installationName, redisKey))
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -127,10 +131,10 @@ export function historicSingle(req, res) {
 
 
 /**
- * Get the latest live data for each installation
+ * DB query to get the latest live data for each installation
  * @param  {String} redisKey if we do a DB query, we'll cache the response
  */
-function getLiveGenerations(redisKey) {
+function queryLiveGenerations(redisKey) {
   return function(cached) {
     if (cached) {
       return JSON.parse(cached);
@@ -162,7 +166,26 @@ function getLiveGenerations(redisKey) {
   }
 }
 
-function historicMultiple(whereFilter) {
+/**
+ * DB query to get the historic generation for filtered installations
+ * @param  {String} redisKey if we do a DB query, we'll cache the response
+ */
+function queryHistoricMultiple(whereFilter, redisKey) {
+  return function(cached) {
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    return Installation.findAll({
+      attributes: ['_id'],
+      where: whereFilter
+    })
+    .then(queryGenerationForIds(whereFilter))
+    .then(cacheResponse(redisKey));
+  }
+}
+
+function queryGenerationForIds(whereFilter) {
   return function(installationIds=[]) {
     let where = {};
 
@@ -189,4 +212,34 @@ function historicMultiple(whereFilter) {
         order: 'datetime DESC'
       });
   }
+}
+
+/**
+ * DB query to get the historic generation for an Installation
+ * @param  {String} installationName
+ * @param  {String} redisKey
+ */
+function queryHistoricSingle(installationName, redisKey) {
+  return function(cached) {
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    return Generation
+      .findAll({
+        where: {
+          InstallationName: installationName
+        },
+        attributes: [
+          'datetime',
+          [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+        ],
+        group: [
+          'datetime'
+        ],
+        limit: 100,
+        order: 'datetime DESC'
+      })
+      .then(cacheResponse(redisKey));
+  };
 }
