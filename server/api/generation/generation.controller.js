@@ -8,6 +8,8 @@
 'use strict';
 
 import {Installation, Generation, sequelize} from '../../sqldb';
+import config from '../../config/environment';
+import redisClient from '../../redis';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -16,6 +18,17 @@ function respondWithResult(res, statusCode) {
       res.status(statusCode).json(entity);
     }
   };
+}
+
+function cacheResponse(redisKey=false) {
+  return function(entity) {
+    if (redisKey && entity) {
+      redisClient.set(redisKey, JSON.stringify(entity));
+      redisClient.expire(redisKey, 10);
+    }
+
+    return entity;
+  }
 }
 
 function handleEntityNotFound(res) {
@@ -35,29 +48,43 @@ function handleError(res, statusCode) {
   };
 }
 
-export function index(req, res) {
-  var superQuery = `
-  SELECT
-    MAX(\`datetime\`) AS \`datetime\`,
-    SUM(\`generated\`) AS \`generated\`,
-    InstallationName
-  FROM
-      Generations a
-      inner join
-          (
-            SELECT
-              MAX(\`datetime\`) as \`max_datetime\`, InstallationId
-            FROM
-              \`Generations\`
-            GROUP BY
-              InstallationId
-          ) as b on
-          a.InstallationId = b.InstallationId AND a.datetime = b.max_datetime
-  GROUP BY InstallationName
-  ORDER BY InstallationName
-  `;
+function getLiveGenerations(redisKey) {
+  return function(cached) {
+    if (cached) {
+      return JSON.parse(cached);
+    }
 
-  sequelize.query(superQuery, { type: sequelize.QueryTypes.SELECT})
+    var superQuery = `
+    SELECT
+      MAX(\`datetime\`) AS \`datetime\`,
+      SUM(\`generated\`) AS \`generated\`,
+      InstallationName
+    FROM
+        Generations a
+        inner join
+            (
+              SELECT
+                MAX(\`datetime\`) as \`max_datetime\`, InstallationId
+              FROM
+                \`Generations\`
+              GROUP BY
+                InstallationId
+            ) as b on
+            a.InstallationId = b.InstallationId AND a.datetime = b.max_datetime
+    GROUP BY InstallationName
+    ORDER BY InstallationName
+    `;
+
+    return sequelize.query(superQuery, { type: sequelize.QueryTypes.SELECT})
+      .then(cacheResponse(redisKey));
+  }
+}
+
+export function index(req, res) {
+  const redisKey = `${config.redis.key}::generation--index`;
+
+  return redisClient.getAsync(redisKey)
+    .then(getLiveGenerations(redisKey))
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));

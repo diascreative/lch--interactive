@@ -16,5 +16,9 @@ module.exports = {
       logging: true
     }
   },
+  redis: {
+    enabled: true,
+    key: 'lch-development---'
+  },
   seedDB: false
 };
