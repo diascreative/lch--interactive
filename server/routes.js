@@ -13,7 +13,8 @@ export default function(app) {
   app.use('/api/installations', require('./api/installation'));
   app.use('/api/users', require('./api/user'));
 
-  app.use('/auth', require('./auth').default);
+  // app.use('/auth', require('./auth').default);
+  app.use(require('prerender-node').set('prerenderServiceUrl', 'http://localhost:3000/'));
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

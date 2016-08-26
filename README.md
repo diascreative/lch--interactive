@@ -30,6 +30,16 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 
 Run `grunt build` for building and `grunt serve` for preview.
 
+4. run prerender for social sharing
+```
+$ git clone https://github.com/prerender/prerender.git
+$ cd prerender
+$ npm install
+$ node server.js
+```
+
+this will run the prerenderer on `localhost:3000`
+
 ## Testing
 
 Running `npm test` will run the unit tests with karma.

@@ -3,11 +3,14 @@
 (function() {
 
 class InstallationComponent {
-  constructor($http, $state) {
+  constructor($http, $rootScope, $state) {
     this.$http = $http;
+    this.$rootScope = $rootScope;
 
     this.details = {};
     this.name = $state.params.name;
+
+    this.$rootScope.title = this.name;
   }
 
   $onInit() {

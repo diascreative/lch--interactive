@@ -4,13 +4,14 @@
 
 class MainController {
 
-  constructor($http, $filter, $location, $scope, $state, $timeout) {
+  constructor($http, $filter, $location, $rootScope, $scope, $state, $timeout) {
     this.$http = $http;
     this.$filter = $filter;
     this.$location = $location;
     this.$timeout = $timeout;
     this.$scope = $scope;
     this.$state = $state;
+    this.$rootScope = $rootScope;
 
     this._installations = [];
     this.filterLocation = false;
@@ -115,7 +116,6 @@ class MainController {
   }
 
   $onInit() {
-
     this._setSavedFilters();
 
     // API call to get the array of installations
@@ -734,6 +734,29 @@ class MainController {
 
   _deg2rad(deg) {
     return deg * (Math.PI / 180);
+  }
+
+  // SEO
+  pageTitle() {
+    const title = 'LCH Interactive';
+    let pageTitle = title;
+
+    if (this.$rootScope.title && this.$rootScope.title !== '') {
+      pageTitle = `${this.$rootScope.title} | ${pageTitle}`;
+    }
+
+    return pageTitle;
+  }
+
+  pageDescription() {
+    const description = 'LCH Interactive description';
+    let pageDescription = description;
+
+    if (this.$rootScope.description && this.$rootScope.description !== '') {
+      pageDescription = `${this.$rootScope.description}`;
+    }
+
+    return pageDescription;
   }
 }
 
