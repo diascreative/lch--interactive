@@ -7,79 +7,21 @@
 
 'use strict';
 
-const bluebird = require('bluebird');
 import {Installation, Generation, sequelize} from '../../sqldb';
-import config from '../../config/environment';
-import redisClient from '../../redis';
-
-function respondWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
-  return function(entity) {
-    if (entity) {
-      res.status(statusCode).json(entity);
-    }
-  };
-}
-
-function handleEntityNotFound(res) {
-  return function(entity) {
-    if (!entity) {
-      res.status(404).end();
-      return null;
-    }
-    return entity;
-  };
-}
-
-function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
-  return function(err) {
-    res.status(statusCode).send(err);
-  };
-}
-
-/**
- * Check if we have cached an API response
- * @param  {String} redisKey
- * @return {Promise}
- */
-function getCache(redisKey) {
-  if (!config.redis.enabled) {
-    return bluebird.delay(1);
-  }
-
-  return redisClient.getAsync(redisKey)
-}
-
-/**
- * Cache an API response
- * @param  {String} redisKey
- * @param  {Number}  cacheExpiry
- * @return {Array} Respose
- */
-function cacheResponse(redisKey=false, cacheExpiry=900) {
-  return function(entity) {
-    if (redisKey && entity) {
-      redisClient.set(redisKey, JSON.stringify(entity));
-      redisClient.expire(redisKey, cacheExpiry);
-    }
-
-    return entity;
-  }
-}
+import Util from '../../util';
 
 /**
  * /api/generations
  * Return the latest generation data for all installations
  */
 export function index(req, res) {
-  const redisKey = `${config.redis.key}::generation--index`;
+  const redisKey = `gen--index`;
 
-  return getCache(redisKey)
+  return Util.getCache(redisKey)
     .then(queryLiveGenerations(redisKey))
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(Util.handleEntityNotFound(res))
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
 
 }
 
@@ -95,7 +37,7 @@ export function historic(req, res) {
 
   let whereFilter = {};
 
-  const redisKey = `${config.redis.key}::generation--historic-${localAuthorities}-${owner}-${ownershipType}-${energyType}`;
+  const redisKey = `gen--historic-${localAuthorities}-${owner}-${ownershipType}-${energyType}`;
 
   if (localAuthorities && localAuthorities !== 'all') {
     whereFilter.localAuthority = localAuthorities;
@@ -113,10 +55,10 @@ export function historic(req, res) {
     whereFilter.energyType = energyType;
   }
 
-  return getCache(redisKey)
+  return Util.getCache(redisKey)
     .then(queryHistoricMultiple(whereFilter, redisKey))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
 }
 
 /**
@@ -125,13 +67,13 @@ export function historic(req, res) {
  */
 export function historicSingle(req, res) {
   const installationName = req.params.name;
-  const redisKey = `${config.redis.key}::generation--installation-${installationName}`;
+  const redisKey = `generation--installation-${installationName}`;
 
-  return getCache(redisKey)
+  return Util.getCache(redisKey)
     .then(queryHistoricSingle(installationName, redisKey))
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(Util.handleEntityNotFound(res))
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
 }
 
 
@@ -167,7 +109,7 @@ function queryLiveGenerations(redisKey) {
     `;
 
     return sequelize.query(superQuery, { type: sequelize.QueryTypes.SELECT})
-      .then(cacheResponse(redisKey));
+      .then(Util.cacheResponse(redisKey));
   }
 }
 
@@ -186,7 +128,7 @@ function queryHistoricMultiple(whereFilter, redisKey) {
       where: whereFilter
     })
     .then(queryGenerationForIds(whereFilter))
-    .then(cacheResponse(redisKey));
+    .then(Util.cacheResponse(redisKey));
   }
 }
 
@@ -245,6 +187,6 @@ function queryHistoricSingle(installationName, redisKey) {
         limit: 100,
         order: 'datetime DESC'
       })
-      .then(cacheResponse(redisKey));
+      .then(Util.cacheResponse(redisKey));
   };
 }

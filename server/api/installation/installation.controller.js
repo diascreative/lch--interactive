@@ -9,75 +9,18 @@
 
 'use strict';
 
-const bluebird = require('bluebird');
 import {Installation, Generation, sequelize} from '../../sqldb';
-import config from '../../config/environment';
-import redisClient from '../../redis';
+import Util from '../../util';
 
-function respondWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
-  return function(entity) {
-    if (entity) {
-      res.status(statusCode).json(entity);
-    }
-  };
-}
-
-function handleEntityNotFound(res) {
-  return function(entity) {
-    if (!entity) {
-      res.status(404).end();
-      return null;
-    }
-    return entity;
-  };
-}
-
-function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
-  return function(err) {
-    res.status(statusCode).send(err);
-  };
-}
-
-/**
- * Check if we have cached an API response
- * @param  {String} redisKey
- * @return {Promise}
- */
-function getCache(redisKey) {
-  if (!config.redis.enabled) {
-    return bluebird.delay(1);
-  }
-
-  return redisClient.getAsync(redisKey)
-}
-
-/**
- * Cache an API response
- * @param  {String} redisKey
- * @param  {Number}  cacheExpiry
- * @return {Array} Respose
- */
-function cacheResponse(redisKey=false, cacheExpiry=900) {
-  return function(entity) {
-    if (redisKey && entity) {
-      redisClient.set(redisKey, JSON.stringify(entity));
-      redisClient.expire(redisKey, cacheExpiry);
-    }
-
-    return entity;
-  }
-}
 
 // Gets a list of Installations
 export function index(req, res) {
-  const redisKey = `${config.redis.key}::installation--index`;
+  const redisKey = `installation--index`;
 
-  return getCache(redisKey)
+  return Util.getCache(redisKey)
     .then(queryGetInstallations(redisKey))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
 }
 
 // Gets a single Installation from the DB
@@ -97,9 +40,9 @@ export function show(req, res) {
       limit: 100,
       order: 'datetime DESC'
     })
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(Util.handleEntityNotFound(res))
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
 }
 
 function queryGetInstallations(redisKey) {
@@ -131,6 +74,6 @@ function queryGetInstallations(redisKey) {
           'energyType'
         ]
       })
-      .then(cacheResponse(redisKey, 86400));
+      .then(Util.cacheResponse(redisKey, 86400));
   }
 }
