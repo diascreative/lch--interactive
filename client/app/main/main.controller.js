@@ -4,12 +4,13 @@
 
 class MainController {
 
-  constructor($http, $filter, $location, $scope, $timeout) {
+  constructor($http, $filter, $location, $scope, $state, $timeout) {
     this.$http = $http;
     this.$filter = $filter;
     this.$location = $location;
     this.$timeout = $timeout;
     this.$scope = $scope;
+    this.$state = $state;
 
     this._installations = [];
     this.filterLocation = false;
@@ -148,6 +149,9 @@ class MainController {
   clickMarker(e, args) {
     const marker = this.map.installations[args.modelName];
     const url = `/api/generations/historic/${marker.name}`;
+
+    this.$state.go('installation', { name: marker.name });
+    // this.$location.path(`/installation`);
 
     return this.$http.get(url)
             .success(data => {
@@ -732,10 +736,7 @@ class MainController {
     return deg * (Math.PI / 180);
   }
 }
-angular.module('lowcarbonhubApp')
-  .component('main', {
-    templateUrl: 'app/main/main.html',
-    controller: MainController
-  });
 
+angular.module('lowcarbonhubApp')
+  .controller('mainController', MainController);
 })();

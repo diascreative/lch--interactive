@@ -5,6 +5,6 @@ angular.module('lowcarbonhubApp')
     $stateProvider
       .state('main', {
         url: '/',
-        template: '<main></main>'
+        templateUrl: 'app/main/main.html',
       });
   });

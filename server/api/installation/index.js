@@ -6,6 +6,6 @@ var controller = require('./installation.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/:id', controller.show);
+router.get('/:name', controller.show);
 
 module.exports = router;

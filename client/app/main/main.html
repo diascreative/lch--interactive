@@ -1,149 +1,34 @@
-<div class="filters">
-  <div class="filters__copy">
-    <h1 class="logo"><img src="/assets/images/logo.svg" height="90px" width="90px" alt="low carbon hub"></h1>
+<p>
+  <span class="large-text">{{$ctrl.getFilteredTotalYearlyGeneration()}}</span> each year from
+</p>
 
-    <h1 class="main-title">PEOPLE'S POWER STATION</h1>
-    <h2 class="strapline">An energy system you can feel good about, for Oxfordshire and the UK.</h2>
+<p>
+  from
+  <span class="large-text">{{$ctrl.getFilteredInstallations()}}</span>
+  {{$ctrl.copyOwnershipType()}} installations in
+</p>
 
-  <!--   <p class="intro-text">
-      Search the People's Power Station to explore locally owned renewable energy in Oxfordshire.
-    </p> -->
+<p>
+  {{$ctrl.copyArea()}}
+</p>
 
-    <div class="stats">
-      <p>
-        <span class="large-text">{{$ctrl.getFilteredTotalYearlyGeneration()}}</span> each year from
-      </p>
+<p>
+  <span class="large-text">{{$ctrl.getFilteredTotalCapacity()}}</span> generating capacity
+</p>
 
-      <p>
-        from
-        <span class="large-text">{{$ctrl.getFilteredInstallations()}}</span>
-        {{$ctrl.copyOwnershipType()}} installations in
-      </p>
+<p>enough to save XXX tonnes of CO2 each year.</p>
 
-      <p>
-        {{$ctrl.copyArea()}}
-      </p>
+<p>
+  That’s the equivalent of<br>
+  XXXX [fridge freezers for a day]  and meets<br>
+  XXX people’s share of Oxfordshire’s energy need.
+</p>
 
-      <p>
-        <span class="large-text">{{$ctrl.getFilteredTotalCapacity()}}</span> generating capacity
-      </p>
-
-      <p>enough to save XXX tonnes of CO2 each year.</p>
-
-      <p>
-        That’s the equivalent of<br>
-        XXXX [fridge freezers for a day]  and meets<br>
-        XXX people’s share of Oxfordshire’s energy need.
-      </p>
-
-      <div class="graph" ng-if="$ctrl.graph.data.length">
-        <canvas class="chart chart-line" style="width: 100%; height: 200px"
-          chart-data="$ctrl.graph.data"
-          chart-options="$ctrl.graph.options"
-          chart-colors="$ctrl.graph.colors"
-          chart-series="$ctrl.graph.series"
-          chart-labels="$ctrl.graph.labels"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="filters__options">
-    <p>
-      Search the People’s Power Station to explore locally owned renewable energy in Oxfordshire.
-    </p>
-
-    <ui-select title="Search by project"
-      ng-model="$ctrl.searchInstallation"
-      on-select="$ctrl.filterFreeText($item)">
-      <ui-select-match allow-clear="true"
-        placeholder="Search by project">{{$select.selected.name}}</ui-select-match>
-      <ui-select-choices repeat="installation in $ctrl.map.installations | filter: $select.search">
-        <span ng-bind-html="installation.name | highlight: $select.search"></span>
-      </ui-select-choices>
-    </ui-select>
-
-    <h4>Geography</h4>
-    <label>
-      <input type="radio" name="local-authorities"
-        value="all"
-        checked="checked"
-        ng-model="$ctrl.filtersChosen.localAuthorities"
-        ng-change="$ctrl.filterInstallations(); $ctrl.loadAreaJSON(localAuthority.name)">
-      <span></span>
-      All
-    </label>
-
-    <p>or by a local authority area</p>
-
-    <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
-      <input type="radio" name="local-authorities"
-        value="{{localAuthority.name}}"
-        ng-model="$ctrl.filtersChosen.localAuthorities"
-        ng-change="$ctrl.filterInstallations(); $ctrl.loadAreaJSON(localAuthority.name)">
-      <span></span>
-      {{localAuthority.name}}
-    </label>
-
-    or your can <input class="postcode-seach" placeholder="search near your postcode"
-    ng-change="$ctrl.setCoords($ctrl.address)" ng-model="$ctrl.address">
-
-    <h4>Ownership</h4>
-    <label>
-      <input type="radio" name="ownership"
-        ng-model="$ctrl.filtersChosen.ownership"
-        value="all"
-        ng-change="$ctrl.filterInstallations()">
-      <span></span>
-      All
-    </label>
-    <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
-      <input type="radio" name="ownership" value="{{ownership.name}}"
-        ng-model="$ctrl.filtersChosen.ownership"
-        ng-change="$ctrl.filterInstallations()">
-      <span></span>
-      {{ownership.name}}
-    </label>
-
-    <div ng-hide="$ctrl.filtersAvailable.ownershipType.length < 2">
-    <h4>Ownership Type</h4>
-    <label>
-      <input type="radio" name="ownershipType" value="all"
-        ng-model="$ctrl.filtersChosen.ownershipType"
-        ng-change="$ctrl.filterInstallations()">
-      <span></span>
-      All
-    </label>
-    <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
-      <input type="radio" name="ownershipType" value="{{type.name}}"
-        ng-model="$ctrl.filtersChosen.ownershipType"
-        ng-change="$ctrl.filterInstallations()">
-      <span></span>
-      {{type.name}}
-    </label>
-    </div>
-
-    <h4>Energy Type</h4>
-    <label>
-      <input type="radio" name="energyTypes" value="all"
-        ng-model="$ctrl.filtersChosen.energyType"
-        ng-change="$ctrl.filterInstallations()">
-      <span></span>
-      All
-    </label>
-    <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
-      <input type="radio" name="energyTypes" value="{{type.name}}"
-        ng-model="$ctrl.filtersChosen.energyType"
-        ng-change="$ctrl.filterInstallations()">
-      <span></span>
-      {{type.name}}
-    </label>
-  </div>
-</div>
-
-<div class="map-section">
-  <leaflet class="map"
-    markers="$ctrl.map.installations"
-    defaults="$ctrl.map.defaults"
-    bounds="$ctrl.map.bounds"
-    geojson="$ctrl.map.geojson"></leaflet>
+<div class="graph" ng-if="$ctrl.graph.data.length">
+  <canvas class="chart chart-line" style="width: 100%; height: 200px"
+    chart-data="$ctrl.graph.data"
+    chart-options="$ctrl.graph.options"
+    chart-colors="$ctrl.graph.colors"
+    chart-series="$ctrl.graph.series"
+    chart-labels="$ctrl.graph.labels"></canvas>
 </div>
