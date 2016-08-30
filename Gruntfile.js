@@ -618,6 +618,18 @@ module.exports = function (grunt) {
       }
     },
 
+    htmlmin: {
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: {
+          '<%= yeoman.dist %>/<%= yeoman.client %>/index.html': '<%= yeoman.dist %>/<%= yeoman.client %>/index.html'
+        }
+      }
+    },
+
     injector: {
       options: {},
       // Inject application script files into index.html (doesn't include bower)
@@ -877,7 +889,8 @@ module.exports = function (grunt) {
     'uglify',
     'filerev',
     'usemin',
-    'inline'
+    'inline',
+    'htmlmin'
   ]);
 
   grunt.registerTask('default', [
