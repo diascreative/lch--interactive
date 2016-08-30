@@ -675,7 +675,11 @@ module.exports = function (grunt) {
             '<%= yeoman.client %>/{app,components}/**/*.styl',
             '!<%= yeoman.client %>/app/app.styl',
             '!<%= yeoman.client %>/components/_variables.styl',
-            '!<%= yeoman.client %>/components/critical.styl'
+            '!<%= yeoman.client %>/components/critical.styl',
+            '!<%= yeoman.client %>/components/critical/**/*.styl'
+          ],
+          '<%= yeoman.client %>/components/critical.styl': [
+            '<%= yeoman.client %>/components/critical/**/*.styl'
           ]
         }
       },

@@ -28,26 +28,15 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <div class="filters">
-      <div class="filters__copy">
-        <h1 class="logo"><a href="/"><img src="/assets/images/logo.svg" height="90px" width="90px" alt="low carbon hub"></a></h1>
-
-        <h1 class="main-title">PEOPLE'S POWER STATION</h1>
+    <header class="main-header">
+      <div class="logo-section">
+        <h1 class="main-title">
+          <a href="/"><img src="/assets/images/logo.svg" title="PEOPLE'S POWER STATION"></a>
+        </h1>
         <h2 class="strapline">An energy system you can feel good about, for Oxfordshire and the UK.</h2>
-
-      <!--   <p class="intro-text">
-          Search the People's Power Station to explore locally owned renewable energy in Oxfordshire.
-        </p> -->
-
-        <div ui-view="" class="stats"></div>
       </div>
 
-      <div class="filters__options">
-        <p>
-          Search the People’s Power Station to explore locally owned renewable energy in Oxfordshire.
-        </p>
-
+      <div class="search">
         <ui-select title="Search by project"
           ng-model="$ctrl.searchInstallation"
           on-select="$ctrl.filterFreeText($item)">
@@ -58,8 +47,45 @@
           </ui-select-choices>
         </ui-select>
 
+        <button class="filter-toggle"
+          ng-class="{'filter-toggle--on': $ctrl.showFilters}"
+          ng-click="$ctrl.showFilters = !$ctrl.showFilters">
+          <span class="filter-toggle__choice">or use our search filter</span>
+          <span class="filter-toggle__choice filter-toggle__choice--close">Close search filter</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="main" ui-view="">
+      <div class="main-content">
+        <header class="intro-text">
+          We're mapping renewable energy projects across Oxfordshire, starting
+          with installations belonging to the Low Carbon Hub and some of our partners.
+        </header>
+
+        <p>
+          We have
+          <span class="large-text" ng-bind-html="$ctrl.getFilteredInstallations()">39</span>
+          installations plugged into the People's Power Station so far. Together they can generate
+          <span class="large-text" ng-bind-html="$ctrl.getFilteredTotalYearlyGeneration()">
+            1.74 <span class="units">MWh</span>
+          </span>
+          each year - enough to meet
+          <span class="large-text" ng-bind-html="4521 | number">4,521</span>
+          people's share of Oxfordshire's energy demands.
+        </p>
+
+        <p>
+          Explore the map to find whats happening near you.
+        </p>
+      </div>
+    </section>
+
+    <div class="filters"
+      ng-class="{'filters--visible': $ctrl.showFilters}">
+      <div class="filters__options">
         <h4>Geography</h4>
-        <label>
+        <label class="column">
           <input type="radio" name="local-authorities"
             value="all"
             checked="checked"
@@ -69,9 +95,10 @@
           All
         </label>
 
-        <p>or by a local authority area</p>
+        <p class="filters__hint">or by a local authority area</p>
 
-        <label ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
+        <label class="column"
+         ng-repeat="localAuthority in $ctrl.filtersAvailable.localAuthorities | orderBy:'name'">
           <input type="radio" name="local-authorities"
             value="{{localAuthority.name}}"
             ng-model="$ctrl.filtersChosen.localAuthorities"
@@ -80,11 +107,13 @@
           {{localAuthority.name}}
         </label>
 
-        or your can <input class="postcode-seach" placeholder="search near your postcode"
-        ng-change="$ctrl.setCoords($ctrl.address)" ng-model="$ctrl.address">
+        <label for="postcode" class="filters__hint">or your can search near</label>
+        <input id="postcode" class="postcode-seach" placeholder="your postcode"
+          ng-change="$ctrl.setCoords($ctrl.address)"
+          ng-model="$ctrl.address">
 
         <h4>Ownership</h4>
-        <label>
+        <label class="column">
           <input type="radio" name="ownership"
             ng-model="$ctrl.filtersChosen.ownership"
             value="all"
@@ -92,7 +121,8 @@
           <span></span>
           All
         </label>
-        <label ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
+        <label class="column"
+         ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
           <input type="radio" name="ownership" value="{{ownership.name}}"
             ng-model="$ctrl.filtersChosen.ownership"
             ng-change="$ctrl.filterInstallations()">
@@ -102,14 +132,15 @@
 
         <div ng-hide="$ctrl.filtersAvailable.ownershipType.length < 2">
         <h4>Ownership Type</h4>
-        <label>
+        <label class="inline">
           <input type="radio" name="ownershipType" value="all"
             ng-model="$ctrl.filtersChosen.ownershipType"
             ng-change="$ctrl.filterInstallations()">
           <span></span>
           All
         </label>
-        <label ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
+        <label class="inline"
+         ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
           <input type="radio" name="ownershipType" value="{{type.name}}"
             ng-model="$ctrl.filtersChosen.ownershipType"
             ng-change="$ctrl.filterInstallations()">
@@ -119,14 +150,15 @@
         </div>
 
         <h4>Energy Type</h4>
-        <label>
+        <label class="inline">
           <input type="radio" name="energyTypes" value="all"
             ng-model="$ctrl.filtersChosen.energyType"
             ng-change="$ctrl.filterInstallations()">
           <span></span>
           All
         </label>
-        <label ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
+        <label class="inline"
+         ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
           <input type="radio" name="energyTypes" value="{{type.name}}"
             ng-model="$ctrl.filtersChosen.energyType"
             ng-change="$ctrl.filterInstallations()">
@@ -136,15 +168,15 @@
       </div>
     </div>
 
-    <div class="map-section">
+    <section class="map-section">
       <leaflet class="map"
         markers="$ctrl.map.installations"
         defaults="$ctrl.map.defaults"
         bounds="$ctrl.map.bounds"
         geojson="$ctrl.map.geojson"></leaflet>
-    </div>
+    </section>
 
-    <div class="about">
+    <section class="about">
       <h1>ABOUT THE PEOPLE’S POWER STATION</h1>
       <p>
         The database showcases the renewable energy projects belonging to the Low Carbon Hub and some
@@ -208,7 +240,7 @@
       LED TV: http://energyusecalculator.com/electricity_lcdleddisplay.htm Fridge-freezer: http://www.inference.eng.cam.ac.uk/sustainable/book/tex/sewtha.pdf
       (p50) Tesla Model S (travelling at 65mph): http://en.wikipedia.org/wiki/Tesla_Model_S Source code can
       be found on GitHub.
-    </div>
+    </section>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

@@ -1,0 +1,25 @@
+.main
+  color #fff
+
+.main-content
+  background $color-tertiary
+  padding 22px
+
+  &--installation
+    background $color-primary
+
+.intro-text
+  font bold 24px/26px $font-primary
+
+@media $not-mobile
+  .main
+    box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+    height 'calc(100vh - %s)' % $header-height
+    left 0
+    max-width $main-content-width
+    position absolute
+    top $header-height
+    z-index 10
+
+  .main-content
+    height 100%

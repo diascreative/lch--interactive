@@ -1,0 +1,125 @@
+// main header
+.main-header
+  background #fff
+  box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+  height $header-height
+  padding 12px 20px
+  position relative
+  z-index 2000
+
+// logo section
+.main-title
+  display block
+  margin 0
+
+.logo-section
+  display inline-block
+
+.strapline
+  color $color-tertiary
+  font normal normal 14px/15px $font-primary
+  letter-spacing 0
+  margin 0
+  max-width 280px
+
+// search section
+.search
+  float right
+  padding 8px 20px 0
+  position relative
+
+  &:before
+    content url(/assets/images/search-border.svg)
+    display block
+    left 0
+    height 70px
+    margin-top -35px
+    position absolute
+    top 50%
+    width 3px
+
+.filter-toggle
+  background $font-color-secondary
+  border 0
+  border-radius 100px
+  color #fff
+  cursor pointer
+  display block
+  font normal 16px/22px $font-secondary
+  margin 12px 0 0
+  min-height 30px
+  min-width 222px
+  overflow hidden
+  outline 0
+  position relative
+
+  &:focus
+    box-shadow 0 0 12px 2px rgba($color-secondary, .4)
+
+  &__choice
+    display block
+    height 100%
+    left 0
+    padding 6px 12px 2px
+    position absolute
+    right 0
+    top 0
+    transform translateY(0)
+    transition transform .4s cubic-bezier(0, 0, .25, 1)
+
+    &:after
+      content url(/assets/images/icon--filter-toggler.svg)
+      display inline-block
+      float right
+      height 14px
+      margin 4px 12px 0 10px
+      vertical-align middle
+      width 19px
+
+  &__choice--close
+    transform translateY(-100%)
+
+    &:after
+      content url(/assets/images/icon--filter-close.svg)
+      height 16px
+      margin 2px 12px 0 13px
+      width 16px
+
+  &--on
+    .filter-toggle__choice
+      transform translateY(100%)
+
+    .filter-toggle__choice--close
+      transform translateY(0)
+
+
+.filters
+  opacity 0
+  visibility hidden
+
+.ui-select-toggle
+.ui-select-search
+  background transparent url(/assets/images/magnifying-glass.svg) 0 50% no-repeat
+  border 0
+  border-bottom solid 1px $font-color-secondary
+  color $font-color-secondary
+  display block
+  font 16px/22px $font-secondary
+  letter-spacing -.36px
+  height 32px
+  padding 7px 10px 3px 35px
+  width 100%
+
+  &:focus
+    border-color $font-color-primary
+    outline 0
+
+.ui-select-choices
+  list-style none
+  margin 0
+  padding 0
+  z-index 200
+
+.ui-select-bootstrap .ui-select-choices-row.active > span
+  background $color-secondary
+  color #fff

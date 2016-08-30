@@ -1,3 +1,33 @@
-<div>This is the installation view.</div>
+<div class="main-content main-content--installation">
+  {{$installation.details.name}} is currently generating
 
---{{$installation.details | json}}--
+  <div class="stat">
+    <div class="large-text">
+      {{$installation.details.annualPredictedGeneration}}
+    </div>
+    generated from this installation each year
+  </div>
+
+  <div class="stat">
+    <div class="large-text">
+      {{$installation.details.capacity}}
+    </div>
+    project size capacity
+  </div>
+
+  <div class="stat">
+    <div class="large-text">
+      35 Tonnes
+    </div>
+    of CO<sub>2</sub> saved every year
+  </div>
+
+  <div class="graph" ng-if="$installation.graph.data.length">
+    <canvas class="chart chart-line" style="width: 100%; height: 200px"
+      chart-data="$installation.graph.data"
+      chart-options="$installation.graph.options"
+      chart-colors="$installation.graph.colors"
+      chart-series="$installation.graph.series"
+      chart-labels="$installation.graph.labels"></canvas>
+  </div>
+</div>

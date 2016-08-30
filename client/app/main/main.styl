@@ -1,24 +1,8 @@
-.main-title
-  color $color-primary
-  font-size 33px
-  letter-spacing .05px
-  line-height 33px
-
-.strapline
-  color $color-primary
-  font normal normal 14px/18px $font-primary
-  letter-spacing 0
-
-.intro-text
-  border-top solid 1px $color-secondary
-  color $color-secondary
-  font 22px/22px $font-secondary
-  letter-spacing 0.08px
-  margin 26px 0
-  padding 22px 0
-
 .large-text
   font 32px/32px $font-primary
+
+  .units
+    font-size 16px
 
 div.large-text
   border-top 1px dashed #fff
@@ -28,71 +12,53 @@ div.large-text
 /*
  * Filters
  */
-
-.logo
-  float left
-  margin 0 10px 0 0
-
 .filters
   background rgba(#fff, .95)
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
-  left 0
-  height calc(100vh - 76px)
-  max-height calc(100vh - 76px)
+  color #4a4a4a
+  font bold 14px/20px $font-primary
+  max-height 'calc(100vh - %s)' % ($header-height - 55)
   max-width $filter-width
+  opacity 1
   overflow auto
-  padding 30px 48px 20px
+  padding 10px 48px 20px
   position absolute
-  top 0
+  right 0
+  top $header-height
+  transform translateY(-100%)
+  transition transform .4s cubic-bezier(0, 0, .25, 1)
+  visibility visible
   width 100%
-  z-index 100
+  z-index 1050
+
+  &--visible
+    transform translateY(0)
 
   &__options
     position relative
 
+  &__hint
+    color $color-secondary
+    display inline-block
+
   .postcode-seach
     border 0
-    border-bottom solid 1px #D0D3D5
+    border-bottom solid 1px $font-color-primary
     display inline-block
-    font-size 16px
-    letter-spacing -.36px
-    line-height 22px
+    font-size 12px
+    line-height 20px
     height 32px
-    max-width 220px
+    max-width 100px
     padding 5px 10px
     width 100%
 
-  .ui-select-toggle
-  .ui-select-search
-    background transparent url(/assets/images/magnifying-glass.svg) 0 50% no-repeat
-    border 0
-    border-bottom solid 1px #D0D3D5
-    display block
-    font-size 16px
-    letter-spacing -.36px
-    line-height 22px
-    height 32px
-    padding 5px 10px 5px 35px
-    width 100%
-
-    &:focus
-      border-color $font-color-primary
-      outline 0
-
-  .ui-select-choices
-    list-style none
-    margin 0
-    padding 0
-    z-index 2
-
-
-  .ui-select-bootstrap .ui-select-choices-row.active > span
-    background $color-secondary
-    color #fff
-
-  label
+  label.column
     display block
     margin-bottom 4px
+
+  label.inline
+    display inline-block
+    margin-right 18px
 
   input[type='radio']
     position absolute
@@ -163,12 +129,13 @@ $animation-timing = .3s
   transition transform 1s cubic-bezier(0, 0, .25, 1)
 
 .map-section
-  box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
-  height calc(100vh - 76px)
-  margin-left $filter-width
-  padding 20px 20px 20px 0
+  height 90vh
   position relative
-  width calc(100% - $filter-width)
+
+  @media $not-mobile
+    height 'calc(100vh - %s)' % $header-height
+    margin-left $main-content-width
+    width calc(100% - $main-content-width)
 
 .map
   height 100%

@@ -45,56 +45,6 @@ class MainController {
       energyType: 'all'
     };
 
-    this.graph = {
-      colors: ['#ffffff'],
-      data: [],
-      labels: [],
-      series: ['Series A'],
-      pointRadius: 0,
-      options: {
-        elements: {
-          line: {
-            borderWidth: 0
-          },
-          point: {
-            radius: 0
-          }
-        },
-        scales: {
-          xAxes: [{
-            beginAtZero: false,
-            ticks: {
-              fontColor: '#fff',
-              callback: function(value) {
-                return moment(value).fromNow();
-              },
-              maxTicksLimit: 7
-            },
-            gridLines: {
-              display: false
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'generation (MW)    ',
-              fontColor: '#fff'
-            },
-            beginAtZero: false,
-            ticks: {
-              fontColor: '#fff',
-              callback: function(value) {
-                return value / 1000;
-              }
-            },
-            gridLines: {
-              display: false
-            }
-          }]
-        }
-      }
-    };
-
     // set our map variables
     this.map = {
       installations: [],
@@ -148,43 +98,8 @@ class MainController {
 
   clickMarker(e, args) {
     const marker = this.map.installations[args.modelName];
-    const url = `/api/generations/historic/${marker.name}`;
 
     this.$state.go('installation', { name: marker.name });
-    // this.$location.path(`/installation`);
-
-    return this.$http.get(url)
-            .success(data => {
-              data.reverse();
-
-              this.graph.labels = data.map(item => {
-                return item.datetime;
-              });
-
-              this.graph.data = data.map(item => {
-                return item.generated;
-              });
-            });
-
-  }
-
-  loadHistoricData() {
-    const url = `/api/generations/historic`;
-    const data = this.filtersChosen;
-
-    return this.$http.get(url, {params: data})
-            .success(data => {
-              data.reverse();
-
-              this.graph.labels = data.map(item => {
-                return item.datetime;
-              });
-
-              this.graph.data = data.map(item => {
-                return item.generated;
-              });
-            });
-
   }
 
   /**
@@ -363,7 +278,6 @@ class MainController {
     }
 
     this._setMapBounds();
-    this.loadHistoricData();
   }
 
   /**
@@ -438,7 +352,7 @@ class MainController {
     const cleanNumbers = {
       name: installation.name,
       capacity: this.watts(installation.capacity),
-      annualPredictedGeneration: this.watts(installation.annualPredictedGeneration) + 'h',
+      annualPredictedGeneration: this.watts(installation.annualPredictedGeneration, false, 'h'),
       generated: this.watts(installation.generated)
     };
 
@@ -488,7 +402,7 @@ class MainController {
     const visibleInstallations = this._getVisibleInstallations();
     const total = _.sumBy(visibleInstallations, 'annualPredictedGeneration');
 
-    return this.watts(total) + 'h';
+    return this.watts(total, false, 'h');
   }
 
   /**
@@ -593,7 +507,7 @@ class MainController {
    * @param  {Boolean} force a particular unit
    * @return {String} pretty-printed reading
    */
-  watts(watt, forcedUnit = false) {
+  watts(watt, forcedUnit = false, hours = '') {
     let unit = 'W';
     let decimalPlaces = 2;
     let returnWatt = watt;
@@ -619,7 +533,7 @@ class MainController {
     }
 
     const cleanWatt = this.$filter('number')(returnWatt, decimalPlaces);
-    return cleanWatt + unit;
+    return `${cleanWatt} <span class="units">${unit}${hours}</span>`;
   }
 
   /**

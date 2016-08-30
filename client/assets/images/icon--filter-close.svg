@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="FILTER-BAR" transform="translate(-328.000000, -17.000000)" fill="#FFFFFF">
+            <g id="Group" transform="translate(328.000000, 17.000000)">
+                <polygon id="Shape" transform="translate(7.677159, 7.677159) rotate(45.000000) translate(-7.677159, -7.677159) " points="-2.32284066 6.82001648 -2.32284066 8.5343022 17.6771593 8.5343022 17.6771593 6.82001648"></polygon>
+                <polygon id="Shape-Copy" transform="translate(7.677159, 7.677159) rotate(-45.000000) translate(-7.677159, -7.677159) " points="-2.32284066 6.82001648 -2.32284066 8.5343022 17.6771593 8.5343022 17.6771593 6.82001648"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
