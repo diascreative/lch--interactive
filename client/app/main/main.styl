@@ -11,6 +11,11 @@ div.large-text
   margin 14px 0 1px
   padding 0 0 2px
 
+.clear
+  clear both
+  height 0
+  width 100%
+
 /*
  * Filters
  */
@@ -182,6 +187,64 @@ $animation-timing = .3s
 
 .leaflet-popup-content-wrapper
   border-radius 0
+
+.leaflet-popup-content
+  color $font-primary
+  font-size 14px
+  line-height 17px
+
+  .icon-section
+    background #F5A623
+    border-radius 50%
+    float right
+    height 140px
+    position relative
+    width 140px
+
+  .capacity
+    color #F5A623
+    float left
+    width calc(100% - 140px)
+
+    .large-text
+      border-bottom 1px dashed #F5A623
+      margin-right 10px
+
+  .icon
+    background #fff
+    border-radius 50%
+    height 60px
+    left 50%
+    margin -30px 0 0 -30px
+    position absolute
+    top 50%
+    width 60px
+
+    &:before
+      content url(../assets/images/icon--solar.svg)
+      height 36px
+      left 50%
+      position absolute
+      top 50%
+      transform translate(-50%, -50%)
+      width 44px
+
+  .hydro
+    .capacity
+      color #98CAEC
+
+    .large-text
+      border-bottom 1px dashed #98CAEC
+
+    .icon-section
+      background #98CAEC
+
+    .icon:before
+      content url(../assets/images/icon--hydro.svg)
+      height 37px
+      width 56px
+
+
 
 /*
  * Tablet

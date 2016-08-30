@@ -92,7 +92,7 @@ class MainController {
 
     if (!L.Browser.touch) {
       this.$scope.$on('leafletDirectiveMarker.mouseover', this.mouseOverMarker.bind(this));
-      this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
+      // this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
       this.$scope.$on('leafletDirectiveMarker.click', this.clickMarker.bind(this));
     }
   }
@@ -352,6 +352,7 @@ class MainController {
   _mapPopupHTML(installation) {
     const cleanNumbers = {
       name: installation.name,
+      owner: installation.owner,
       capacity: this.watts(installation.capacity),
       annualPredictedGeneration: this.watts(installation.annualPredictedGeneration, false, 'h'),
       generated: this.watts(installation.generated)
@@ -361,17 +362,23 @@ class MainController {
       cleanNumbers.datetime = moment(installation.datetime).fromNow();
     }
 
-    const hasData = cleanNumbers.generated && cleanNumbers.datetime;
+    const className = slug(installation.energyType).toLowerCase();
 
-    const html = [
-      '<div>',
-        '<h2>%(name)s</h2>',
-        'capacity: <strong>%(capacity)s</strong>',
-        '<br>annual predicted generation: <strong>%(annualPredictedGeneration)s</strong>',
-        hasData ? '<br>Was generating <strong>%(generated)s</strong>' : '',
-        hasData ? ', %(datetime)s' : '',
-      '</div>'
-    ].join('');
+    const html =
+      `<div class="${className}">
+        <h2>%(name)s</h2>
+        <div class="capacity">
+          <div class="large-text">%(capacity)s</div>
+          Generated Capacity
+        </div>
+        <div class="icon-section">
+         <div class="icon"></div>
+        </div>
+        <div class="clear"></div>
+        <p><span class="large-text">%(annualPredictedGeneration)s</span> Annual predicted generation</p>
+        <p>This installation is owned by <strong>%(owner)s.</strong></p>
+        <p>Click location marker to view more details.</p>
+      </div>`;
 
     return sprintf(html, cleanNumbers);
   }
