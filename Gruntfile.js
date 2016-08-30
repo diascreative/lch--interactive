@@ -417,11 +417,6 @@ module.exports = function (grunt) {
             '<%= yeoman.server %>/**/*',
             '!<%= yeoman.server %>/config/local.env.sample.js'
           ]
-        }, {
-          expand: true,
-          cwd: '.tmp/app',
-          dest: '<%= yeoman.dist %>/<%= yeoman.client %>/app',
-          src: ['critical.css']
         }]
       },
       styles: {
@@ -606,7 +601,7 @@ module.exports = function (grunt) {
         },
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl',
-          '.tmp/app/critical.css' : '<%= yeoman.client %>/components/critical.styl',
+          '.tmp/app/critical.css' : '<%= yeoman.client %>/app/critical.styl',
           '.tmp/admin/admin-app.css' : '<%= yeoman.client %>/admin/admin-app.styl'
         }
       }
@@ -615,6 +610,8 @@ module.exports = function (grunt) {
     inline: {
       dist: {
         options:{
+
+          tag: 'critical',
           cssmin: true
         },
         src: '<%= yeoman.dist %>/<%= yeoman.client %>/index.html'
@@ -675,10 +672,10 @@ module.exports = function (grunt) {
             '<%= yeoman.client %>/{app,components}/**/*.styl',
             '!<%= yeoman.client %>/app/app.styl',
             '!<%= yeoman.client %>/components/_variables.styl',
-            '!<%= yeoman.client %>/components/critical.styl',
+            '!<%= yeoman.client %>/app/critical.styl',
             '!<%= yeoman.client %>/components/critical/**/*.styl'
           ],
-          '<%= yeoman.client %>/components/critical.styl': [
+          '<%= yeoman.client %>/app/critical.styl': [
             '<%= yeoman.client %>/components/critical/**/*.styl'
           ]
         }
@@ -877,10 +874,10 @@ module.exports = function (grunt) {
     'babel:server',
     'cdnify',
     'cssmin',
-    'inline',
     'uglify',
     'filerev',
-    'usemin'
+    'usemin',
+    'inline'
   ]);
 
   grunt.registerTask('default', [
