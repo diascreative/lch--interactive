@@ -32,6 +32,7 @@ class InstallationComponent {
           xAxes: [{
             beginAtZero: false,
             ticks: {
+              scaleLineColor: '#ffffff',
               fontColor: '#fff',
               callback: function(value) {
                 return moment(value).fromNow();
@@ -43,11 +44,6 @@ class InstallationComponent {
             }
           }],
           yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'generation (MW)    ',
-              fontColor: '#fff'
-            },
             beginAtZero: false,
             ticks: {
               fontColor: '#fff',
