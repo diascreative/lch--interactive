@@ -1,27 +1,45 @@
 <div class="main-content main-content--installation">
-  {{$installation.details.name}} is currently generating
+  <p><strong>{{$installation.details.name}} is currently generating</strong></p>
 
-  <div class="stat">
-    <div class="large-text">
-      {{$installation.details.annualPredictedGeneration}}
+  <div class="installation-stats">
+    <div class="installation-stat">
+      <div class="large-text" ng-bind-html="$installation.getAnnualGeneration()">
+      </div>
+      generated from this installation each year
     </div>
-    generated from this installation each year
+
+    <div class="installation-stat">
+      <div class="large-text" ng-bind-html="$installation.getCapacity()">
+      </div>
+      project size capacity
+    </div>
+
+    <div class="installation-stat">
+      <div class="large-text">
+        35 <span class="units">Tonnes</span>
+      </div>
+      of CO<sub>2</sub> saved every year
+    </div>
   </div>
 
-  <div class="stat">
-    <div class="large-text">
-      {{$installation.details.capacity}}
+  <p><strong>That's the equivalent of -</strong></p>
+  <div class="installation-stats">
+    <div class="installation-stat">
+      <div class="large-text">
+        2,544
+      </div>
+      fridge freezers for a day
     </div>
-    project size capacity
+
+    <div class="installation-stat">
+      <div class="large-text">
+        4,521
+      </div>
+      people's share of Oxfordshire's energy need met
+    </div>
   </div>
 
-  <div class="stat">
-    <div class="large-text">
-      35 Tonnes
-    </div>
-    of CO<sub>2</sub> saved every year
-  </div>
-
+  <p><strong>Recent peoples power generation  -</strong></p>
   <div class="graph" ng-if="$installation.graph.data.length">
     <canvas class="chart chart-line" style="width: 100%; height: 200px"
       chart-data="$installation.graph.data"

@@ -6,6 +6,7 @@ class InstallationComponent {
   constructor($http, $rootScope, $state) {
     this.$http = $http;
     this.$rootScope = $rootScope;
+    this.watts = $rootScope.watts;
 
     this.details = {};
     this.name = $state.params.name;
@@ -88,6 +89,14 @@ class InstallationComponent {
                 return item.generated;
               });
             });
+  }
+
+  getAnnualGeneration() {
+    return this.watts(this.details.annualPredictedGeneration, false, 'h');
+  }
+
+  getCapacity() {
+    return this.watts(this.details.capacity);
   }
 }
 

@@ -1,0 +1,17 @@
+.installation-stats
+  font-size 0
+
+.installation-stat
+  display inline-block
+  font-size 14px
+  line-height 17px
+  margin 0 5px
+  vertical-align top
+
+  @media $not-mobile
+    margin 0 10px 0 0
+    width calc(50% - 10px)
+
+    &:nth-of-type(2n)
+      margin 0 0 0 10px
+
