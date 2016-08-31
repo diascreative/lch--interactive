@@ -40,6 +40,7 @@
 
       <div class="search">
         <ui-select title="Search by project"
+          ng-cloak
           ng-model="$ctrl.searchInstallation"
           on-select="$ctrl.filterFreeText($item)">
           <ui-select-match allow-clear="true"
@@ -57,27 +58,6 @@
         </button>
       </div>
     </header>
-
-    <section class="main" ui-view="">
-      <div class="main-content">
-        <header class="intro-text">
-          We're mapping renewable energy projects across Oxfordshire, starting
-          with installations belonging to the Low Carbon Hub and some of our partners.
-        </header>
-
-        <p>
-          We have
-          <span class="large-text" ng-bind-html="$ctrl.getFilteredInstallations()">39</span>
-          installations plugged into the People's Power Station so far. Together they can generate
-          <span class="large-text" ng-bind-html="$ctrl.getFilteredTotalYearlyGeneration()">
-          1.74 <span class="units">MWh</span></span> each year - enough to meet
-          <span class="large-text" ng-bind-html="4521 | number">4,521</span>
-          people's share of Oxfordshire's energy demands.
-        </p>
-
-        <p>Explore the map to find what's happening near you.</p>
-      </div>
-    </section>
 
     <div class="filters"
       ng-class="{'filters--visible': $ctrl.showFilters}">
@@ -165,6 +145,27 @@
         </label>
       </div>
     </div>
+
+    <section class="main" ui-view="">
+      <div class="main-content">
+        <header class="intro-text">
+          We're mapping renewable energy projects across Oxfordshire, starting
+          with installations belonging to the Low Carbon Hub and some of our partners.
+        </header>
+
+        <p>
+          We have
+          <span class="large-text" ng-bind-html="$ctrl.getFilteredInstallations()">39</span>
+          installations plugged into the People's Power Station so far. Together they can generate
+          <span class="large-text" ng-bind-html="$ctrl.getFilteredTotalYearlyGeneration()">
+          1.74 <span class="units">MWh</span></span> each year - enough to meet
+          <span class="large-text" ng-bind-html="4521 | number">4,521</span>
+          people's share of Oxfordshire's energy demands.
+        </p>
+
+        <p>Explore the map to find what's happening near you.</p>
+      </div>
+    </section>
 
     <section class="map-section">
       <leaflet class="map"

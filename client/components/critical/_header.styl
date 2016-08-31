@@ -2,10 +2,17 @@
 .main-header
   background #fff
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
-  height $header-height
+  min-height $header-height
   padding 12px 20px
   position relative
   z-index 2000
+
+  &:after
+    clear both
+    content ''
+    display block
+    height 0
+    width 100%
 
 // logo section
 .main-title
@@ -24,19 +31,22 @@
 
 // search section
 .search
-  float right
   padding 8px 20px 0
   position relative
+  text-align center
 
-  &:before
-    content url(../assets/images/search-border.svg)
-    display block
-    left 0
-    height 70px
-    margin-top -35px
-    position absolute
-    top 50%
-    width 3px
+  @media $not-mobile
+    float right
+
+    &:before
+      content url(../assets/images/search-border.svg)
+      display block
+      left 0
+      height 70px
+      margin-top -35px
+      position absolute
+      top 50%
+      width 3px
 
 .filter-toggle
   background $font-color-secondary
@@ -44,7 +54,7 @@
   border-radius 100px
   color #fff
   cursor pointer
-  display block
+  display inline-block
   font normal 16px/22px $font-secondary
   margin 12px 0 0
   min-height 30px
@@ -108,6 +118,7 @@
   letter-spacing -.36px
   height 32px
   padding 7px 10px 3px 35px
+  text-align left
   width 100%
 
   &:focus
@@ -115,9 +126,12 @@
     outline 0
 
 .ui-select-choices
+  font-size 14px
+  line-height 17px
   list-style none
   margin 0
   padding 0
+  text-align left
   z-index 200
 
 .ui-select-bootstrap .ui-select-choices-row.active > span

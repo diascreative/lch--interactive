@@ -26,18 +26,20 @@ div.large-text
   color #4a4a4a
   font bold 14px/20px $font-primary
   max-height 'calc(100vh - %s)' % ($header-height - 55)
-  max-width $filter-width
   opacity 1
   overflow auto
   padding 10px 48px 20px
   position absolute
   right 0
-  top $header-height
   transform translateY(-100%)
   transition transform .4s cubic-bezier(0, 0, .25, 1)
   visibility visible
   width 100%
   z-index 1050
+
+  @media $not-mobile
+    max-width $filter-width
+    top $header-height
 
   &--visible
     transform translateY(0)
@@ -274,31 +276,3 @@ $animation-timing = .3s
       content url(../assets/images/icon--hydro.svg)
       height 37px
       width 56px
-
-
-/*
- * Tablet
- */
-@media $tablet
-  .filters
-    max-width none
-    max-height 50vh
-    overflow hidden
-
-    &__copy
-      float left
-
-    &__options
-      float right
-      max-height 100%
-      overflow auto
-
-    &__copy
-    &__options
-      width 40%
-
-  .map-section
-    height 50vh
-    margin 50vh 0 0
-    padding 20px
-    width 100%
