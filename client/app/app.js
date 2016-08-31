@@ -5,6 +5,7 @@ angular.module('lowcarbonhubApp', [
   'ngSanitize',
   'ui.router',
   'ui.select',
+  '720kb.socialshare',
   'chart.js',
   'validation.match',
   'leaflet-directive'

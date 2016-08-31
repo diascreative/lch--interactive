@@ -53,6 +53,7 @@
     display inline-block
     margin 0 3px
     text-decoration none
+    transition opacity .3s cubic-bezier(0, 0, .25, 1)
     vertical-align middle
 
     &:not(.image-link)
@@ -62,8 +63,13 @@
       font 16px/22px $font-secondary
       padding 5px 14px 3px
 
+    &:hover
+    &:focus
+      opacity .7
+
     img
       display block
+
 
 // search section
 .search

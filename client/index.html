@@ -46,10 +46,18 @@
         <a href="#about" title="About">
           About
         </a>
-        <a href="http://www.lowcarbonhub.org" title="Low Carbon Hub" class="image-link">
+        <a href="#" title="Low Carbon Hub" class="image-link"
+         socialshare
+         socialshare-provider="facebook"
+         socialshare-url="{{$ctrl.absUrl}}"
+         socialshare-text="LCH Interactive! main website message">
           <img src="/assets/images/icon--fb.svg" width="30" height="30">
         </a>
-        <a href="http://www.lowcarbonhub.org" title="Low Carbon Hub" class="image-link">
+        <a href="#" title="Low Carbon Hub" class="image-link"
+         socialshare
+         socialshare-provider="twitter"
+         socialshare-url="{{$ctrl.absUrl}}"
+         socialshare-text="LCH Interactive! main website message">
           <img src="/assets/images/icon--twitter.svg" width="30" height="30">
         </a>
       </nav>
@@ -289,6 +297,7 @@
       <script src="bower_components/slug/slug.js"></script>
       <script src="bower_components/chart.js/dist/Chart.min.js"></script>
       <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+      <script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js(.tmp) app/app.js -->

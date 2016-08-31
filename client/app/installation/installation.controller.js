@@ -3,13 +3,15 @@
 (function() {
 
 class InstallationComponent {
-  constructor($http, $rootScope, $state) {
+  constructor($http, $location, $rootScope, $state) {
     this.$http = $http;
     this.$rootScope = $rootScope;
     this.watts = $rootScope.watts;
 
     this.details = {};
     this.name = $state.params.name;
+
+    this.absUrl = $location.protocol() + '://' + $location.host() + ':9000/installation/' + this.name;
 
     this.$rootScope.title = this.name;
 

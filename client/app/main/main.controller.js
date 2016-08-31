@@ -14,6 +14,8 @@ class MainController {
     this.$rootScope = $rootScope;
     this.watts = $rootScope.watts;
 
+    this.absUrl = this.$location.protocol() + '://' + this.$location.host();
+
     this._installations = [];
     this.filterLocation = false;
 
