@@ -11,7 +11,7 @@ class InstallationComponent {
     this.details = {};
     this.name = $state.params.name;
 
-    this.absUrl = $location.protocol() + '://' + $location.host() + '/installation/' + this.name;
+    this.lnk = `${$location.protocol()}://${$location.host()}/installation/${encodeURI(this.name)}`;
 
     this.$rootScope.title = this.name;
 
