@@ -11,7 +11,7 @@ class InstallationComponent {
     this.details = {};
     this.name = $state.params.name;
 
-    this.absUrl = $location.protocol() + '://' + $location.host() + ':9000/installation/' + this.name;
+    this.absUrl = $location.protocol() + '://' + $location.host() + '/installation/' + this.name;
 
     this.$rootScope.title = this.name;
 
