@@ -45,6 +45,7 @@ function queryGetInstallations(redisKey) {
           'owner',
           'ownershipType',
           'energyType',
+          'url',
           [sequelize.fn('max', sequelize.col('lat')), 'lat'],
           [sequelize.fn('min', sequelize.col('lng')), 'lng'],
           [sequelize.fn('sum',
@@ -57,7 +58,8 @@ function queryGetInstallations(redisKey) {
           'localAuthority',
           'owner',
           'ownershipType',
-          'energyType'
+          'energyType',
+          'url'
         ]
       })
       .then(Util.cacheResponse(redisKey, 86400));

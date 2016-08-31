@@ -92,7 +92,7 @@ class MainController {
 
     if (!L.Browser.touch) {
       this.$scope.$on('leafletDirectiveMarker.mouseover', this.mouseOverMarker.bind(this));
-      // this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
+      this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
       this.$scope.$on('leafletDirectiveMarker.click', this.clickMarker.bind(this));
     }
   }
@@ -365,19 +365,23 @@ class MainController {
     const className = slug(installation.energyType).toLowerCase();
 
     const html =
-      `<div class="${className}">
+      `<div class="map-popup ${className}">
         <h2>%(name)s</h2>
-        <div class="capacity">
-          <div class="large-text">%(capacity)s</div>
-          Generated Capacity
+        <div class="map-popup__graphic">
+          <div class="map-popup__capacity">
+            <div class="large-text">%(capacity)s</div>
+            Generated<br>Capacity
+          </div>
+          <div class="map-popup__icon-section">
+           <div class="map-popup__icon"></div>
+          </div>
         </div>
-        <div class="icon-section">
-         <div class="icon"></div>
-        </div>
-        <div class="clear"></div>
-        <p><span class="large-text">%(annualPredictedGeneration)s</span> Annual predicted generation</p>
+        <p>
+          <span class="large-text">%(annualPredictedGeneration)s</span>
+          Annual predicted generation
+        </p>
         <p>This installation is owned by <strong>%(owner)s.</strong></p>
-        <p>Click location marker to view more details.</p>
+        <p>Click location marker<br> to view more details.</p>
       </div>`;
 
     return sprintf(html, cleanNumbers);

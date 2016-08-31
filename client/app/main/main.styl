@@ -1,6 +1,7 @@
 .large-text
-  font 30px/32px $font-primary
+  font 30px/22px $font-secondary
   letter-spacing -.31px
+  vertical-align top
 
   .units
     font-size 16px
@@ -9,7 +10,7 @@
 div.large-text
   border-bottom 1px solid #fff
   margin 14px 0 1px
-  padding 0 0 2px
+  padding 0
 
 .clear
   clear both
@@ -189,11 +190,38 @@ $animation-timing = .3s
   border-radius 0
 
 .leaflet-popup-content
-  color $font-primary
+  color $font-color-primary
   font-size 14px
   line-height 17px
+  margin 0
 
-  .icon-section
+  p
+    margin 8px 0
+
+.map-popup
+  max-width 300px
+  padding 18px 22px 0
+
+  .large-text
+    line-height 17px
+
+  &__graphic
+    border 1px dashed $font-color-primary
+    border-left 0
+    border-right 0
+    margin 0 0 22px
+    padding 12px 0 9px
+    position relative
+
+    &:after
+      clear both
+      content ''
+      display block
+      height 0
+      width 100%
+
+
+  &__icon-section
     background #F5A623
     border-radius 50%
     float right
@@ -201,16 +229,19 @@ $animation-timing = .3s
     position relative
     width 140px
 
-  .capacity
+  &__capacity
     color #F5A623
-    float left
+    left 0
+    position absolute
+    top 50%
+    transform translateY(-50%)
     width calc(100% - 140px)
 
     .large-text
       border-bottom 1px dashed #F5A623
       margin-right 10px
 
-  .icon
+  &__icon
     background #fff
     border-radius 50%
     height 60px
@@ -229,21 +260,20 @@ $animation-timing = .3s
       transform translate(-50%, -50%)
       width 44px
 
-  .hydro
-    .capacity
+  &.hydro
+    .map-popup__capacity
       color #98CAEC
 
-    .large-text
-      border-bottom 1px dashed #98CAEC
+      .large-text
+        border-bottom 1px dashed #98CAEC
 
-    .icon-section
+    .map-popup__icon-section
       background #98CAEC
 
-    .icon:before
+    .map-popup__icon:before
       content url(../assets/images/icon--hydro.svg)
       height 37px
       width 56px
-
 
 
 /*

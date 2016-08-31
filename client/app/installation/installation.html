@@ -48,4 +48,13 @@
       chart-series="$installation.graph.series"
       chart-labels="$installation.graph.labels"></canvas>
   </div>
+
+  <p class="installation-description">
+    It's a <strong>{{$installation.details.ownershipType}}</strong> in
+    <strong>{{$installation.details.localAuthority}}</strong>.
+    <span ng-ig="$installation.details.url">
+      To find out more go to -
+      <a ng-href="{{$installation.details.url}}"
+      target="_blank" rel="noopener"><strong>{{$installation.details.url}}</strong></a>
+    </span>
 </div>
