@@ -36,3 +36,8 @@
 
   .main-content
     height 100%
+
+@media $tablet
+  .main
+    height 'calc(100vh - %s)' % $header-height--tablet
+    top $header-height--tablet

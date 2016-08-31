@@ -5,7 +5,11 @@
   min-height $header-height
   padding 12px 20px
   position relative
+  text-align center
   z-index 2000
+
+  @media $not-mobile
+    text-align right
 
   &:after
     clear both
@@ -15,29 +19,64 @@
     width 100%
 
 // logo section
+.logo-section
+  display block
+  margin 0 0 20px
+  text-align center
+
+  @media $not-mobile
+    float left
+    margin 0
+    text-align left
+
 .main-title
   display block
   margin 0
-
-.logo-section
-  display inline-block
 
 .strapline
   color $color-tertiary
   font normal normal 14px/15px $font-primary
   letter-spacing 0
-  margin 0
+  margin 0 auto
   max-width 280px
+
+// main nav
+.main-nav
+  display block
+  padding 0 10px
+  vertical-align top
+
+  @media $not-mobile
+    display inline-block
+
+  a
+    display inline-block
+    margin 0 3px
+    text-decoration none
+    vertical-align middle
+
+    &:not(.image-link)
+      background $font-color-secondary
+      border-radius 100px
+      color #fff
+      font 16px/22px $font-secondary
+      padding 5px 14px 3px
+
+    img
+      display block
 
 // search section
 .search
+  display block
   padding 8px 20px 0
   position relative
   text-align center
+  vertical-align middle
 
   @media $not-mobile
-    float right
+    display inline-block
 
+  @media $desktop
     &:before
       content url(../assets/images/search-border.svg)
       display block

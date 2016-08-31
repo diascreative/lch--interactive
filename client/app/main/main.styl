@@ -276,3 +276,11 @@ $animation-timing = .3s
       content url(../assets/images/icon--hydro.svg)
       height 37px
       width 56px
+
+
+@media $tablet
+  .filters
+    top $header-height--tablet
+
+  .map-section
+    height 'calc(100vh - %s)' % $header-height--tablet
