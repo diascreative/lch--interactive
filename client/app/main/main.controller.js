@@ -214,7 +214,13 @@ class MainController {
    */
   filterFreeText(marker = false) {
     if (marker) {
+      this.map.installations.map((installationMarker) => {
+        this._installationVisibility(installationMarker);
+      });
+
       this._centerOnMarker(marker);
+    } else {
+      this.filterInstallations();
     }
   }
 
@@ -270,9 +276,8 @@ class MainController {
         visibleItems.push(index);
       }
 
-      installationMarker.visible = visible;
+      this._installationVisibility(installationMarker, visible);
       installationMarker.focus = false;
-      installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
     });
 
     if (visibleItems.length === 1) {
@@ -283,15 +288,22 @@ class MainController {
     this._setMapBounds();
   }
 
+  _installationVisibility(installationMarker, visible = false) {
+    installationMarker.visible = visible;
+    installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
+  }
+
   /**
    * Show a marker and move the map to its coordinates
    * @param  {Object} marker
    */
   _centerOnMarker(marker) {
+    this._installationVisibility(marker, true);
     marker.focus = true;
-    marker.visible = true;
     this.map.defaults.center.lat = marker.lat;
     this.map.defaults.center.lng = marker.lng;
+
+    this.$state.go('installation', { name: marker.name });
   }
 
   /**
