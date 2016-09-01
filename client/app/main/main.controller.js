@@ -94,7 +94,7 @@ class MainController {
 
     if (!L.Browser.touch) {
       this.$scope.$on('leafletDirectiveMarker.mouseover', this.mouseOverMarker.bind(this));
-      // this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
+      this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
       this.$scope.$on('leafletDirectiveMarker.click', this.clickMarker.bind(this));
       this.$scope.$on('leafletDirectiveMap.click', this.closeMarkers.bind(this));
       this.$scope.$on('leafletDirectiveGeoJson.click', this.closeMarkers.bind(this));
@@ -511,14 +511,13 @@ class MainController {
    * Leaflet by default brings this up on click
    */
   mouseOutMarker(e, args) {
-    const marker = this.map.installations[args.modelName];
     this.currentHoverOver = 'out';
 
     this.$timeout(() => {
-      if (args.modelName !== this.currentHoverOver) {
-        marker.focus = false;
+      if (this.currentHoverOver === 'out') {
+        this.currentHoverOver = args.modelName;
       }
-    }, 300);
+    }, 350);
   }
 
   closeMarkers() {
