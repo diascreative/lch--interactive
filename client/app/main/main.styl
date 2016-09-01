@@ -248,7 +248,7 @@ $animation-timing = .3s
 
 
   &__icon-section
-    background #F5A623
+    background rgba(#f5a623, .6)
     border-radius 50%
     float right
     height 140px
@@ -256,7 +256,7 @@ $animation-timing = .3s
     width 140px
 
   &__capacity
-    color #F5A623
+    color #f5a623
     left 0
     position absolute
     top 50%
@@ -269,11 +269,13 @@ $animation-timing = .3s
 
   &__icon
     background #fff
+    border solid 10px #f5a623
     border-radius 50%
+    box-sizing content-box
     height 60px
     left 50%
-    margin -30px 0 0 -30px
     position absolute
+    transform translate(-50%, -50%)
     top 50%
     width 60px
 
@@ -294,12 +296,15 @@ $animation-timing = .3s
         border-bottom 1px dashed #98CAEC
 
     .map-popup__icon-section
-      background #98CAEC
+      background rgba(#98CAEC, .6)
 
-    .map-popup__icon:before
-      content url(../assets/images/icon--hydro.svg)
-      height 37px
-      width 56px
+    .map-popup__icon
+      border-color #98CAEC
+
+      &:before
+        content url(../assets/images/icon--hydro.svg)
+        height 37px
+        width 56px
 
 
 @media $tablet

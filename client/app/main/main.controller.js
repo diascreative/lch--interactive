@@ -18,6 +18,7 @@ class MainController {
 
     this._installations = [];
     this.filterLocation = false;
+    this._maxCapacity = 0;
 
     this._postCodeMatches = [
         new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d[A-Z]{2})$/i), // SW1A+1AA
@@ -114,6 +115,7 @@ class MainController {
    * @return {Array} Map markers
    */
   _updateMapMarkers() {
+    this._maxCapacity = _.maxBy(this._installations, 'capacity').capacity * 1000;
     this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
     this.filtersAvailable = this._installationsToFilters(this._installations);
 
@@ -388,6 +390,8 @@ class MainController {
     }
 
     const className = slug(installation.energyType).toLowerCase();
+    const spaceForBorder = (140 - 80);
+    const iconBorderWidth = spaceForBorder * (installation.capacity / this._maxCapacity);
 
     const html =
       `<div class="map-popup ${className}">
@@ -398,7 +402,7 @@ class MainController {
             Generated<br>Capacity
           </div>
           <div class="map-popup__icon-section">
-           <div class="map-popup__icon"></div>
+           <div class="map-popup__icon" style="border-width: ${iconBorderWidth}px"></div>
           </div>
         </div>
         <p>
