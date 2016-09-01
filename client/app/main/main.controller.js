@@ -115,7 +115,7 @@ class MainController {
    * @return {Array} Map markers
    */
   _updateMapMarkers() {
-    this._maxCapacity = _.maxBy(this._installations, 'capacity').capacity * 1000;
+    this._maxCapacity = _.maxBy(this._installations, 'capacity').capacity;
     this.map.installations = this._installations.map(this._installationsToMarkers.bind(this));
     this.filtersAvailable = this._installationsToFilters(this._installations);
 
@@ -139,7 +139,7 @@ class MainController {
       marker.generated = 0;
     }
 
-    marker.capacity = marker.capacity * 1000;
+    marker.capacity = marker.capacity;
 
     marker.icon = {
       type: 'div',
@@ -390,7 +390,7 @@ class MainController {
     }
 
     const className = slug(installation.energyType).toLowerCase();
-    const spaceForBorder = (140 - 80);
+    const spaceForBorder = (140 - 60) / 2;
     const iconBorderWidth = spaceForBorder * (installation.capacity / this._maxCapacity);
 
     const html =

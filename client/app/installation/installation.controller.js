@@ -3,13 +3,16 @@
 (function() {
 
 class InstallationComponent {
-  constructor($http, $location, $rootScope, $state) {
+  constructor(appStats, $interval, $http, $location, $rootScope, $state) {
+    this.$interval = $interval;
     this.$http = $http;
     this.$rootScope = $rootScope;
     this.watts = $rootScope.watts;
+    this.appStats = appStats;
 
     this.details = {};
     this.name = $state.params.name;
+    this._randomStat = Math.round(Math.random() * (this.appStats.length - 2)) + 1;
 
     this.lnk = `${$location.protocol()}://${$location.host()}/installation/${encodeURI(this.name)}`;
 
@@ -71,6 +74,8 @@ class InstallationComponent {
     });
 
     this.loadGraphData();
+
+    this.$interval(this.newRandomExample.bind(this), 5000);
   }
 
   loadGraphData() {
@@ -90,12 +95,21 @@ class InstallationComponent {
             });
   }
 
+  getStatExample(indexToShow = this._randomStat) {
+    return this.appStats[indexToShow];
+  }
+
+  newRandomExample() {
+    this._randomStat = Math.round(Math.random() * (this.appStats.length - 2)) + 1;
+    return this._randomStat;
+  }
+
   getAnnualGeneration() {
     return this.watts(this.details.annualPredictedGeneration, false, 'h');
   }
 
   getCapacity() {
-    return this.watts(this.details.capacity * 1000);
+    return this.watts(this.details.capacity);
   }
 }
 

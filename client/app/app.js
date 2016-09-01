@@ -8,7 +8,8 @@ angular.module('lowcarbonhubApp', [
   '720kb.socialshare',
   'chart.js',
   'validation.match',
-  'leaflet-directive'
+  'leaflet-directive',
+  'lowcarbonhubApp.constants'
 ])
   .run(function($filter, $rootScope) {
     /**

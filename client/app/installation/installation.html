@@ -19,16 +19,16 @@
   <div class="installation-stats">
     <div class="installation-stat">
       <div class="large-text">
-        2,544
+        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample().consumption) | number:0 }}
       </div>
-      fridge freezers for a day
+      {{ $installation.getStatExample().action }}
     </div>
 
     <div class="installation-stat">
       <div class="large-text">
-        4,521
+        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample(0).consumption) | number:2 }}
       </div>
-      people's share of Oxfordshire's energy need met
+      {{ $installation.getStatExample(0).action }}
     </div>
   </div>
 
