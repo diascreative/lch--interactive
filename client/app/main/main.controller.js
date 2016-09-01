@@ -94,8 +94,10 @@ class MainController {
 
     if (!L.Browser.touch) {
       this.$scope.$on('leafletDirectiveMarker.mouseover', this.mouseOverMarker.bind(this));
-      this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
+      // this.$scope.$on('leafletDirectiveMarker.mouseout', this.mouseOutMarker.bind(this));
       this.$scope.$on('leafletDirectiveMarker.click', this.clickMarker.bind(this));
+      this.$scope.$on('leafletDirectiveMap.click', this.closeMarkers.bind(this));
+      this.$scope.$on('leafletDirectiveGeoJson.click', this.closeMarkers.bind(this));
     }
   }
 
@@ -402,8 +404,8 @@ class MainController {
           <span class="large-text">%(annualPredictedGeneration)s</span>
           Annual predicted generation
         </p>
-        <p>This installation is owned by <strong>%(owner)s.</strong></p>
-        <p>Click location marker<br> to view more details.</p>
+        <p>Owned by: <strong>%(owner)s.</strong></p>
+        <p><a href="/installation/${installation.name}">more details</a></p>
       </div>`;
 
     return sprintf(html, cleanNumbers);
@@ -516,6 +518,16 @@ class MainController {
         marker.focus = false;
       }
     }, 300);
+  }
+
+  closeMarkers() {
+    if (!this.currentHoverOver || this.currentHoverOver === 'out') {
+      return;
+    }
+
+    const marker = this.map.installations[this.currentHoverOver];
+    this.currentHoverOver = 'out';
+    marker.focus = false;
   }
 
   /**
