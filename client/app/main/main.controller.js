@@ -399,7 +399,7 @@ class MainController {
         <div class="map-popup__graphic">
           <div class="map-popup__capacity">
             <div class="large-text">%(capacity)s</div>
-            Generated<br>Capacity
+            Capacity
           </div>
           <div class="map-popup__icon-section">
            <div class="map-popup__icon" style="border-width: ${iconBorderWidth}px"></div>
