@@ -220,6 +220,7 @@ class MainController {
     if (marker) {
       this.map.installations.map((installationMarker) => {
         this._installationVisibility(installationMarker);
+        installationMarker.focus = false;
       });
 
       this._centerOnMarker(marker);
