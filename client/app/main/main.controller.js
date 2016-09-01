@@ -523,7 +523,7 @@ class MainController {
       return;
     }
 
-    return `belonging to ${this.filtersChosen.ownershipType}`;
+    return `${this.filtersChosen.ownership}'s installations in`;
   }
 
   /**
