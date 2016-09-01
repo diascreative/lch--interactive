@@ -94,7 +94,7 @@ class InstallationComponent {
   }
 
   getCapacity() {
-    return this.watts(this.details.capacity);
+    return this.watts(this.details.capacity * 1000);
   }
 }
 
