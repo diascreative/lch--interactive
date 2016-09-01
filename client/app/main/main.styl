@@ -274,6 +274,7 @@ $animation-timing = .3s
     box-sizing content-box
     height 60px
     left 50%
+    overflow hidden
     position absolute
     transform translate(-50%, -50%)
     top 50%
@@ -295,6 +296,7 @@ $animation-timing = .3s
       left 50%
       margin -16px 0 0 -1px
       position absolute
+      transform-origin 50% 50%
       top 50%
       width 22px
 
@@ -311,10 +313,19 @@ $animation-timing = .3s
     .map-popup__icon
       border-color #98CAEC
 
-      &:before
+      &:after
+        animation 3s linear infinite hydro-water
         content url(../assets/images/icon--hydro.svg)
-        height 37px
-        width 56px
+        height 9px
+        margin 0px 0 0 -95px
+        width 132px
+
+      &:before
+        animation 10s linear infinite hydro-wheel
+        content url(../assets/images/icon--hydro-wheel.svg)
+        height 40px
+        margin -20px 0 0 -17px
+        width 34px
 
 @media $tablet
   .filters
@@ -330,3 +341,17 @@ $animation-timing = .3s
 
   to
     transform rotate3d(0, 0, 1, 60deg) scale(1.3)
+
+@keyframes hydro-wheel
+  from
+    transform rotate3d(0, 0, 0, 0deg)
+
+  to
+    transform rotate3d(0, 0, 1, -360deg)
+
+@keyframes hydro-water
+  from
+    transform translateX(0)
+
+  to
+    transform translateX(56px)
