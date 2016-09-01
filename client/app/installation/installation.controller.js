@@ -24,6 +24,7 @@ class InstallationComponent {
       options: {
         elements: {
           line: {
+            borderColor: 'transparent',
             borderWidth: 0
           },
           point: {
@@ -37,7 +38,7 @@ class InstallationComponent {
               scaleLineColor: '#ffffff',
               fontColor: '#fff',
               callback: function(value) {
-                return moment(value).fromNow();
+                return '-' + moment(value).fromNow(true);
               },
               maxTicksLimit: 7
             },
