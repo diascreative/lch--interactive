@@ -221,6 +221,7 @@ class MainController {
       this._centerOnMarker(marker);
     } else {
       this.filterInstallations();
+      this.$state.go('main');
     }
   }
 
