@@ -279,14 +279,24 @@ $animation-timing = .3s
     top 50%
     width 60px
 
-    &:before
+    &:after
       content url(../assets/images/icon--solar.svg)
-      height 36px
+      height 23px
       left 50%
+      margin -5px 0 0 -22px
       position absolute
       top 50%
-      transform translate(-50%, -50%)
-      width 44px
+      width 38px
+
+    &:before
+      animation 6s ease-in-out infinite alternate sun
+      content url(../assets/images/icon--solar-sun.svg)
+      height 22px
+      left 50%
+      margin -16px 0 0 -1px
+      position absolute
+      top 50%
+      width 22px
 
   &.hydro
     .map-popup__capacity
@@ -306,10 +316,17 @@ $animation-timing = .3s
         height 37px
         width 56px
 
-
 @media $tablet
   .filters
     top $header-height--tablet
 
   .map-section
     height 'calc(100vh - %s)' % $header-height--tablet
+
+
+@keyframes sun
+  from
+    transform rotate3d(0, 0, 0, 0deg)
+
+  to
+    transform rotate3d(0, 0, 1, 60deg) scale(1.3)
