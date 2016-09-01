@@ -101,6 +101,8 @@ class MainController {
 
   clickMarker(e, args) {
     const marker = this.map.installations[args.modelName];
+    this.currentHoverOver = args.modelName;
+    marker.focus = true;
 
     this.$state.go('installation', { name: marker.name });
   }

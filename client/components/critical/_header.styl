@@ -129,6 +129,7 @@
       height 14px
       margin 4px 12px 0 10px
       vertical-align middle
+      transition transform .4s .1s cubic-bezier(0, 0, .25, 1)
       width 19px
 
   &__choice--close
@@ -138,14 +139,21 @@
       content url(../assets/images/icon--filter-close.svg)
       height 16px
       margin 2px 12px 0 13px
+      transform translateY(-100%)
       width 16px
 
   &--on
     .filter-toggle__choice
       transform translateY(100%)
 
+      &:after
+        transform translateY(100%)
+
     .filter-toggle__choice--close
       transform translateY(0)
+
+      &:after
+        transform translateY(0)
 
 
 .filters
