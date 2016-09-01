@@ -4,7 +4,7 @@
 
 class MainController {
 
-  constructor($http, $filter, $location, $rootScope, $scope, $state, $timeout) {
+  constructor(graphDefault, $http, $filter, $location, $rootScope, $scope, $state, $timeout) {
     this.$http = $http;
     this.$filter = $filter;
     this.$location = $location;
@@ -19,6 +19,8 @@ class MainController {
     this._installations = [];
     this.filterLocation = false;
     this._maxCapacity = 0;
+
+    this.graph = graphDefault;
 
     this._postCodeMatches = [
         new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d[A-Z]{2})$/i), // SW1A+1AA
@@ -108,6 +110,25 @@ class MainController {
     marker.focus = true;
 
     this.$state.go('installation', { name: marker.name });
+  }
+
+  loadHistoricData() {
+    const url = `/api/generations/historic`;
+    const data = this.filtersChosen;
+
+    return this.$http.get(url, {params: data})
+            .success(data => {
+              data.reverse();
+
+              this.graph.labels = data.map(item => {
+                return item.datetime;
+              });
+
+              this.graph.data = data.map(item => {
+                return item.generated;
+              });
+            });
+
   }
 
   /**
@@ -304,6 +325,7 @@ class MainController {
     }
 
     this._setMapBounds();
+    this.loadHistoricData();
   }
 
   _installationVisibility(installationMarker, visible = false) {

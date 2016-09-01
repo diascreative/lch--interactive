@@ -3,7 +3,7 @@
 (function() {
 
 class InstallationComponent {
-  constructor(appStats, $interval, $http, $location, $rootScope, $state) {
+  constructor(appStats, graphDefault, $interval, $http, $location, $rootScope, $state) {
     this.$interval = $interval;
     this.$http = $http;
     this.$rootScope = $rootScope;
@@ -18,52 +18,7 @@ class InstallationComponent {
 
     this.$rootScope.title = this.name;
 
-    this.graph = {
-      colors: ['#ffffff'],
-      data: [],
-      labels: [],
-      series: ['Series A'],
-      pointRadius: 0,
-      options: {
-        elements: {
-          line: {
-            borderColor: 'transparent',
-            borderWidth: 0
-          },
-          point: {
-            radius: 0
-          }
-        },
-        scales: {
-          xAxes: [{
-            beginAtZero: false,
-            ticks: {
-              scaleLineColor: '#ffffff',
-              fontColor: '#fff',
-              callback: function(value) {
-                return '-' + moment(value).fromNow(true);
-              },
-              maxTicksLimit: 7
-            },
-            gridLines: {
-              display: false
-            }
-          }],
-          yAxes: [{
-            beginAtZero: false,
-            ticks: {
-              fontColor: '#fff',
-              callback: function(value) {
-                return value / 1000;
-              }
-            },
-            gridLines: {
-              display: false
-            }
-          }]
-        }
-      }
-    };
+    this.graph = graphDefault;
   }
 
   $onInit() {
