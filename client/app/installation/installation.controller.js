@@ -18,7 +18,7 @@ class InstallationComponent {
 
     this.$rootScope.title = this.name;
 
-    this.graph = graphDefault;
+    this.graph = angular.copy(graphDefault);
   }
 
   $onInit() {

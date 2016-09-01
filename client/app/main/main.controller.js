@@ -20,7 +20,7 @@ class MainController {
     this.filterLocation = false;
     this._maxCapacity = 0;
 
-    this.graph = graphDefault;
+    this.graph = angular.copy(graphDefault);
 
     this._postCodeMatches = [
         new RegExp(/^([A-Z]{1,2}\d{1,2}[A-Z]?)\s*(\d[A-Z]{2})$/i), // SW1A+1AA
@@ -242,7 +242,7 @@ class MainController {
   filterFreeText(marker = false) {
     if (marker) {
       this.map.installations.map((installationMarker) => {
-        this._installationVisibility(installationMarker);
+        this._setInstallationVisibility(installationMarker);
         installationMarker.focus = false;
       });
 
@@ -315,7 +315,7 @@ class MainController {
         visibleItems.push(index);
       }
 
-      this._installationVisibility(installationMarker, visible);
+      this._setInstallationVisibility(installationMarker, visible);
       installationMarker.focus = false;
     });
 
@@ -328,7 +328,7 @@ class MainController {
     this.loadHistoricData();
   }
 
-  _installationVisibility(installationMarker, visible = false) {
+  _setInstallationVisibility(installationMarker, visible = false) {
     installationMarker.visible = visible;
     installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
   }
@@ -338,7 +338,7 @@ class MainController {
    * @param  {Object} marker
    */
   _centerOnMarker(marker) {
-    this._installationVisibility(marker, true);
+    this._setInstallationVisibility(marker, true);
     marker.focus = true;
     this.map.defaults.center.lat = marker.lat;
     this.map.defaults.center.lng = marker.lng;
@@ -467,10 +467,14 @@ class MainController {
    * @return {String} $filtered sum
    */
   getFilteredTotalYearlyGeneration() {
-    const visibleInstallations = this._getVisibleInstallations();
-    const total = _.sumBy(visibleInstallations, 'annualPredictedGeneration');
+    const total = this.getTotalYearlyGeneration();
 
     return this.watts(total, false, 'h');
+  }
+
+  getTotalYearlyGeneration() {
+    const visibleInstallations = this._getVisibleInstallations();
+    return _.sumBy(visibleInstallations, 'annualPredictedGeneration');
   }
 
   /**
@@ -506,6 +510,20 @@ class MainController {
                                 this.filtersChosen.localAuthorities;
 
     return str;
+  }
+
+  /**
+   * Build stats copy about the chosen ownership
+   * @return {String}
+   * eg. "Low Carbon Hub"
+   *     "community and council"
+   */
+  copyOwnership() {
+    if (this.filtersChosen.ownership === 'all') {
+      return;
+    }
+
+    return `belonging to ${this.filtersChosen.ownershipType}`;
   }
 
   /**

@@ -1,4 +1,5 @@
 <div class="main-content">
+  <h1 class="installation-title">{{$ctrl.copyOwnership()}}</h1>
   <h1 class="installation-title">{{$ctrl.copyArea()}}</h1>
 
   <p>
@@ -23,19 +24,20 @@
   <div class="installation-stats">
     <div class="installation-stat">
       <div class="large-text">
-        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample().consumption) | number:0 }}
+        {{ ($ctrl.getTotalYearlyGeneration() / $filter.getStatExample().consumption) | number:0 }}
       </div>
-      {{ $installation.getStatExample().action }}
+      {{ $filter.getStatExample().action }}
     </div>
 
     <div class="installation-stat">
       <div class="large-text">
-        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample(0).consumption) | number:2 }}
+        {{ ($ctrl.getTotalYearlyGeneration() / $filter.getStatExample(0).consumption) | number:2 }}
       </div>
-      {{ $installation.getStatExample(0).action }}
+      {{ $filter.getStatExample(0).action }}
     </div>
   </div>
 
+  <p ng-if="ctrl.graph.data.length"><strong>Recent power generation (MW)</strong></p>
   <div class="graph" ng-if="$ctrl.graph.data.length">
     <canvas class="chart chart-line" style="width: 100%; height: 200px"
       chart-data="$ctrl.graph.data"
