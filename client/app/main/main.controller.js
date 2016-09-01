@@ -237,6 +237,11 @@ class MainController {
     this.filterInstallations();
   }
 
+  interactWithFilters() {
+    this.$state.go('filter');
+    this.filterInstallations();
+  }
+
   /**
    * Filter the visibility of our markers
    */

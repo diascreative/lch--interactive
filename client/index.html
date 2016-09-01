@@ -92,7 +92,7 @@
             value="all"
             checked="checked"
             ng-model="$ctrl.filtersChosen.localAuthorities"
-            ng-change="$ctrl.filterInstallations(); $ctrl.loadAreaJSON(localAuthority.name)">
+            ng-change="$ctrl.interactWithFilters(); $ctrl.loadAreaJSON(localAuthority.name)">
           <span></span>
           All
         </label>
@@ -104,7 +104,7 @@
           <input type="radio" name="local-authorities"
             value="{{localAuthority.name}}"
             ng-model="$ctrl.filtersChosen.localAuthorities"
-            ng-change="$ctrl.filterInstallations(); $ctrl.loadAreaJSON(localAuthority.name)">
+            ng-change="$ctrl.interactWithFilters(); $ctrl.loadAreaJSON(localAuthority.name)">
           <span></span>
           {{localAuthority.name}}
         </label>
@@ -131,7 +131,7 @@
         <label class="inline">
           <input type="radio" name="ownershipType" value="all"
             ng-model="$ctrl.filtersChosen.ownershipType"
-            ng-change="$ctrl.filterInstallations()">
+            ng-change="$ctrl.interactWithFilters()">
           <span></span>
           All
         </label>
@@ -139,7 +139,7 @@
          ng-repeat="type in $ctrl.filtersAvailable.ownershipType | orderBy:'name'">
           <input type="radio" name="ownershipType" value="{{type.name}}"
             ng-model="$ctrl.filtersChosen.ownershipType"
-            ng-change="$ctrl.filterInstallations()">
+            ng-change="$ctrl.interactWithFilters()">
           <span></span>
           {{type.name}}
         </label>
@@ -149,7 +149,7 @@
         <label class="inline">
           <input type="radio" name="energyTypes" value="all"
             ng-model="$ctrl.filtersChosen.energyType"
-            ng-change="$ctrl.filterInstallations()">
+            ng-change="$ctrl.interactWithFilters()">
           <span></span>
           All
         </label>
@@ -157,7 +157,7 @@
          ng-repeat="type in $ctrl.filtersAvailable.energyTypes | orderBy:'name'">
           <input type="radio" name="energyTypes" value="{{type.name}}"
             ng-model="$ctrl.filtersChosen.energyType"
-            ng-change="$ctrl.filterInstallations()">
+            ng-change="$ctrl.interactWithFilters()">
           <span></span>
           {{type.name}}
         </label>
@@ -298,6 +298,8 @@
       <script src="app/app.js"></script>
       <!-- injector:js -->
       <script src="app/app.constant.js"></script>
+      <script src="app/filter/filter.controller.js"></script>
+      <script src="app/filter/filter.js"></script>
       <script src="app/installation/installation.controller.js"></script>
       <script src="app/installation/installation.js"></script>
       <script src="app/main/main.controller.js"></script>
