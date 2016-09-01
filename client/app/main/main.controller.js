@@ -224,6 +224,11 @@ class MainController {
     }
   }
 
+  filterOwners(ownerName = 'all') {
+    this.filtersChosen.ownership = ownerName;
+    this.filterInstallations();
+  }
+
   /**
    * Filter the visibility of our markers
    */

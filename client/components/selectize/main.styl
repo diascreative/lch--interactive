@@ -18,9 +18,12 @@
 .ui-select-bootstrap
   > .ui-select-choices
     background #fff
-    border-bottom solid 1px #9B9B9B
-    border-left solid 1px #9B9B9B
+    border solid 1px $color-tertiary
+    border-top solid 1px blend(rgba($color-tertiary, .4), #fff)
+    box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+    clip rect(0, 300px, 210px, -10px)
     height auto
+    margin-top -1px
     max-height 200px
     overflow-x hidden
     position absolute
@@ -42,6 +45,14 @@
         background-color #f5f5f5
         color #262626
         text-decoration none
+
+  .ui-select-match-text
+    display inline-block
+    max-width 175px
+    padding-right 16px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
 
 
 .ui-select-offscreen

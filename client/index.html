@@ -115,22 +115,16 @@
           ng-model="$ctrl.address">
 
         <h4>Ownership</h4>
-        <label class="column">
-          <input type="radio" name="ownership"
-            ng-model="$ctrl.filtersChosen.ownership"
-            value="all"
-            ng-change="$ctrl.filterInstallations()">
-          <span></span>
-          All
-        </label>
-        <label class="column"
-         ng-repeat="ownership in $ctrl.filtersAvailable.ownership | orderBy:'name'">
-          <input type="radio" name="ownership" value="{{ownership.name}}"
-            ng-model="$ctrl.filtersChosen.ownership"
-            ng-change="$ctrl.filterInstallations()">
-          <span></span>
-          {{ownership.name}}
-        </label>
+        <ui-select title="Search by project"
+          ng-cloak
+          ng-model="$ctrl.searchOwner"
+          on-select="$ctrl.filterOwners($item.name)">
+          <ui-select-match allow-clear="true"
+            placeholder="Search by owners">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="ownership.name as ownership in $ctrl.filtersAvailable.ownership | orderBy:'name' | filter: $select.search">
+            <span ng-bind-html="ownership.name | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
 
         <div ng-hide="$ctrl.filtersAvailable.ownershipType.length < 2">
         <h4>Ownership Type</h4>
