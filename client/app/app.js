@@ -18,7 +18,7 @@ angular.module('lowcarbonhubApp', [
      * @param  {Boolean} force a particular unit
      * @return {String} pretty-printed reading
      */
-    $rootScope.watts = function(watt, forcedUnit = false, hours = '') {
+    $rootScope.watts = function(watt, forcedUnit = false, hours = '', wrapUnits = true) {
       let unit = 'W';
       let decimalPlaces = 2;
       let returnWatt = watt;
@@ -44,7 +44,13 @@ angular.module('lowcarbonhubApp', [
       }
 
       const cleanWatt = $filter('number')(returnWatt, decimalPlaces);
-      return `${cleanWatt} <span class="units">${unit}${hours}</span>`;
+
+      if (wrapUnits) {
+        return `${cleanWatt}<span class="units">${unit}${hours}</span>`;
+      } else {
+        return `${cleanWatt}${unit}${hours}`;
+      }
+
     };
   })
   .config(function($urlRouterProvider, $locationProvider) {

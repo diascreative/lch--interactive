@@ -720,6 +720,13 @@ class MainController {
     return deg * (Math.PI / 180);
   }
 
+  globalSocialSharingMessage() {
+    const total = _.sumBy(this.map.installations, 'generated');
+    const cleanTotal = this.watts(total, 'W', '', false);
+
+    return `${cleanTotal} of #Oxon's #communityenergy is now plugged into the #PeoplesPowerStation. See local energy grow!`;
+  }
+
   // SEO
   pageTitle() {
     const title = 'LCH Interactive';

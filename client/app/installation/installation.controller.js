@@ -26,6 +26,8 @@ class InstallationComponent {
 
     this.$http.get(url).then(response => {
       this.details = response.data;
+
+      this.setPageDescription();
     });
 
     this.loadGraphData();
@@ -65,6 +67,16 @@ class InstallationComponent {
 
   getCapacity() {
     return this.watts(this.details.capacity);
+  }
+
+  socialMessage() {
+    const cleanGen = this.watts(this.details.annualPredictedGeneration, false, 'h', false);
+    return `${this.name} generates ${cleanGen} clean energy for #Oxon p.a.`;
+  }
+
+  setPageDescription() {
+    const cleanGen = this.watts(this.details.annualPredictedGeneration, false, 'h', false);
+    return `${this.name} generates ${cleanGen} clean energy for #Oxon p.a. What's plugged into the #PeoplesPowerStation near you?`;
   }
 }
 

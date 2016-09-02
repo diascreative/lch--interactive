@@ -61,14 +61,14 @@
      socialshare
      socialshare-provider="facebook"
      socialshare-url="{{$installation.lnk}}"
-     socialshare-text="{{$installation.details.name}} on LCH">
+     socialshare-text="{{$installation.socialMessage()}}">
       <img src="/assets/images/icon--fb.svg" width="30" height="30">
     </a>
     <a href="#" title="Low Carbon Hub" class="installation__social-link image-link"
      socialshare
      socialshare-provider="twitter"
      socialshare-url="{{$installation.lnk}}"
-     socialshare-text="{{$installation.details.name}} on LCH">
+     socialshare-text="{{$installation.socialMessage()}}">
       <img src="/assets/images/icon--twitter.svg" width="30" height="30">
     </a>
   </p>
