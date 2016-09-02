@@ -161,7 +161,7 @@ $animation-timing = .3s
 .leaflet-marker-icon
   background transparent
   border 0
-  opacity .8
+  opacity .5
 
   &:before
     background url(/assets/images/marker.svg) 0 0 no-repeat
@@ -187,6 +187,13 @@ $animation-timing = .3s
 
     &:before
       transform scale(0, 0)
+
+.leaflet-marker-icon--focus
+  opacity 1
+
+  &:before
+    transform scale(1.1)
+
 
 /* Map tooltip */
 .leaflet-popup-content-wrapper

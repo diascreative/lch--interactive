@@ -14,6 +14,9 @@ class MainController {
     this.$rootScope = $rootScope;
     this.watts = $rootScope.watts;
 
+    this.currentHoverOver = false;
+    this.currentFocus = false;
+
     this.absUrl = this.$location.protocol() + '://' + this.$location.host();
 
     this._installations = [];
@@ -101,13 +104,15 @@ class MainController {
       this.$scope.$on('leafletDirectiveMarker.click', this.clickMarker.bind(this));
       this.$scope.$on('leafletDirectiveMap.click', this.closeMarkers.bind(this));
       this.$scope.$on('leafletDirectiveGeoJson.click', this.closeMarkers.bind(this));
+
+      this.$scope.$on('leafletDirectiveMarker.popupopen', this._focusMarker.bind(this));
     }
   }
 
   clickMarker(e, args) {
     const marker = this.map.installations[args.modelName];
     this.currentHoverOver = args.modelName;
-    marker.focus = true;
+    this._setInstallationFocus(marker, true);
 
     this.$state.go('installation', { name: marker.name });
   }
@@ -155,6 +160,7 @@ class MainController {
     marker.lat = installation.lat;
     marker.lng = installation.lng;
     marker.visible = false;
+    marker.className = '';
 
     if (!marker.generated) {
       marker.generated = 0;
@@ -245,7 +251,7 @@ class MainController {
     if (marker) {
       this.map.installations.map((installationMarker) => {
         this._setInstallationVisibility(installationMarker);
-        installationMarker.focus = false;
+        this._setInstallationFocus(installationMarker);
       });
 
       this._centerOnMarker(marker);
@@ -318,7 +324,7 @@ class MainController {
       }
 
       this._setInstallationVisibility(installationMarker, visible);
-      installationMarker.focus = false;
+      this._setInstallationFocus(installationMarker);
     });
 
     if (visibleItems.length === 1) {
@@ -335,13 +341,49 @@ class MainController {
     installationMarker.icon.className = visible ? '' : 'leaflet-marker-icon--hidden';
   }
 
+  _setInstallationFocus(installationMarker, focus = false) {
+    if (installationMarker.focus === focus) {
+      return;
+    }
+
+    installationMarker.focus = focus;
+  }
+
+  _focusMarker(e, args) {
+    if (this.currentFocus === args.modelName) {
+      return;
+    }
+
+    this._hidePreviousMarker();
+
+    let marker = this.map.installations[args.modelName];
+    this.currentFocus = args.modelName;
+
+    if (marker.icon.className.indexOf('leaflet-marker-icon--focus') > -1) {
+      return;
+    }
+
+    marker.icon.className += ' leaflet-marker-icon--focus';
+  }
+
+  _hidePreviousMarker() {
+    if (this.currentFocus) {
+      let marker = this.map.installations[this.currentFocus];
+      marker.focus = false;
+      if (marker.icon.className.indexOf('leaflet-marker-icon--focus') > -1) {
+        marker.icon.className = '';
+      }
+    }
+  }
+
   /**
    * Show a marker and move the map to its coordinates
    * @param  {Object} marker
    */
   _centerOnMarker(marker) {
     this._setInstallationVisibility(marker, true);
-    marker.focus = true;
+    this._setInstallationFocus(marker, true);
+
     this.map.defaults.center.lat = marker.lat;
     this.map.defaults.center.lng = marker.lng;
 
@@ -500,6 +542,20 @@ class MainController {
     return this.$filter('number')(total, 0);
   }
 
+
+  closeMarkers() {
+    this._hidePreviousMarker();
+
+    if (!this.currentHoverOver || this.currentHoverOver === 'out') {
+      return;
+    }
+
+    const marker = this.map.installations[this.currentHoverOver];
+    this.currentHoverOver = 'out';
+
+    this._setInstallationFocus(marker, false);
+  }
+
   /**
    * Callback on mouse out a map marker
    * ( Brings up tooltip )
@@ -515,16 +571,6 @@ class MainController {
     }, 350);
   }
 
-  closeMarkers() {
-    if (!this.currentHoverOver || this.currentHoverOver === 'out') {
-      return;
-    }
-
-    const marker = this.map.installations[this.currentHoverOver];
-    this.currentHoverOver = 'out';
-    marker.focus = false;
-  }
-
   /**
    * Callback on mouse over a map marker
    * ( Brings up tooltip )
@@ -532,12 +578,12 @@ class MainController {
    */
   mouseOverMarker(e, args) {
     let marker = this.map.installations[args.modelName];
-    marker.focus = false;
+
     this.currentHoverOver = args.modelName;
 
     this.$timeout(() => {
       if (args.modelName === this.currentHoverOver) {
-        marker.focus = true;
+        this._setInstallationFocus(marker, true);
       }
     }, 300);
   }
