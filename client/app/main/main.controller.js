@@ -94,6 +94,7 @@ class MainController {
 
         this._updateMapMarkers();
         this.filterInstallations();
+        this._setInstallation();
         this.loadAreaJSON(this.filtersChosen.localAuthorities);
       });
     });
@@ -197,6 +198,21 @@ class MainController {
     };
 
     this.searchOwner = this.filtersChosen.ownership;
+  }
+
+  _setInstallation() {
+    if (!this.$state.includes('installation')) {
+      return;
+    }
+
+    const installationName = this.$state.params.name;
+    const currentMarker= this.map.installations.filter(installation => {
+      return installation.name === installationName;
+    });
+
+    if (currentMarker.length) {
+      this._setInstallationFocus(currentMarker[0], true);
+    }
   }
 
 
