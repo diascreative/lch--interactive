@@ -192,14 +192,18 @@ $animation-timing = .3s
   opacity 1
 
   &:before
-    transform scale(1.1)
+    transform scale(1.3)
 
 
 /* Map tooltip */
+.leaflet-popup
+  pointer-events none
+
 .leaflet-popup-content-wrapper
 .leaflet-popup-tip
   background rgba(#fff, .94)
   box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+  pointer-events all
 
 .leaflet-popup-content-wrapper
   border-radius 0

@@ -373,6 +373,8 @@ class MainController {
       if (marker.icon.className.indexOf('leaflet-marker-icon--focus') > -1) {
         marker.icon.className = '';
       }
+
+      this.currentFocus = false;
     }
   }
 
