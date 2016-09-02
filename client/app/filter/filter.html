@@ -1,22 +1,24 @@
 <div class="main-content">
-  <h1 class="installation-title">{{$ctrl.copyOwnership()}}</h1>
-  <h1 class="installation-title">{{$ctrl.copyArea()}}</h1>
-
   <p>
-    <span class="large-text" ng-bind-html="$ctrl.getFilteredTotalCapacity()"></span> generating capacity
+    <span ng-bind-html="$filter.copyArea()"></span> we have
+    <span class="large-text" ng-bind-html="$ctrl.getFilteredInstallations()"></span>
+    <strong ng-bind-html="$filter.copyEnergyType()"></strong>
+    <strong ng-bind-html="$filter.copyOwnershipType()"></strong>
+    installations
+    <span ng-bind-html="$filter.copyOwnership()"></span>.
   </p>
 
   <div class="installation-stats">
     <div class="installation-stat">
       <div class="large-text" ng-bind-html="$ctrl.getFilteredTotalYearlyGeneration()">
       </div>
-      generated each year with {{$ctrl.getFilteredInstallations()}} installations
+      generated from these installations each year
     </div>
 
     <div class="installation-stat">
       <div class="large-text" ng-bind-html="$ctrl.getFilteredTotalCapacity()">
       </div>
-      capacity
+      projects' capacity
     </div>
   </div>
 

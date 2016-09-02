@@ -189,6 +189,8 @@ class MainController {
       ownershipType: allFilters[2],
       energyType: allFilters[3]
     };
+
+    this.searchOwner = this.filtersChosen.ownership;
   }
 
 
@@ -496,62 +498,6 @@ class MainController {
     const total = this._getVisibleInstallations().length;
 
     return this.$filter('number')(total, 0);
-  }
-
-  /**
-   * Build stats copy about the chosen areas
-   * @return {String}
-   * eg. "Oxfordshire"
-   *     "Cherwell District Council"
-   *     "your 2 chosen districts"
-   */
-  copyArea() {
-    const str = this.filtersChosen.localAuthorities === 'all' ? 'Oxfordshire' :
-                                this.filtersChosen.localAuthorities;
-
-    return str;
-  }
-
-  /**
-   * Build stats copy about the chosen ownership
-   * @return {String}
-   * eg. "Low Carbon Hub"
-   *     "community and council"
-   */
-  copyOwnership() {
-    if (this.filtersChosen.ownership === 'all') {
-      return;
-    }
-
-    return `${this.filtersChosen.ownership}'s installations in`;
-  }
-
-  /**
-   * Build stats copy about the chosen ownership types
-   * @return {String}
-   * eg. "Commnity"
-   *     "community and council"
-   */
-  copyOwnershipType() {
-    const m = (this.filtersChosen.ownershipType === 'all') ? '' : this.filtersChosen.ownershipType;
-    return m + ' renewable energy';
-  }
-
-  _addValuesAsString(values, fallback) {
-    if (!values.length) {
-      return fallback;
-    }
-
-    if (values.length === 1) {
-      return values[0];
-    }
-
-    const lastItem = _.last(values);
-    const string = _.initial(values)
-                  .join(', ');
-
-    return string + ' and ' + lastItem;
-
   }
 
   /**
