@@ -66,7 +66,7 @@ class MainController {
         },
         minZoom: 9,
         //jscs:disable maximumLineLength
-        tileLayer: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        tileLayer: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
         //jscs:enable maximumLineLength
         zoomControlPosition: 'bottomright',
         scrollWheelZoom: false
