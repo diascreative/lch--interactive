@@ -279,6 +279,8 @@ class MainController {
 
   filterOwners(ownerName = 'all') {
     this.filtersChosen.ownership = ownerName;
+
+    this.$state.go('filter');
     this.filterInstallations();
   }
 
