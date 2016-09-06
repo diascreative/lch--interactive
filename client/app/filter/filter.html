@@ -4,8 +4,7 @@
     <span class="large-text" ng-bind-html="$ctrl.getFilteredInstallations()"></span>
     <strong ng-bind-html="$filter.copyEnergyType()"></strong>
     <strong ng-bind-html="$filter.copyOwnershipType()"></strong>
-    installations
-    <span ng-bind-html="$filter.copyOwnership()"></span>.
+    installations<span ng-bind-html="$filter.copyOwnership()"></span>.
   </p>
 
   <div class="installation-stats">
@@ -47,5 +46,7 @@
       chart-colors="$ctrl.graph.colors"
       chart-series="$ctrl.graph.series"
       chart-labels="$ctrl.graph.labels"></canvas>
+
+    <div class="hint">Showing real time data where available</div>
   </div>
 </div>
