@@ -632,10 +632,10 @@ class MainController {
                 data: data,
                 style: {
                   fillColor: fillColor,
-                  weight: 1,
+                  weight: 3,
                   opacity: 0.8,
                   color: fillColor,
-                  fillOpacity: 0.05
+                  fillOpacity: 0.1
                 }
               };
             });
