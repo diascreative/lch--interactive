@@ -26,7 +26,7 @@
 
     <div class="installation-stat">
       <div class="large-text">
-        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample(0).consumption) | number:2 }}
+        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample(0).consumption) | number:0 }}
       </div>
       {{ $installation.getStatExample(0).action }}
     </div>
