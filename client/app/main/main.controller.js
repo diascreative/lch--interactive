@@ -761,7 +761,10 @@ class MainController {
   }
 
   pageDescription() {
-    const description = 'LCH Interactive description';
+    const description = 'A new kind of energy is lighting up schools, homes and businesses all ' +
+                        'over Oxfordshire: it’s renewable, locally-owned and developed for ' +
+                        'community benefit.';
+
     let pageDescription = description;
 
     if (this.$rootScope.description && this.$rootScope.description !== '') {

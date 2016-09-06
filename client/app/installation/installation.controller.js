@@ -71,12 +71,14 @@ class InstallationComponent {
 
   socialMessage() {
     const cleanGen = this.watts(this.details.annualPredictedGeneration, false, 'h', false);
-    return `${this.name} generates ${cleanGen} clean energy for #Oxon p.a. Find out more at #PeoplesPowerStation`;
+    return `${this.name} generates ${cleanGen} clean energy for #Oxon p.a. ` +
+           `Find out more at #PeoplesPowerStation`;
   }
 
   setPageDescription() {
     const cleanGen = this.watts(this.details.annualPredictedGeneration, false, 'h', false);
-    return `${this.name} generates ${cleanGen} clean energy for #Oxon p.a. What's plugged into the #PeoplesPowerStation near you?`;
+    this.$rootScope.description = `${this.name} generates ${cleanGen} clean energy for #Oxon p.a.` +
+                                  ` What's plugged into the #PeoplesPowerStation near you?`;
   }
 }
 
