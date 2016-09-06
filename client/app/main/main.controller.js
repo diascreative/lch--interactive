@@ -632,7 +632,7 @@ class MainController {
                 data: data,
                 style: {
                   fillColor: fillColor,
-                  weight: 3,
+                  weight: 2,
                   opacity: 0.8,
                   color: fillColor,
                   fillOpacity: 0.1
