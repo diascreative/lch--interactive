@@ -729,6 +729,20 @@ class MainController {
     return `${cleanTotal} of #Oxon's #communityenergy is now plugged into the #PeoplesPowerStation. See local energy grow!`;
   }
 
+  reset() {
+    this.filtersChosen = {
+      localAuthorities: 'all',
+      ownership: 'all',
+      ownershipType: 'all',
+      energyType: 'all'
+    };
+
+    this.filterInstallations();
+    this.loadAreaJSON();
+
+    this.$state.go('main');
+  }
+
   // SEO
   pageTitle() {
     const title = 'LCH Interactive';
