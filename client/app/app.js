@@ -48,9 +48,9 @@ angular.module('lowcarbonhubApp', [
       const cleanWatt = $filter('number')(returnWatt, decimalPlaces);
 
       if (wrapUnits) {
-        return `${cleanWatt}<span class="units">${unit}${hours}</span>`;
+        return `${cleanWatt}&nbsp;<span class="units">${unit}${hours}</span>`;
       } else {
-        return `${cleanWatt}${unit}${hours}`;
+        return `${cleanWatt} ${unit}${hours}`;
       }
 
     };
