@@ -23,6 +23,8 @@ angular.module('lowcarbonhubApp', [
       let decimalPlaces = 2;
       let returnWatt = watt;
 
+      forcedUnit = 'kW';
+
       if (forcedUnit && forcedUnit === 'W') {
 
       } else if (forcedUnit && forcedUnit === 'kW') {
