@@ -43,7 +43,7 @@ class InstallationComponent {
               data.reverse();
 
               this.graph.labels = data.map(item => {
-                return item.datetime;
+                return item.date;
               });
 
               this.graph.data = data.map(item => {

@@ -178,14 +178,14 @@ function queryHistoricSingle(installationName, redisKey) {
           InstallationName: installationName
         },
         attributes: [
-          'datetime',
+          [sequelize.fn('date_format', sequelize.col('datetime'), '%Y-%m-%dT%h:00:00.000Z'), 'date'],
           [sequelize.fn('sum', sequelize.col('generated')), 'generated']
         ],
         group: [
-          'datetime'
+          'date'
         ],
         limit: 100,
-        order: 'datetime DESC'
+        order: 'date DESC'
       })
       .then(Util.cacheResponse(redisKey));
   };
