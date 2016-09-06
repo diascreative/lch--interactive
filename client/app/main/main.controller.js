@@ -4,7 +4,7 @@
 
 class MainController {
 
-  constructor(graphDefault, $http, $filter, $location, $rootScope, $scope, $state, $timeout) {
+  constructor(appStats, graphDefault, $http, $filter, $location, $rootScope, $scope, $state, $timeout) {
     this.$http = $http;
     this.$filter = $filter;
     this.$location = $location;
@@ -23,6 +23,7 @@ class MainController {
     this.filterLocation = false;
     this._maxCapacity = 0;
 
+    this.appStats = appStats;
     this.graph = angular.copy(graphDefault);
 
     this._postCodeMatches = [
@@ -727,6 +728,10 @@ class MainController {
     const cleanTotal = this.watts(total, 'W', '', false);
 
     return `${cleanTotal} of #Oxon's #communityenergy is now plugged into the #PeoplesPowerStation. See local energy grow!`;
+  }
+
+  getStatExample(indexToShow = 0) {
+    return this.appStats[indexToShow];
   }
 
   reset() {

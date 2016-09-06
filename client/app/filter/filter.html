@@ -33,7 +33,7 @@
 
     <div class="installation-stat">
       <div class="large-text">
-        {{ ($ctrl.getTotalYearlyGeneration() / $filter.getStatExample(0).consumption) | number:2 }}
+        {{ ($ctrl.getTotalYearlyGeneration() / $filter.getStatExample(0).consumption) | number:0 }}
       </div>
       {{ $filter.getStatExample(0).action }}
     </div>
