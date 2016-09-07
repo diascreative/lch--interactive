@@ -5,7 +5,7 @@ angular.module('lowcarbonhubApp.constants', [])
   .constant('appStats', [
     {
       consumption: 15907000,
-      action: `people's share of Oxfordshire's energy need met`
+      action: `people's share of Oxfordshire's energy needs`
     },
     {
       // 1800W for 3 mins : 1800 * (3/60) = 90Wh
