@@ -29,8 +29,9 @@ export default function(sequelize, DataTypes) {
     source: DataTypes.STRING,
 
     // Installation metadata
+    commissioned: DataTypes.STRING,
     info: DataTypes.STRING,
-    url: DataTypes.STRING,
-    commissioned: DataTypes.STRING
+    location: DataTypes.STRING,
+    url: DataTypes.STRING
   });
 }
