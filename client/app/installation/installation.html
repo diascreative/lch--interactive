@@ -43,8 +43,12 @@
   </div>
 
   <p class="installation-description">
-    It's a <strong>{{$installation.details.ownershipType}} site</strong> in
-    <strong>{{$installation.details.localAuthority}}</strong>.
+    It's a
+    <strong>{{$installation.details.ownershipType}} site</strong>
+    <span ng-if="$installation.details.location">in
+    <strong>{{$installation.details.location}}</strong></span>
+    <span ng-if="$installation.details.commissioned">installed on
+    <strong>{{$installation.details.commissioned}}</strong></span>.
   </p>
 
   <p class="installation-description">

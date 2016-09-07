@@ -78,7 +78,9 @@ function queryGetInstallation(name, redisKey) {
           name: name
         },
         attributes: [
+          'commissioned',
           'name',
+          'location',
           'localAuthority',
           'owner',
           'ownershipType',
