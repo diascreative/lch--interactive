@@ -1,7 +1,9 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/installations              ->  index
- * GET     /api/installations/:name          ->  show
+ * GET     /api/installations/full         ->  adminIndex
+ * GET     /api/installations/:name        ->  show
+ * GET     /api/installations/:id/full     ->  adminShow
  */
 
 'use strict';
@@ -27,6 +29,31 @@ export function show(req, res) {
 
   return Util.getCache(redisKey)
     .then(queryGetInstallation(name, redisKey))
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
+}
+
+export function adminIndex(req, res) {
+  return Installation
+    .findAll({
+      attributes: ['_id', 'name'],
+      order: 'name ASC'
+    })
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
+}
+
+export function adminShow(req, res) {
+  const id = req.params.id;
+
+  console.log(id)
+
+  return Installation
+    .findOne({
+      where: {
+        _id: id
+      }
+    })
     .then(Util.respondWithResult(res))
     .catch(Util.handleError(res));
 }

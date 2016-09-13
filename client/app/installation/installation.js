@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lowcarbonhubApp')
-  .config(function ($stateProvider) {
+  .config(function($stateProvider) {
     $stateProvider
       .state('installation', {
         url: '/installation/:name',

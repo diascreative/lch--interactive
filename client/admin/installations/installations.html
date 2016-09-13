@@ -1,0 +1,23 @@
+<div>Your installations.</div>
+
+<div class="table-responsive">
+  <table class="table table-condensed table-hover">
+    <thead>
+      <th>#</th>
+      <th>name</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in $data.installations" ui-sref-active="active">
+        <td>({{item._id}})</td>
+        <td>{{item.name}}</td>
+
+        <td style="text-align: right">
+          <a href="/installation/{{item.name}}" class="btn btn-primary btn-sm" target="_blank">view</a>
+          <a href="/admin/installation/{{item._id}}" class="btn btn-success btn-sm">edit</a>
+          <button class="btn btn-danger btn-sm" disabled>remove</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

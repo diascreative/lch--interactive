@@ -244,7 +244,6 @@ module.exports = function (grunt) {
       clientAdmin: {
         options: {
           exclude: [
-          'jquery',
           '/json3/',
           '/es5-shim/',
           'angular-leaflet-directive'

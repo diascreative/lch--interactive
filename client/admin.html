@@ -42,6 +42,7 @@
     <![endif]-->
     <!-- build:js({client,node_modules}) admin/vendor.js -->
       <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
@@ -65,14 +66,18 @@
       <!-- injector:js -->
       <script src="admin/components/auth/auth.module.js"></script>
       <script src="admin/components/util/util.module.js"></script>
-      <script src="admin/components/auth/user.service.js"></script>
+      <script src="admin/components/navbar/navbar.directive.js"></script>
       <script src="admin/components/auth/interceptor.service.js"></script>
       <script src="admin/components/auth/router.decorator.js"></script>
-      <script src="admin/app.constant.js"></script>
+      <script src="admin/components/auth/user.service.js"></script>
       <script src="admin/components/navbar/navbar.controller.js"></script>
-      <script src="admin/components/navbar/navbar.directive.js"></script>
+      <script src="admin/app.constant.js"></script>
       <script src="admin/components/auth/auth.service.js"></script>
       <script src="admin/components/util/util.service.js"></script>
+      <script src="admin/installation/installation.controller.js"></script>
+      <script src="admin/installation/installation.js"></script>
+      <script src="admin/installations/installations.controller.js"></script>
+      <script src="admin/installations/installations.js"></script>
       <script src="admin/login/login.controller.js"></script>
       <!-- endinjector -->
     <!-- endbuild -->
