@@ -2,7 +2,8 @@
 (function() {
 
 class FilterComponent {
-  constructor(appStats, $scope, $interval) {
+  constructor(appStats, $filter, $interval, $scope) {
+    this.$filter = $filter;
     this.$interval = $interval;
     this.appStats = appStats;
     this._randomStat = Math.round(Math.random() * (this.appStats.length - 2)) + 1;
@@ -13,6 +14,13 @@ class FilterComponent {
 
   $onInit() {
     this.$interval(this.newRandomExample.bind(this), 5000);
+  }
+
+  getCO2() {
+    // metric tons CO2 / kWh https://www.epa.gov/energy/ghg-equivalencies-calculator-calculations-and-references
+    const tonnes = (7.03 * 0.0001) * (this.$ctrl.getTotalYearlyGeneration() / 1000);
+    const cleanTonnes = this.$filter('number')(tonnes, 3);
+    return `${cleanTonnes} <span class="units">Tonnes</span>`;
   }
 
   getStatExample(indexToShow = this._randomStat) {
