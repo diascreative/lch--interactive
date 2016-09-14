@@ -4,6 +4,7 @@
 
 'use strict';
 
+import helmet from 'helmet';
 import express from 'express';
 import favicon from 'serve-favicon';
 import morgan from 'morgan';
@@ -24,6 +25,7 @@ var Store = expressSequelizeSession(session.Store);
 export default function(app) {
   var env = app.get('env');
 
+
   app.set('views', config.root + '/server/views');
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
@@ -33,6 +35,9 @@ export default function(app) {
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(passport.initialize());
+
+  // server security
+  app.use(helmet());
 
   // Persist sessions with MongoStore / sequelizeStore
   // We need to enable sessions for passport-twitter because it's an
