@@ -19,7 +19,8 @@ class FilterComponent {
   getCO2() {
     // metric tons CO2 / kWh https://www.epa.gov/energy/ghg-equivalencies-calculator-calculations-and-references
     const tonnes = (7.03 * 0.0001) * (this.$ctrl.getTotalYearlyGeneration() / 1000);
-    const cleanTonnes = this.$filter('number')(tonnes, 3);
+    const decimals = tonnes < 1 ? 1 : 0;
+    const cleanTonnes = this.$filter('number')(tonnes, decimals);
     return `${cleanTonnes} <span class="units">Tonnes</span>`;
   }
 
