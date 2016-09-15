@@ -11,15 +11,15 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) admin/vendor.css -->
+    <!-- build:css(client) admin-app/vendor.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
       <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
       <!-- endbower -->
     <!-- endbuild -->
-    <!-- build:css({.tmp,client}) admin/admin-app.css -->
-      <link rel="stylesheet" href="admin/admin-app.css">
+    <!-- build:css({.tmp,client}) admin-app/admin-app.css -->
+      <link rel="stylesheet" href="admin-app/admin-app.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
@@ -40,7 +40,10 @@
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
-    <!-- build:js({client,node_modules}) admin/vendor.js -->
+
+
+
+    <!-- build:js({client,node_modules}) admin-app/vendor.js -->
       <!-- bower:js -->
       <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
@@ -61,24 +64,24 @@
       <script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
-    <!-- build:js(.tmp) admin/admin-app.js -->
-      <script src="admin/admin-app.js"></script>
+    <!-- build:js(.tmp) admin-app/admin-app.js -->
+      <script src="admin-app/admin-app.js"></script>
       <!-- injector:js -->
-      <script src="admin/components/auth/auth.module.js"></script>
-      <script src="admin/components/util/util.module.js"></script>
-      <script src="admin/components/navbar/navbar.directive.js"></script>
-      <script src="admin/components/auth/interceptor.service.js"></script>
-      <script src="admin/components/auth/router.decorator.js"></script>
-      <script src="admin/components/auth/user.service.js"></script>
-      <script src="admin/components/navbar/navbar.controller.js"></script>
-      <script src="admin/app.constant.js"></script>
-      <script src="admin/components/auth/auth.service.js"></script>
-      <script src="admin/components/util/util.service.js"></script>
-      <script src="admin/installation/installation.controller.js"></script>
-      <script src="admin/installation/installation.js"></script>
-      <script src="admin/installations/installations.controller.js"></script>
-      <script src="admin/installations/installations.js"></script>
-      <script src="admin/login/login.controller.js"></script>
+      <script src="admin-app/components/auth/auth.module.js"></script>
+      <script src="admin-app/components/util/util.module.js"></script>
+      <script src="admin-app/components/navbar/navbar.directive.js"></script>
+      <script src="admin-app/components/auth/interceptor.service.js"></script>
+      <script src="admin-app/components/auth/router.decorator.js"></script>
+      <script src="admin-app/components/auth/user.service.js"></script>
+      <script src="admin-app/components/navbar/navbar.controller.js"></script>
+      <script src="admin-app/app.constant.js"></script>
+      <script src="admin-app/components/auth/auth.service.js"></script>
+      <script src="admin-app/components/util/util.service.js"></script>
+      <script src="admin-app/installation/installation.controller.js"></script>
+      <script src="admin-app/installation/installation.js"></script>
+      <script src="admin-app/installations/installations.controller.js"></script>
+      <script src="admin-app/installations/installations.js"></script>
+      <script src="admin-app/login/login.controller.js"></script>
       <!-- endinjector -->
     <!-- endbuild -->
   </body>

@@ -21,11 +21,11 @@ angular.module('lowcarbonhubAppAdmin', [
       .state('admin', {
         url: '/admin',
         template: '<installations></installations>',
-        authenticate: true
+        authenticate: false
       })
       .state('login', {
         url: '/admin/login',
-        templateUrl: 'admin/login/login.html',
+        templateUrl: 'admin-app/login/login.html',
         controller: 'LoginController',
         controllerAs: 'vm'
       })

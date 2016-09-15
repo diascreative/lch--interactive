@@ -58,7 +58,7 @@ module.exports = function (grunt) {
     },
     watch: {
       babel: {
-        files: ['<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock).js'],
+        files: ['<%= yeoman.client %>/{admin-app,app,components}/**/!(*.spec|*.mock).js'],
         tasks: ['newer:babel:client']
       },
       ngconstant: {
@@ -67,14 +67,14 @@ module.exports = function (grunt) {
       },
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock).js',
+          '<%= yeoman.client %>/{admin-app,app,components}/**/!(*.spec|*.mock).js',
           '!<%= yeoman.client %>/app/app.js',
-          '!<%= yeoman.client %>/admin/admin-app.js'
+          '!<%= yeoman.client %>/admin-app/admin-app.js'
         ],
         tasks: ['injector:scripts']
       },
       injectCss: {
-        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.css'],
+        files: ['<%= yeoman.client %>/{admin-app,app,components}/**/*.css'],
         tasks: ['injector:css']
       },
       mochaTest: {
@@ -82,15 +82,15 @@ module.exports = function (grunt) {
         tasks: ['env:test', 'mochaTest']
       },
       jsTest: {
-        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.{spec,mock}.js'],
+        files: ['<%= yeoman.client %>/{admin-app,app,components}/**/*.{spec,mock}.js'],
         tasks: ['newer:jshint:all', 'wiredep:test', 'karma']
       },
       injectStylus: {
-        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.styl'],
+        files: ['<%= yeoman.client %>/{admin-app,app,components}/**/*.styl'],
         tasks: ['injector:stylus']
       },
       stylus: {
-        files: ['<%= yeoman.client %>/{admin,app,components}/**/*.styl'],
+        files: ['<%= yeoman.client %>/{admin-app,app,components}/**/*.styl'],
         tasks: ['stylus', 'postcss']
       },
       gruntfile: {
@@ -98,8 +98,8 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{admin,app,components}/**/*.{css,html}',
-          '{.tmp,<%= yeoman.client %>}/{admin,app,components}/**/!(*.spec|*.mock).js',
+          '{.tmp,<%= yeoman.client %>}/{admin-app,app,components}/**/*.{css,html}',
+          '{.tmp,<%= yeoman.client %>}/{admin-app,app,components}/**/!(*.spec|*.mock).js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -138,9 +138,9 @@ module.exports = function (grunt) {
         },
         src: ['<%= yeoman.server %>/**/*.{spec,integration}.js']
       },
-      all: ['<%= yeoman.client %>/{admin,app,components}/**/!(*.spec|*.mock|app.constant).js'],
+      all: ['<%= yeoman.client %>/{admin-app,app,components}/**/!(*.spec|*.mock|app.constant).js'],
       test: {
-        src: ['<%= yeoman.client %>/{admin,app,components}/**/*.{spec,mock}.js']
+        src: ['<%= yeoman.client %>/{admin-app,app,components}/**/*.{spec,mock}.js']
       }
     },
 
@@ -286,7 +286,6 @@ module.exports = function (grunt) {
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>/<%= yeoman.client %>',
-          '<%= yeoman.dist %>/<%= yeoman.client %>/admin',
           '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images'
         ],
         // This is so we update image references in our ng-templates
@@ -331,7 +330,7 @@ module.exports = function (grunt) {
     ngconstant: {
       options: {
         name: 'lowcarbonhubAppAdmin.constants',
-        dest: '<%= yeoman.client %>/admin/app.constant.js',
+        dest: '<%= yeoman.client %>/admin-app/app.constant.js',
         deps: [],
         wrap: true,
         configPath: '<%= yeoman.server %>/config/environment/shared'
@@ -347,29 +346,44 @@ module.exports = function (grunt) {
 
     // Package all the html partials into a single javascript payload
     ngtemplates: {
-      options: {
-        // This should be the name of your apps angular module
-        module: 'lowcarbonhubApp',
-        htmlmin: {
-          collapseBooleanAttributes: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true,
-          removeEmptyAttributes: true,
-          removeRedundantAttributes: true,
-          removeScriptTypeAttributes: true,
-          removeStyleLinkTypeAttributes: true
-        },
-        usemin: 'app/app.js'
-      },
       main: {
+        options: {
+          // This should be the name of your apps angular module
+          module: 'lowcarbonhubApp',
+          htmlmin: {
+            collapseBooleanAttributes: true,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true,
+            removeEmptyAttributes: true,
+            removeRedundantAttributes: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true
+          },
+          usemin: 'app/app.js'
+        },
         cwd: '<%= yeoman.client %>',
         src: ['{app,components}/**/*.html'],
         dest: '.tmp/templates.js'
       },
       clientAdmin: {
-        cwd: '<%= yeoman.client %>admin',
+        options: {
+          // This should be the name of your apps angular module
+          prefix: 'admin-app',
+          module: 'lowcarbonhubAppAdmin',
+          htmlmin: {
+            collapseBooleanAttributes: true,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true,
+            removeEmptyAttributes: true,
+            removeRedundantAttributes: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true
+          },
+          usemin: 'admin-app/admin-app.js'
+        },
+        cwd: '<%= yeoman.client %>/admin-app',
         src: ['**/*.html'],
-        dest: '.tmp/admin/admin-templates.js'
+        dest: '.tmp/admin-templates.js'
       },
       tmp: {
         cwd: '.tmp',
@@ -422,7 +436,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
-        src: ['{admin,app,components}/**/*.css']
+        src: ['{admin-app,app,components}/**/*.css']
       }
     },
 
@@ -569,7 +583,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.client %>',
-          src: ['{admin,app,components}/**/!(*.spec).js'],
+          src: ['{admin-app,app,components}/**/!(*.spec).js'],
           dest: '.tmp'
         }]
       },
@@ -601,7 +615,7 @@ module.exports = function (grunt) {
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.styl',
           '.tmp/app/critical.css' : '<%= yeoman.client %>/app/critical.styl',
-          '.tmp/admin/admin-app.css' : '<%= yeoman.client %>/admin/admin-app.styl'
+          '.tmp/admin-app/admin-app.css' : '<%= yeoman.client %>/admin-app/admin-app.styl'
         }
       }
     },
@@ -659,8 +673,8 @@ module.exports = function (grunt) {
             ],
           '<%= yeoman.client %>/admin.html': [
                [
-                 '<%= yeoman.client %>/admin/**/!(*.spec|*.mock).js',
-                 '!{.tmp,<%= yeoman.client %>}/admin/admin-app.{js,ts}'
+                 '<%= yeoman.client %>/admin-app/**/!(*.spec|*.mock).js',
+                 '!{.tmp,<%= yeoman.client %>}/admin-app/admin-app.{js,ts}'
                ]
             ]
         }
@@ -709,7 +723,7 @@ module.exports = function (grunt) {
             '<%= yeoman.client %>/{app,components}/**/*.css'
           ],
           '<%= yeoman.client %>/admin.html': [
-            '<%= yeoman.client %>/admin/**/*.css'
+            '<%= yeoman.client %>/admin-app/**/*.css'
           ]
         }
       }
@@ -878,7 +892,8 @@ module.exports = function (grunt) {
     'wiredep:clientAdmin',
     'useminPrepare',
     'postcss',
-    'ngtemplates',
+    'ngtemplates:main',
+    'ngtemplates:clientAdmin',
     'concat',
     'ngAnnotate',
     'copy:dist',

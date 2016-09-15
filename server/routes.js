@@ -13,7 +13,7 @@ export default function(app) {
   app.use('/api/installations', require('./api/installation'));
   app.use('/api/users', require('./api/user'));
 
-  // app.use('/auth', require('./auth').default);
+  app.use('/auth', require('./auth').default);
   app.use(require('prerender-node').set('prerenderServiceUrl', 'http://localhost:3000/'));
 
   // All undefined asset or api routes should return a 404
@@ -21,7 +21,7 @@ export default function(app) {
    .get(errors[404]);
 
   // All admin routes should redirect to the /admin.html
-  app.route('/admin/*')
+  app.route('/admin*')
     .get((req, res) => {
       res.sendFile(path.resolve(app.get('appPath') + '/admin.html'));
     });

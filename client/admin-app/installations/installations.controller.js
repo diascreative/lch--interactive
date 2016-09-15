@@ -16,7 +16,7 @@ class InstallationsComponent {
 
 angular.module('lowcarbonhubAppAdmin')
   .component('installations', {
-    templateUrl: 'admin/installations/installations.html',
+    templateUrl: 'admin-app/installations/installations.html',
     controller: InstallationsComponent,
     controllerAs: '$data'
   });
