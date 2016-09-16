@@ -51,9 +51,9 @@ export function uploadCSV(req, res) {
             return {
               _id: parseInt(i[0]),
               name: i[1],
-              localAuthority: i[2],
-              lat: parseFloat(i[3]),
-              lng: parseFloat(i[4]),
+              lat: parseFloat(i[2]),
+              lng: parseFloat(i[3]),
+              localAuthority: i[4],
               owner: i[5],
               ownershipType: i[6],
               annualPredictedGeneration: i[7],
