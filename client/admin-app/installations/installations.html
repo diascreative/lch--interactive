@@ -1,23 +1,66 @@
-<div>Your installations.</div>
+<form name="uploadForm">
+  <legend>Upload CSV with new installations</legend>
+  <div class="bs-callout bs-callout-info">
+    <p>The CSV file <strong>must</strong> contain these columns in the same order:</p>
 
-<div class="table-responsive">
-  <table class="table table-condensed table-hover">
-    <thead>
-      <th>#</th>
-      <th>name</th>
-      <th></th>
-    </thead>
-    <tbody>
-      <tr ng-repeat="item in $data.installations" ui-sref-active="active">
-        <td>({{item._id}})</td>
-        <td>{{item.name}}</td>
+    <p style="overflow: auto">
+      <code>
+        _id, name, lat, lng, localAuthority, owner, ownershipType, annualPredictedGeneration, capacity, energyType, source, commissioned, info, location, url
+      </code>
+    </p>
 
-        <td style="text-align: right">
-          <a href="/installation/{{item.name}}" class="btn btn-primary btn-sm" target="_blank">view</a>
-          <a href="/admin/installation/{{item._id}}" class="btn btn-success btn-sm">edit</a>
-          <button class="btn btn-danger btn-sm" disabled>remove</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <p>
+      Make sure that repeated
+      <strong>names</strong>,
+      <strong>owners</strong>,
+      <strong>ownershipType</strong>,
+      <strong>energyType</strong>, and
+      <strong>source</strong>
+      are all <strong><em>spelled</em></strong> and <strong><em>cased</em></strong> exactly the same way for all installations.
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-2">
+      <div class="form-group">
+        <input type="file"
+         nv-file-select uploader="$data.upload">
+      </div>
+
+      <button type="button" class="btn btn-success btn-s" disabled
+       ng-click="$data.upload.uploadAll()"
+       ng-disabled="!$data.upload.getNotUploadedItems().length">
+        <span class="glyphicon glyphicon-upload"></span> Upload CSV
+      </button>
+    </div>
+  </div>
+</form>
+
+<div ng-if="$data.installations.length">
+  <h2>Your installations</h2>
+
+  <input class="form-control" placeholder="Search your installations"
+   ng-model="search">
+
+  <div class="table-responsive">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <th>id</th>
+        <th>name</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in $data.installations | filter: search" ui-sref-active="active">
+          <td>{{item._id}}</td>
+          <td>{{item.name}}</td>
+
+          <td style="text-align: right">
+            <a href="/installation/{{item.name}}" class="btn btn-primary btn-sm" target="_blank">view</a>
+            <!-- <a href="/admin/installation/{{item._id}}" class="btn btn-success btn-sm">edit</a> -->
+            <button class="btn btn-danger btn-sm" disabled>remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

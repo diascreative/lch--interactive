@@ -228,13 +228,15 @@ module.exports = function (grunt) {
     wiredep: {
       options: {
         exclude: [
-          '/json3/',
-          'jquery',
-          '/es5-shim/',
           'angular-cookies',
-          /font-awesome\.css/,
+          'angular-file-upload',
+          'angular-ui-notification',
           '/angular-ui-select/dist/select.css',
-          /bootstrap/
+          /bootstrap/,
+          '/es5-shim/',
+          /font-awesome\.css/,
+          'jquery',
+          '/json3/'
         ]
       },
       client: {
@@ -244,9 +246,9 @@ module.exports = function (grunt) {
       clientAdmin: {
         options: {
           exclude: [
-          '/json3/',
+          'angular-leaflet-directive',
           '/es5-shim/',
-          'angular-leaflet-directive'
+          '/json3/'
           ]
         },
         src: '<%= yeoman.client %>/admin.html',

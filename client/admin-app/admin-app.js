@@ -7,7 +7,9 @@ angular.module('lowcarbonhubAppAdmin', [
   'ngResource',
   'ngSanitize',
   'ui.router',
-  'validation.match'
+  'validation.match',
+  'angularFileUpload',
+  'ui-notification'
 ])
 .config(function($urlRouterProvider, $locationProvider, $stateProvider) {
     $urlRouterProvider
