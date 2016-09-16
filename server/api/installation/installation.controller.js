@@ -1,6 +1,7 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/installations              ->  index
+ * POST    /api/installations              ->  uploadCSV
  * GET     /api/installations/full         ->  adminIndex
  * GET     /api/installations/:name        ->  show
  * GET     /api/installations/:id/full     ->  adminShow
@@ -8,8 +9,13 @@
 
 'use strict';
 
+import csv from 'csv';
+import formidable from 'formidable';
+import fs from 'fs';
+import _ from 'lodash';
 import {Installation, sequelize} from '../../sqldb';
 import Util from '../../util';
+
 
 
 // Gets a list of Installations
@@ -20,6 +26,57 @@ export function index(req, res) {
     .then(queryGetInstallations(redisKey))
     .then(Util.respondWithResult(res))
     .catch(Util.handleError(res));
+}
+
+export function uploadCSV(req, res) {
+  const form = new formidable.IncomingForm();
+
+  form.parse(req);
+
+  form.on('file', function(field, file) {
+    if (file.type !== 'text/csv') {
+      return Util.handleError(res)
+    }
+
+    const readStream = fs.createReadStream(file.path);
+
+    readStream.on('data', function(data) {
+      readStream.pause();
+
+      csv.parse(data.toString(), { delimiter: ','}, function(err, output) {
+        const installations = _
+          .chain(output)
+          .tail()
+          .filter(i => i[0] !== '')
+          .map(i => {
+            return {
+              _id: i[0],
+              name: i[1],
+              lat: i[2],
+              lng: i[3],
+              localAuthority: i[4],
+              owner: i[5],
+              ownershipType: i[6],
+              annualPredictedGeneration: i[7],
+              capacity: i[8],
+              energyType: i[9],
+              source: i[10],
+              commissioned: i[11],
+              location: i[12],
+              url: i[13]
+            }
+          })
+          .value();
+
+        console.log(JSON.stringify(installations, null, 4));
+      });
+    });
+
+    readStream.on('end', function() {
+      logger.info('file stored');
+    });
+  })
+
 }
 
 // Gets a single Installation from the DB

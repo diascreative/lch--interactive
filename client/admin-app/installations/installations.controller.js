@@ -15,6 +15,10 @@ class InstallationsComponent {
 
     this.upload = new this.FileUploader({
           url: '/api/installations/',
+          headers: {
+            Authorization: 'Bearer ' + this.$cookies.get('token'),
+            'x-xsrf-token': this.$cookies.get('XSRF-TOKEN')
+          },
           queueLimit: 1,
           filters: [{
             name: 'csvFilter',
@@ -29,12 +33,6 @@ class InstallationsComponent {
               return allowed;
             }
           }],
-
-          onBeforeUploadItem: (item) => {
-            item.headers = {
-              Authorization: 'Bearer ' + this.$cookies.get('token')
-            };
-          },
 
           onSuccessItem: () => {
             this.Notification.success('Uploaded and inserted data successfully');
