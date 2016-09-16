@@ -46,15 +46,14 @@ export function uploadCSV(req, res) {
       csv.parse(data.toString(), { delimiter: ','}, function(err, output) {
         const installations = _
           .chain(output)
-          .tail()
-          .filter(i => i[0] !== '')
+          .filter(i => (i[0] !== '' && i[0] !== ''))
           .map(i => {
             return {
-              _id: i[0],
+              _id: parseInt(i[0]),
               name: i[1],
-              lat: i[2],
-              lng: i[3],
-              localAuthority: i[4],
+              localAuthority: i[2],
+              lat: parseFloat(i[3]),
+              lng: parseFloat(i[4]),
               owner: i[5],
               ownershipType: i[6],
               annualPredictedGeneration: i[7],
@@ -68,15 +67,28 @@ export function uploadCSV(req, res) {
           })
           .value();
 
-        console.log(JSON.stringify(installations, null, 4));
+        return Installation.bulkCreate(installations, {
+            updateOnDuplicate: [
+              'name',
+              'localAuthority',
+              'lat',
+              'lng',
+              'owner',
+              'ownershipType',
+              'annualPredictedGeneration',
+              'capacity',
+              'energyType',
+              'source',
+              'commissioned',
+              'location',
+              'url'
+            ]
+          })
+          .then(Util.respondWithResult(res))
+          .catch(Util.handleError(res));
       });
     });
-
-    readStream.on('end', function() {
-      logger.info('file stored');
-    });
-  })
-
+  });
 }
 
 // Gets a single Installation from the DB
