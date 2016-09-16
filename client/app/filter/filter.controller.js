@@ -13,6 +13,7 @@ class FilterComponent {
 
   $onInit() {
     this.$interval(this.newRandomExample.bind(this), 5000);
+    this.$ctrl.setHash();
   }
 
   getStatExample(indexToShow = this._randomStat) {

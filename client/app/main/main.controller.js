@@ -290,15 +290,21 @@ class MainController {
     this.filterInstallations();
   }
 
+  setHash() {
+    const newHash = this.filtersChosen.localAuthorities + '::' +
+                    this.filtersChosen.ownership + '::' +
+                    this.filtersChosen.ownershipType + '::' +
+                    this.filtersChosen.energyType;
+
+    this.$location.hash(newHash);
+  }
+
   /**
    * Filter the visibility of our markers
    */
   filterInstallations() {
     // keep tabs if we're not specifically filtering by anything
-    const newHash = this.filtersChosen.localAuthorities + '::' +
-                    this.filtersChosen.ownership + '::' +
-                    this.filtersChosen.ownershipType + '::' +
-                    this.filtersChosen.energyType;
+    this.setHash();
 
     const locationLength = this.address ? this.address.length : 0;
     let locationRadiusIndex = 3;
@@ -315,8 +321,6 @@ class MainController {
     let locationRadius = this._postCodeRadius[locationRadiusIndex];
 
     const visibleItems = [];
-
-    this.$location.hash(newHash);
 
     this.map.installations.map((installationMarker, index) => {
       const inLas = this.isInCurrentLocalAuthority(installationMarker);
