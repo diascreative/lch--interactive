@@ -55,17 +55,17 @@ export default function(app) {
       frameguard: false
     }));
 
-    app.use(lusca({
-      csrf: {
-        angular: true
-      },
-      hsts: {
-        maxAge: 31536000, //1 year, in seconds
-        includeSubDomains: true,
-        preload: true
-      },
-      xssProtection: true
-    }));
+    // app.use(lusca({
+    //   csrf: {
+    //     angular: true
+    //   },
+    //   hsts: {
+    //     maxAge: 31536000, //1 year, in seconds
+    //     includeSubDomains: true,
+    //     preload: true
+    //   },
+    //   xssProtection: true
+    // }));
   }
 
   app.set('appPath', path.join(config.root, 'client'));
