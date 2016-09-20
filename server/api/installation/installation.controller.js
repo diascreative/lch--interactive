@@ -175,18 +175,28 @@ function queryGetInstallation(name, redisKey) {
           name: name
         },
         attributes: [
-          'commissioned',
+          [sequelize.fn('max', sequelize.col('commissioned')), 'commissioned'],
+          [sequelize.fn('max', sequelize.col('location')), 'location'],
           'name',
-          'location',
           'localAuthority',
           'owner',
           'ownershipType',
-          'annualPredictedGeneration',
-          'capacity',
+          [sequelize.fn('sum',
+                          sequelize.col('annualPredictedGeneration')
+                        ), 'annualPredictedGeneration'],
+          [sequelize.fn('sum', sequelize.col('capacity')), 'capacity'],
           'energyType',
           'source',
           'url'
-
+        ],
+        group: [
+          'name',
+          'localAuthority',
+          'owner',
+          'ownershipType',
+          'energyType',
+          'source',
+          'url'
         ]
       })
       .then(Util.cacheResponse(redisKey, 86400));
