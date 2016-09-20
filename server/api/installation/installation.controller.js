@@ -84,6 +84,7 @@ export function uploadCSV(req, res) {
               'url'
             ]
           })
+          .then(Util.clearCache())
           .then(Util.respondWithResult(res))
           .catch(Util.handleError(res));
       });

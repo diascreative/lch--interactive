@@ -9,7 +9,8 @@ const Util = {
   handleEntityNotFound: handleEntityNotFound,
   handleError: handleError,
   getCache: getCache,
-  cacheResponse: cacheResponse
+  cacheResponse: cacheResponse,
+  clearCache: clearCache
 };
 
 module.exports = Util;
@@ -67,5 +68,17 @@ function cacheResponse(redisKey=false, cacheExpiry=900) {
     }
 
     return entity;
+  }
+}
+
+function clearCache() {
+  return function() {
+    return redisClient.keys('*', function(err, replies) {
+      replies.forEach(function(val) {
+        if (val.indexOf(config.redis.key) > -1) {
+          redisClient.del(val);
+        }
+      });
+    });
   }
 }
