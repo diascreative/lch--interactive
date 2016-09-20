@@ -36,9 +36,6 @@ export default function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
-  // server security
-  app.use(helmet());
-
   // Persist sessions with MongoStore / sequelizeStore
   // We need to enable sessions for passport-twitter because it's an
   // oauth 1.0 strategy, and Lusca depends on sessions
@@ -54,11 +51,14 @@ export default function(app) {
    * https://github.com/krakenjs/lusca
    */
   if ('test' !== env) {
+    app.use(helmet({
+      frameguard: false
+    }));
+
     app.use(lusca({
       csrf: {
         angular: true
       },
-      xframe: 'SAMEORIGIN',
       hsts: {
         maxAge: 31536000, //1 year, in seconds
         includeSubDomains: true,
