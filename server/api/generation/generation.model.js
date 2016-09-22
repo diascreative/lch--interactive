@@ -3,7 +3,7 @@
 export default function(sequelize, DataTypes) {
   return sequelize.define('Generation', {
     _id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
