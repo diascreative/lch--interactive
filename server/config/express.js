@@ -36,9 +36,6 @@ export default function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
-  // server security
-  app.use(helmet());
-
   // Persist sessions with MongoStore / sequelizeStore
   // We need to enable sessions for passport-twitter because it's an
   // oauth 1.0 strategy, and Lusca depends on sessions
