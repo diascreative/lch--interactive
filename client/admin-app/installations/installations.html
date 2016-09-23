@@ -59,10 +59,31 @@
           <td style="text-align: right">
             <a href="/installation/{{item.name}}" class="btn btn-primary btn-sm" target="_blank">view</a>
             <a href="/admin/installation/{{item._id}}" class="btn btn-success btn-sm">view details</a>
-            <button class="btn btn-danger btn-sm" ng-click="$data.deleteInstallation(item._id)">remove</button>
+            <button class="btn btn-danger btn-sm"
+              ng-click="$data.deleteId = item._id"
+              data-toggle="modal" data-target="#deleteModal">remove</button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Confirm</h4>
+      </div>
+      <div class="modal-body">
+        Please confirm you would like to delete Installation with id <strong>{{$data.deleteId}}</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger"
+          ng-click="$data.deleteInstallation($data.deleteId)">Delete</button>
+      </div>
+    </div>
   </div>
 </div>

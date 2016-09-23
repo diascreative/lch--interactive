@@ -56,13 +56,11 @@ class InstallationsComponent {
   }
 
   deleteInstallation(id) {
-    const msg = `Are you sure you want to delete the Installation with id ${id}?`;
-    if (window.confirm(msg)) {
-      this.$http.delete(`/api/installations/${id}`).then(response => {
-        this.Notification.success('Deleted successfully');
-        this.getInstallations();
-      });
-    }
+    this.$http.delete(`/api/installations/${id}`).then(response => {
+      this.Notification.success('Deleted successfully');
+      this.getInstallations();
+      $('#deleteModal').modal('hide');
+    });
   }
 }
 
