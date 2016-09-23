@@ -59,7 +59,7 @@
           <td style="text-align: right">
             <a href="/installation/{{item.name}}" class="btn btn-primary btn-sm" target="_blank">view</a>
             <a href="/admin/installation/{{item._id}}" class="btn btn-success btn-sm">view details</a>
-            <button class="btn btn-danger btn-sm" disabled>remove</button>
+            <button class="btn btn-danger btn-sm" ng-click="$data.deleteInstallation(item._id)">remove</button>
           </td>
         </tr>
       </tbody>

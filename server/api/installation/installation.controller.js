@@ -4,6 +4,7 @@
  * POST    /api/installations              ->  uploadCSV
  * GET     /api/installations/full         ->  adminIndex
  * GET     /api/installations/:name        ->  show
+ * DELETE  /api/installations/:id          ->  destroy
  * GET     /api/installations/:id/full     ->  adminShow
  */
 
@@ -17,6 +18,23 @@ import {Installation, sequelize} from '../../sqldb';
 import Util from '../../util';
 
 
+/**
+ * Deletes a user
+ * restriction: 'admin'
+ */
+export function destroy(req, res) {
+  console.log(345678)
+  return Installation
+      .destroy({
+        where: {
+          _id: req.params.id
+        }
+      })
+      .then(function() {
+        res.status(204).end();
+      })
+      .catch(Util.handleError(res));
+}
 
 // Gets a list of Installations
 export function index(req, res) {
