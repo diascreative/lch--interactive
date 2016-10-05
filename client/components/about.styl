@@ -1,7 +1,7 @@
 .about
-  font-size calc(.7em + 1vh)
+  font-size 16px
   font-weight normal
-  line-height calc(1em + 1vh + 4px)
+  line-height calc(1em + 4px)
   margin 0 auto
   max-width 1020px
   overflow-wrap break-word
@@ -9,3 +9,23 @@
   word-wrap break-word
   word-break break-word
   hyphens auto
+
+  h1
+    font-size 1.4em
+
+  h2
+    font-size 1.3em
+
+  h3
+    font-size 1.2em
+
+  a
+    border-bottom solid 1px rgba($color-tertiary, .0)
+    color $color-tertiary
+    text-decoration none
+    transition border .3s ease-in
+
+    &:hover
+    &:focus
+      border-bottom-color rgba($color-tertiary, .9)
+      transition border .3s ease-out

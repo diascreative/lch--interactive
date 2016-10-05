@@ -1,10 +1,10 @@
 <div class="main-content">
   <p>
-    <span ng-bind-html="$filter.copyArea()"></span> we have
+    <span ng-bind-html="$filter.copyArea()"></span> we have installations at
     <span class="large-text" ng-bind-html="$ctrl.getFilteredInstallations()"></span>
     <strong ng-bind-html="$filter.copyEnergyType()"></strong>
     <strong ng-bind-html="$filter.copyOwnershipType()"></strong>
-    installations<span ng-bind-html="$filter.copyOwnership()"></span>.
+    <span ng-bind-html="$filter.copyOwnership()"></span> sites.
   </p>
 
   <div class="installation-stats">
@@ -17,7 +17,7 @@
     <div class="installation-stat">
       <div class="large-text" ng-bind-html="$ctrl.getFilteredTotalCapacity()">
       </div>
-      projects' capacity
+      Total installed capacity
     </div>
 
     <div class="installation-stat">
