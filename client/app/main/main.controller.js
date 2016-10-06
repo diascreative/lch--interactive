@@ -769,13 +769,13 @@ class MainController {
                         'over Oxfordshire: it’s renewable, locally-owned and developed for ' +
                         'community benefit.';
 
-    let pageDescription = description;
+    let desc = description;
 
     if (this.$rootScope.description && this.$rootScope.description !== '') {
-      pageDescription = `${this.$rootScope.description}`;
+      desc = `${this.$rootScope.description}`;
     }
 
-    return pageDescription;
+    return desc;
   }
 }
 
