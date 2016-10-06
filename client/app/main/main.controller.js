@@ -70,7 +70,8 @@ class MainController {
         tileLayer: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
         //jscs:enable maximumLineLength
         zoomControlPosition: 'bottomright',
-        scrollWheelZoom: false
+        scrollWheelZoom: false,
+        doubleClickZoom: true
       }
     };
   }
