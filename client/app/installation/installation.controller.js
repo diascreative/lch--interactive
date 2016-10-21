@@ -66,6 +66,10 @@ class InstallationComponent {
     return this.watts(this.details.annualPredictedGeneration, false, 'h');
   }
 
+  getLastIndex() {
+    return this.watts(this.details.lastIndex, false, 'h');
+  }
+
   getCapacity() {
     return this.watts(this.details.capacity);
   }

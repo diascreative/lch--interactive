@@ -23,6 +23,10 @@ export default function(sequelize, DataTypes) {
     ownershipType: DataTypes.STRING,
 
     // Installation details
+    lastIndex: {
+      type: DataTypes.FLOAT,
+      default: 0
+    },
     annualPredictedGeneration: DataTypes.FLOAT,
     capacity: DataTypes.FLOAT,
     energyType: DataTypes.STRING,

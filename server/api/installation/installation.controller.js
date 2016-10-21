@@ -200,6 +200,9 @@ function queryGetInstallation(name, redisKey) {
           'owner',
           'ownershipType',
           [sequelize.fn('sum',
+                          sequelize.col('lastIndex')
+                        ), 'lastIndex'],
+          [sequelize.fn('sum',
                           sequelize.col('annualPredictedGeneration')
                         ), 'annualPredictedGeneration'],
           [sequelize.fn('sum', sequelize.col('capacity')), 'capacity'],

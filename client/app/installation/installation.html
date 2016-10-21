@@ -3,21 +3,27 @@
 
   <div class="installation-stats">
     <div class="installation-stat">
-      <div class="large-text" ng-bind-html="$installation.getAnnualGeneration()">
-      </div>
-      generated from this installation each year
-    </div>
-
-    <div class="installation-stat">
       <div class="large-text" ng-bind-html="$installation.getCapacity()">
       </div>
       Total installed capacity
     </div>
 
     <div class="installation-stat">
+      <div class="large-text" ng-bind-html="$installation.getAnnualGeneration()">
+      </div>
+      generated from this installation each year
+    </div>
+
+    <div class="installation-stat">
       <div class="large-text" ng-bind-html="$installation.getCO2()">
       </div>
       of CO<sub>2</sub> saved every year
+    </div>
+
+    <div class="installation-stat" ng-if="$installation.details.lastIndex">
+      <div class="large-text" ng-bind-html="$installation.getLastIndex()">
+      </div>
+      Generated to date
     </div>
   </div>
 
