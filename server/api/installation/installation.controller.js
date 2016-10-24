@@ -1,11 +1,13 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/installations              ->  index
- * POST    /api/installations              ->  uploadCSV
- * GET     /api/installations/full         ->  adminIndex
  * GET     /api/installations/:name        ->  show
+ * GET     /api/installations/full         ->  adminIndex
+ * POST    /api/installations              ->  uploadCSV
  * DELETE  /api/installations/:id          ->  destroy
+ * POST    /api/installations/:id          ->  update
  * GET     /api/installations/:id/full     ->  adminShow
+ * GET     /api/installations/sources      ->  sources
  */
 
 'use strict';
@@ -17,26 +19,9 @@ import _ from 'lodash';
 import {Installation, sequelize} from '../../sqldb';
 import Util from '../../util';
 
-
 /**
- * Deletes a user
- * restriction: 'admin'
+ * Get list of all our installations
  */
-export function destroy(req, res) {
-  console.log(345678)
-  return Installation
-      .destroy({
-        where: {
-          _id: req.params.id
-        }
-      })
-      .then(function() {
-        res.status(204).end();
-      })
-      .catch(Util.handleError(res));
-}
-
-// Gets a list of Installations
 export function index(req, res) {
   const redisKey = `installation--index`;
 
@@ -46,6 +31,31 @@ export function index(req, res) {
     .catch(Util.handleError(res));
 }
 
+// Gets a single Installation from the DB
+export function show(req, res) {
+  const name = req.params.name;
+  const redisKey = `installation-${name}`;
+
+  return Util.getCache(redisKey)
+    .then(queryGetInstallation(name, redisKey))
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
+}
+
+export function adminIndex(req, res) {
+  return Installation
+    .findAll({
+      attributes: ['_id', 'name'],
+      order: 'name ASC'
+    })
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
+}
+
+/**
+ * Upload a CSV which inserts new Installations and edits existing ones
+ * restriction: 'admin'
+ */
 export function uploadCSV(req, res) {
   const form = new formidable.IncomingForm();
 
@@ -110,31 +120,76 @@ export function uploadCSV(req, res) {
   });
 }
 
-// Gets a single Installation from the DB
-export function show(req, res) {
-  const name = req.params.name;
-  const redisKey = `installation-${name}`;
-
-  return Util.getCache(redisKey)
-    .then(queryGetInstallation(name, redisKey))
-    .then(Util.respondWithResult(res))
-    .catch(Util.handleError(res));
+/**
+ * Deletes an installation
+ * restriction: 'admin'
+ */
+export function destroy(req, res) {
+  return Installation
+      .destroy({
+        where: {
+          _id: req.params.id
+        }
+      })
+      .then(function() {
+        res.status(204).end();
+      })
+      .catch(Util.handleError(res));
 }
 
-export function adminIndex(req, res) {
+/**
+ * Updates an installation
+ * restriction: 'admin'
+ */
+export function update(req, res) {
+  const installationId = req.params.id;
+
   return Installation
-    .findAll({
-      attributes: ['_id', 'name'],
-      order: 'name ASC'
+    .update({
+      'name': req.body.name,
+      'lat': req.body.lat,
+      'lng': req.body.lng,
+      'localAuthority': req.body.localAuthority,
+      'owner': req.body.owner,
+      'ownershipType': req.body.ownershipType,
+      'annualPredictedGeneration': req.body.annualPredictedGeneration,
+      'capacity': req.body.capacity,
+      'energyType': req.body.energyType,
+      'commissioned': req.body.commissioned,
+      'source': req.body.source,
+      'info': req.body.info,
+      'location': req.body.location,
+      'url': req.body.url
+    }, {
+      where: {
+        _id: installationId
+      }
     })
     .then(Util.respondWithResult(res))
     .catch(Util.handleError(res));
 }
 
+/**
+ * Gets a list of possible sources for an installaiton
+ * restriction: 'admin'
+ */
+export function sources(req, res) {
+  return Installation
+    .findAll({
+      attributes: ['source'],
+      group: ['source'],
+      order: 'source ASC'
+    })
+    .then(Util.respondWithResult(res))
+    .catch(Util.handleError(res));
+}
+
+/**
+ * Get full installation information
+ * restriction: 'admin'
+ */
 export function adminShow(req, res) {
   const id = req.params.id;
-
-  console.log(id)
 
   return Installation
     .findOne({

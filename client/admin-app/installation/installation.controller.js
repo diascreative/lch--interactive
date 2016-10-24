@@ -2,9 +2,10 @@
 (function() {
 
 class InstallationComponent {
-  constructor($http, $state) {
+  constructor(Notification, $http, $state) {
     this.$http = $http;
     this.$state = $state;
+    this.Notification = Notification;
 
     this.details = {};
     this.id = this.$state.params.id;
@@ -16,6 +17,24 @@ class InstallationComponent {
     this.$http.get(url).then(response => {
       this.installation = response.data;
     });
+
+    const sourcesUrl = `/api/installations/sources`;
+
+    this.$http.get(sourcesUrl).then(response => {
+      this.sources = response.data;
+    });
+  }
+
+  saveChanges(installation) {
+    if (installation._id) {
+      const url = `/api/installations/${installation._id}`;
+
+      this.$http.post(url, installation)
+        .then(() => this.Notification.success('Updated installation successfully'))
+        .catch(() => this.Notification.error('There was an error processing the data.'));
+    } else {
+      this.Notification.error('There was an error processing the data.');
+    }
   }
 }
 
@@ -25,5 +44,4 @@ angular.module('lowcarbonhubAppAdmin')
     controller: InstallationComponent,
     controllerAs: 'vm'
   });
-
 })();
