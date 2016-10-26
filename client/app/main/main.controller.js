@@ -174,9 +174,9 @@ class MainController {
     marker.icon = {
       type: 'div',
       html: '',
-      iconSize: [30, 45],
-      iconAnchor: [15, 45],
-      popupAnchor: [0, -45]
+      iconSize: [10, 10],
+      iconAnchor: [5, 5],
+      popupAnchor: [0, -15]
     };
 
     marker.message = this._mapPopupHTML(marker);
