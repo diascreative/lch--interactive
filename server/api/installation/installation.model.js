@@ -27,6 +27,7 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.FLOAT,
       default: 0
     },
+
     annualPredictedGeneration: DataTypes.FLOAT,
     capacity: DataTypes.FLOAT,
     energyType: DataTypes.STRING,
@@ -36,6 +37,18 @@ export default function(sequelize, DataTypes) {
     commissioned: DataTypes.STRING,
     info: DataTypes.STRING,
     location: DataTypes.STRING,
-    url: DataTypes.STRING
+    url: DataTypes.STRING,
+
+    // quickbase
+    quickbase: {
+      type: DataTypes.STRING,
+      get: function() {
+        if (this.getDataValue('quickbase') && this.getDataValue('quickbase') !== '') {
+          return JSON.parse(this.getDataValue('quickbase'));
+        } else {
+          return {};
+        }
+      }
+    }
   });
 }

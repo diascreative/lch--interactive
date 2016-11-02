@@ -16,6 +16,7 @@ var db = {
 };
 
 // Insert models below
+db.Quickbase = db.sequelize.import('../api/quickbase/quickbase.model');
 db.Generation = db.sequelize.import('../api/generation/generation.model');
 db.Installation = db.sequelize.import('../api/installation/installation.model');
 db.User = db.sequelize.import('../api/user/user.model');
@@ -23,5 +24,8 @@ db.User = db.sequelize.import('../api/user/user.model');
 // Insert associations below
 db.Generation.belongsTo(db.Installation);
 db.Installation.hasMany(db.Generation);
+
+db.Quickbase.belongsTo(db.Installation);
+db.Installation.hasMany(db.Quickbase);
 
 module.exports = db;
