@@ -76,6 +76,16 @@ export function uploadCSV(req, res) {
           .chain(output)
           .filter(i => (i[0] !== '' && i[0] !== ''))
           .map(i => {
+            const quickbase = {};
+
+            if (i[14]) {
+              quickbase.generation = i[14];
+
+              if (i[15]) {
+                quickbase.export = i[15];
+              }
+            }
+
             return {
               _id: parseInt(i[0]),
               name: i[1],
@@ -91,7 +101,7 @@ export function uploadCSV(req, res) {
               commissioned: i[11],
               location: i[12],
               url: i[13],
-              quickbase: i[14]
+              quickbase: JSON.stringify(quickbase)
             }
           })
           .value();
