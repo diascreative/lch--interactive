@@ -9,7 +9,7 @@
 
 'use strict';
 
-import {Quickbase, sequelize} from '../../sqldb';
+import {Installation, Quickbase, sequelize} from '../../sqldb';
 
 /**
  * Get list of all our installations
@@ -31,8 +31,13 @@ function queryGetData(req) {
       'InstallationId',
       [sequelize.fn('date_format', sequelize.col('date'), '%d/%m/%Y'), 'date'],
       'incremental',
+      'type',
       'performanceRatio'
     ],
+    include: [{
+      model: Installation,
+      attributes: ['quickbase']
+    }],
     where: {
       $and: [
         {'date': { lt: endDate }},
@@ -46,7 +51,8 @@ function queryGetData(req) {
 function parseData(req, res) {
   return function(data) {
     const list = data.map((item) => {
-      return `${item.InstallationId}, ${item.date}, ${item.incremental}, ${item.performanceRatio}`;
+      const meter = item.Installation.quickbase[item.type];
+      return `${meter}, ${item.date}, ${item.incremental}, ${item.performanceRatio}`;
     });
 
     console.log(list.join('\n'))

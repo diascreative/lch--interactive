@@ -19,7 +19,6 @@ class QuickBaseComponent {
         endDate: this.endDate
       })
       .then(res => {
-        console.log(res)
         const anchor = angular.element('<a/>');
         anchor.attr({
             href: 'data:attachment/csv;charset=utf-8,' + encodeURI(res.data),
