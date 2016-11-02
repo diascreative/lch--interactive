@@ -90,7 +90,8 @@ export function uploadCSV(req, res) {
               source: i[10],
               commissioned: i[11],
               location: i[12],
-              url: i[13]
+              url: i[13],
+              quickbase: i[14]
             }
           })
           .value();
@@ -109,7 +110,8 @@ export function uploadCSV(req, res) {
               'source',
               'commissioned',
               'location',
-              'url'
+              'url',
+              'quickbase'
             ]
           })
           .then(Util.clearCache())
@@ -143,6 +145,15 @@ export function destroy(req, res) {
  */
 export function update(req, res) {
   const installationId = req.params.id;
+  const quickbase = {};
+
+  if (req.body.quickbase.export) {
+    quickbase.export = req.body.quickbase.export;
+  }
+
+  if (req.body.quickbase.generation) {
+    quickbase.generation = req.body.quickbase.generation;
+  }
 
   return Installation
     .update({
@@ -159,7 +170,8 @@ export function update(req, res) {
       'source': req.body.source,
       'info': req.body.info,
       'location': req.body.location,
-      'url': req.body.url
+      'url': req.body.url,
+      'quickbase': JSON.stringify(quickbase)
     }, {
       where: {
         _id: installationId
