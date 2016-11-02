@@ -1,0 +1,32 @@
+<div>
+  <legend>QuickBase</legend>
+  <div class="bs-callout bs-callout-info">
+    <p>Chose the date range you would like to export</p>
+  </div>
+
+  <form name="csvForm" class="form" method="post" ng-submit="$data.downloadCSV()" novalidate>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label" for="start-date">Start Date</label>
+          <input id="start-date" ng-model="$data.startDate" name="startDate" class="form-control" type="date" required>
+        </div>
+      </div>
+
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label" for="end-date">End Date</label>
+          <input id="end-date" ng-model="$data.endDate" name="endDate" class="form-control" type="date" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button type="submit" class="btn" ng-disabled="csvForm.$invalid">Download CSV</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

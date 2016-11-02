@@ -9,105 +9,53 @@
 
 'use strict';
 
-import _ from 'lodash';
 import {Quickbase} from '../../sqldb';
 
-function respondWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
-  return function(entity) {
-    if (entity) {
-      res.status(statusCode).json(entity);
-    }
-  };
-}
-
-function saveUpdates(updates) {
-  return function(entity) {
-    return entity.updateAttributes(updates)
-      .then(updated => {
-        return updated;
-      });
-  };
-}
-
-function removeEntity(res) {
-  return function(entity) {
-    if (entity) {
-      return entity.destroy()
-        .then(() => {
-          res.status(204).end();
-        });
-    }
-  };
-}
-
-function handleEntityNotFound(res) {
-  return function(entity) {
-    if (!entity) {
-      res.status(404).end();
-      return null;
-    }
-    return entity;
-  };
-}
-
-function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
-  return function(err) {
-    res.status(statusCode).send(err);
-  };
-}
-
-// Gets a list of Quickbases
+/**
+ * Get list of all our installations
+ */
 export function index(req, res) {
-  return Quickbase.findAll()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  return queryGetData(req)
+    .then(parseData())
+    .then(responsdCSV(req, res));
 }
 
-// Gets a single Quickbase from the DB
-export function show(req, res) {
-  return Quickbase.find({
+function queryGetData(req) {
+  const maxDelta = 7 * (1000 * 60 * 60 * 24);
+  const endDate = req.body.endDate ? req.body.endDate : Date();
+  const startDate = req.body.startDate ? req.body.startDate : new Date(+new Date() - maxDelta);
+
+  return Quickbase.findAll({
+    attributes: [
+      '_id',
+      'InstallationId',
+      'date',
+      'incremental',
+      'performanceRatio'
+    ],
     where: {
-      _id: req.params.id
+      $and: [
+        {'date': { lt: endDate }},
+        {'date': { gte: startDate }}
+      ]
     }
   })
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
 }
 
-// Creates a new Quickbase in the DB
-export function create(req, res) {
-  return Quickbase.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
-}
+function parseData(req, res) {
+  return function(data) {
+    const list = data.map((item) => {
+      return `${item.InstallationId}, ${item.date}, ${item.incremental}, ${item.performanceRatio}`;
+    });
 
-// Updates an existing Quickbase in the DB
-export function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+    console.log(list.join('\n'))
+
+    return list.join('\n');
   }
-  return Quickbase.find({
-    where: {
-      _id: req.params.id
-    }
-  })
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
 }
 
-// Deletes a Quickbase from the DB
-export function destroy(req, res) {
-  return Quickbase.find({
-    where: {
-      _id: req.params.id
-    }
-  })
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+function responsdCSV(req, res) {
+  return function(data) {
+    return res.set('Content-Type', 'text/csv').set('Content-Disposition', 'attachment; filename="users.csv"').status(200).send(data);
+  }
 }
