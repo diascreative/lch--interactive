@@ -9,7 +9,7 @@
 
 'use strict';
 
-import {Quickbase} from '../../sqldb';
+import {Quickbase, sequelize} from '../../sqldb';
 
 /**
  * Get list of all our installations
@@ -29,7 +29,7 @@ function queryGetData(req) {
     attributes: [
       '_id',
       'InstallationId',
-      'date',
+      [sequelize.fn('date_format', sequelize.col('date'), '%d/%m/%Y'), 'date'],
       'incremental',
       'performanceRatio'
     ],
@@ -38,7 +38,8 @@ function queryGetData(req) {
         {'date': { lt: endDate }},
         {'date': { gte: startDate }}
       ]
-    }
+    },
+    order: 'date ASC'
   })
 }
 
@@ -50,7 +51,7 @@ function parseData(req, res) {
 
     console.log(list.join('\n'))
 
-    return list.join('\n');
+    return 'related meter,	date,	incremental value,	performance ratio	\n' + list.join('\n');
   }
 }
 

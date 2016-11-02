@@ -18,12 +18,13 @@ class QuickBaseComponent {
         startDate: this.startDate,
         endDate: this.endDate
       })
-      .then(data => {
+      .then(res => {
+        console.log(res)
         const anchor = angular.element('<a/>');
         anchor.attr({
-            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(res.data),
             target: '_blank',
-            download: 'filename.csv'
+            download: `quickbase--${this.startDate}-${this.endDate}.csv`
         })[0].click();
       })
       .catch(() => this.Notification.error('There was an error processing the data.'));
