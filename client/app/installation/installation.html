@@ -40,7 +40,7 @@
 
     <div class="installation-stat">
       <div class="large-text">
-        {{ ($installation.details.annualPredictedGeneration / $installation.getStatExample(0).consumption) | number:0 }}
+        {{ $installation.roudIfNecessary($installation.details.annualPredictedGeneration / $installation.getStatExample(0).consumption) }}
       </div>
       {{ $installation.getStatExample(0).action }}
     </div>

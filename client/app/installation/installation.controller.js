@@ -93,6 +93,11 @@ class InstallationComponent {
     this.$rootScope.description = `${this.name} generates ${cleanGen} clean energy for #Oxon p.a.` +
                                   ` What's plugged into the #PeoplesPowerStation near you?`;
   }
+
+  roudIfNecessary(value) {
+    const decimals = value < 1 ? 1 : 0;
+    return this.$filter('number')(value, decimals);
+  }
 }
 
 angular.module('lowcarbonhubApp')
