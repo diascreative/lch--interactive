@@ -10,7 +10,7 @@ angular.module('lowcarbonhubApp.constants', [])
     {
       // 1800W for 3 mins : 1800 * (3/60) = 90Wh
       consumption: 90,
-      action: 'cups of tea'
+      action: 'kettles of boiling water'
     },
     {
       // 1200W * (3/60) = 60Wh
@@ -28,7 +28,7 @@ angular.module('lowcarbonhubApp.constants', [])
       // page 52 http://www.inference.eng.cam.ac.uk/sustainable/book/tex/sewtha.pdf
       // mentions 0.5kWh per day
       consumption: 500,
-      action: 'fridge-freezers for a day'
+      action: 'fridges for a day'
     }
   ])
   .constant('graphDefault', {
