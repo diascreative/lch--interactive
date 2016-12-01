@@ -12,6 +12,9 @@ angular.module('lowcarbonhubApp', [
   'lowcarbonhubApp.constants'
 ])
   .run(function($filter, $rootScope) {
+
+    document.getElementById('page-description').setAttribute('content', '{{$ctrl.pageDescription()}}');
+
     /**
      * Pretty-print watt
      * @param  {Integer} watts
