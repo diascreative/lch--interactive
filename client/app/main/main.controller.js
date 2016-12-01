@@ -79,6 +79,9 @@ class MainController {
   $onInit() {
     this._setSavedFilters();
 
+    this.$rootScope.title = '';
+    this.$rootScope.description = '';
+
     // API call to get the array of installations
     this.$http.get('/api/installations').then(response => {
       this._installations = response.data;
@@ -91,6 +94,9 @@ class MainController {
               installation.generated = gen.generated;
               installation.datetime = gen.datetime;
             }
+
+            this.setPageTitle();
+            this.setPageDescription();
           });
         });
 
@@ -358,6 +364,9 @@ class MainController {
 
     this._setMapBounds();
     this.loadHistoricData();
+
+    this.setPageTitle();
+    this.setPageDescription();
   }
 
   _setInstallationVisibility(installationMarker, visible = false) {
@@ -777,6 +786,76 @@ class MainController {
     }
 
     return desc;
+  }
+
+  setPageTitle() {
+    this.$rootScope.title = '';
+  }
+
+  setPageDescription() {
+    if (this.$location.hash() === 'all::all::all::all') {
+      return this.$rootScope.description = '';
+    }
+
+    const description = `${this.copyArea()} we have installations at ${this.getFilteredInstallations()} ${this.copyEnergyType()} ${this.copyOwnershipType()} sites ${this.copyOwnership()}.`;
+
+    this.$rootScope.description = String(description).replace(/<[^>]+>/gm, '').replace(/\s+/gm, ' ').replace(/\s\./gm, '.');
+  }
+
+  /**
+   * Build stats copy about the chosen areas
+   * @return {String}
+   * eg. "Oxfordshire"
+   *     "Cherwell District Council"
+   *     "your 2 chosen districts"
+   */
+  copyArea() {
+    const str = this.filtersChosen.localAuthorities === 'all' ? 'Oxfordshire' :
+                                this.filtersChosen.localAuthorities;
+
+    return `In <strong>${str}</strong>`;
+  }
+
+  /**
+   * Build stats copy about the chosen ownership
+   * @return {String}
+   * eg. "Low Carbon Hub"
+   *     "community and council"
+   */
+  copyOwnership() {
+    if (this.filtersChosen.ownership === 'all') {
+      return '';
+    }
+
+    return `, owned by <strong>${this.filtersChosen.ownership}</strong>`;
+  }
+
+  /**
+   * Build stats copy about the chosen ownership types
+   * @return {String}
+   * eg. "Commnity"
+   *     "community and council"
+   */
+  copyOwnershipType() {
+    if (this.filtersChosen.ownershipType === 'all') {
+      return '';
+    }
+
+    return this.filtersChosen.ownershipType.toLowerCase();
+  }
+
+  /**
+   * Build stats copy about the chosen energy types
+   * @return {String}
+   * eg. "hydro"
+   *     "solar pv"
+   */
+  copyEnergyType() {
+    if (this.filtersChosen.energyType === 'all') {
+      return '';
+    }
+
+    return this.filtersChosen.energyType.toLowerCase();
   }
 }
 
