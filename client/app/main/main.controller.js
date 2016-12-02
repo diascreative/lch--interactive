@@ -95,8 +95,10 @@ class MainController {
               installation.datetime = gen.datetime;
             }
 
-            this.setPageTitle();
-            this.setPageDescription();
+            if (!this.$state.is('installation')) {
+              this.setPageTitle();
+              this.setPageDescription();
+            }
           });
         });
 
@@ -365,8 +367,10 @@ class MainController {
     this._setMapBounds();
     this.loadHistoricData();
 
-    this.setPageTitle();
-    this.setPageDescription();
+    if (!this.$state.is('installation')) {
+      this.setPageTitle();
+      this.setPageDescription();
+    }
   }
 
   _setInstallationVisibility(installationMarker, visible = false) {
