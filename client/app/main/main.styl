@@ -303,13 +303,13 @@ $animation-timing = .3s
       content url(../assets/images/icon--solar.svg)
       height 23px
       left 50%
-      margin -5px 0 0 -22px
+      margin -12px 0 0 -22px
       position absolute
       top 50%
       width 38px
 
     &:before
-      animation 3s linear infinite sun
+      animation 2s linear infinite alternate sun
       content url(../assets/images/icon--solar-sun.svg)
       height 22px
       left 50%
@@ -388,18 +388,20 @@ $animation-timing = .3s
 
 @keyframes sun
   from
-    transform rotateZ(0deg)
+    opacity .6
+    transform rotate(0deg) scale(.9)
 
   to
-    transform rotateZ(180deg)
+    opacity 1
+    transform rotate(10deg) scale(1.4)
 
 @keyframes hydro-wheel
   from
     transform rotate3d(0, 0, 0, 0deg)
 
   to
-    transform rotate3d(0, 0, 1, -180deg)
 
+    transform rotate3d(0, 0, 1, -180deg)
 @keyframes hydro-water
   from
     transform translateX(0)
