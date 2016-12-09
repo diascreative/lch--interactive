@@ -336,7 +336,7 @@ $animation-timing = .3s
         animation 3s linear infinite hydro-water
         content url(../assets/images/icon--hydro.svg)
         height 9px
-        margin 0px 0 0 -95px
+        margin 0 0 0 -95px
         width 132px
 
       &:before
@@ -345,6 +345,38 @@ $animation-timing = .3s
         height 40px
         margin -20px 0 0 -17px
         width 34px
+
+  &.wind
+    .map-popup__capacity
+      color #CCEA7E
+
+      .large-text
+        border-bottom 1px dashed #CCEA7E
+
+    .map-popup__icon-section
+      background rgba(#CCEA7E, .6)
+
+    .map-popup__icon
+      border-color #CCEA7E
+
+      &:after
+        animation 2s linear infinite wind-turbine
+        bottom calc(25px - 18px)
+        content url(../assets/images/icon--wind-turbine.svg)
+        height 46px
+        margin 0 0 0 -26px
+        top auto
+        transform-origin 26.5px 23px
+        width 40px
+
+      &:before
+        animation none
+        bottom 0
+        content url(../assets/images/icon--wind-turbine-mast.svg)
+        height 25px
+        margin 0 0 0 -3px
+        top auto
+        width 6px
 
 @media $tablet
   .filters
@@ -374,3 +406,10 @@ $animation-timing = .3s
 
   to
     transform translateX(56px)
+
+@keyframes wind-turbine
+  from
+    transform rotate3d(0, 0, 0, 0deg)
+
+  to
+    transform rotate3d(0, 0, 1, 120deg)
