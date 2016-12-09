@@ -86,27 +86,10 @@ class MainController {
     this.$http.get('/api/installations').then(response => {
       this._installations = response.data;
 
-      // API call to get latest generating details
-      this.$http.get('/api/generations').then(response => {
-        _.each(response.data, (gen) => {
-          _.each(this._installations, (installation) => {
-            if (installation.name === gen.InstallationName) {
-              installation.generated = gen.generated;
-              installation.datetime = gen.datetime;
-            }
-
-            if (!this.$state.is('installation')) {
-              this.setPageTitle();
-              this.setPageDescription();
-            }
-          });
-        });
-
-        this._updateMapMarkers();
-        this.filterInstallations();
-        this._setInstallation();
-        this.loadAreaJSON(this.filtersChosen.localAuthorities);
-      });
+      this._updateMapMarkers();
+      this.filterInstallations();
+      this._setInstallation();
+      this.loadAreaJSON(this.filtersChosen.localAuthorities);
     });
 
     if (!L.Browser.touch) {
@@ -172,10 +155,6 @@ class MainController {
     marker.lng = installation.lng;
     marker.visible = false;
     marker.className = '';
-
-    if (!marker.generated) {
-      marker.generated = 0;
-    }
 
     marker.capacity = marker.capacity;
 
@@ -491,8 +470,7 @@ class MainController {
       name: installation.name,
       owner: installation.owner,
       capacity: this.watts(installation.capacity),
-      annualPredictedGeneration: this.watts(installation.annualPredictedGeneration, false, 'h'),
-      generated: this.watts(installation.generated)
+      annualPredictedGeneration: this.watts(installation.annualPredictedGeneration, false, 'h')
     };
 
     if (installation.datetime) {
