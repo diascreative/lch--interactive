@@ -742,7 +742,7 @@ class MainController {
   }
 
   globalSocialSharingMessage() {
-    const total = _.sumBy(this.map.installations, 'generated');
+    const total = _.sumBy(this.map.installations, 'capacity');
     const cleanTotal = this.watts(total, 'W', '', false);
 
     return `${cleanTotal} of #Oxon's #communityenergy is now plugged into the #PeoplesPowerStation. See local energy grow!`;
