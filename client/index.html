@@ -39,7 +39,7 @@
         <h2 class="strapline">Let’s create energy we can all feel good about.</h2>
       </div>
 
-      <nav class="main-nav" ng-cloak>
+      <nav class="main-nav">
         <a href="http://www.lowcarbonhub.org" title="Low Carbon Hub" class="image-link"
           target="_blank">
           <img src="/assets/images/logo--lch.svg" width="51" height="51">
@@ -63,9 +63,8 @@
         </a>
       </nav>
 
-      <div class="search" ng-cloak>
+      <div class="search ng-cloak">
         <ui-select title="Search by project"
-          ng-cloak
           ng-model="$ctrl.searchInstallation"
           on-select="$ctrl.filterFreeText($item)">
           <ui-select-match allow-clear="true"
@@ -84,7 +83,7 @@
       </div>
     </header>
 
-    <div class="filters"
+    <div class="filters ng-cloak"
       ng-class="{'filters--visible': $ctrl.showFilters}">
       <div class="filters__options">
         <h4>Geography</h4>
@@ -117,7 +116,6 @@
 
         <h4>Ownership</h4>
         <ui-select title="Search by project"
-          ng-cloak
           ng-model="$ctrl.searchOwner"
           on-select="$ctrl.filterOwners($item.name)">
           <ui-select-match allow-clear="true"
