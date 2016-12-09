@@ -186,7 +186,7 @@ class MainController {
       energyType: allFilters[3]
     };
 
-    this.searchOwner = this.filtersChosen.ownership;
+    this.searchOwner = this.filtersChosen.ownership === 'all' ? '' : this.filtersChosen.ownership;
   }
 
   _setInstallation() {
