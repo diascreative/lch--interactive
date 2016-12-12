@@ -28,7 +28,7 @@ export default function(sequelize, DataTypes) {
       default: 0
     },
 
-    annualPredictedGeneration: DataTypes.FLOAT,
+    annualPredictedGeneration: DataTypes.BIGINT,
     capacity: DataTypes.FLOAT,
     energyType: DataTypes.STRING,
     source: DataTypes.STRING,
