@@ -746,7 +746,7 @@ class MainController {
 
   // SEO
   pageTitle() {
-    const title = 'LCH Interactive';
+    const title = 'People\'s Power station';
     let pageTitle = title;
 
     if (this.$rootScope.title && this.$rootScope.title !== '') {
