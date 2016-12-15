@@ -148,7 +148,7 @@ function queryGenerationForIds(whereFilter) {
       .findAll({
         attributes: [
           [sequelize.fn('max', sequelize.col('datetime')), 'datetime'],
-          [sequelize.fn('date_format', sequelize.col('datetime'), '%Y%m%d%h'), 'date_col_formed'],
+          [sequelize.fn('date_format', sequelize.col('datetime'), '%Y%m%d%h%i'), 'date_col_formed'],
           [sequelize.fn('sum', sequelize.col('generated')), 'generated']
         ],
         where: where,
