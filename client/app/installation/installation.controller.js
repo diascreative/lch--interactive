@@ -48,7 +48,7 @@ class InstallationComponent {
               });
 
               this.graph.data = data.map(item => {
-                return item.generated / 1000;
+                return item.generated;
               });
             });
   }

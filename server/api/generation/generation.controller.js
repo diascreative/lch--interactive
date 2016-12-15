@@ -179,7 +179,7 @@ function queryHistoricSingle(installationName, redisKey) {
         },
         attributes: [
           [sequelize.fn('date_format', sequelize.col('datetime'), '%Y-%m-%dT%h:00:00.000Z'), 'date'],
-          [sequelize.fn('sum', sequelize.col('generated')), 'generated']
+          [sequelize.fn('avg', sequelize.col('generated')), 'generated']
         ],
         group: [
           'date'
