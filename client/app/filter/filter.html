@@ -43,16 +43,4 @@
       {{ $filter.getStatExample(0).action }}
     </div>
   </div>
-
-  <p ng-if="$ctrl.graph.data.length"><strong>Recent power generation (kW)</strong></p>
-  <div class="graph" ng-if="$ctrl.graph.data.length">
-    <canvas class="chart chart-line" style="width: 100%; height: 200px"
-      chart-data="$ctrl.graph.data"
-      chart-options="$ctrl.graph.options"
-      chart-colors="$ctrl.graph.colors"
-      chart-series="$ctrl.graph.series"
-      chart-labels="$ctrl.graph.labels"></canvas>
-
-    <div class="hint">Showing real time data where available</div>
-  </div>
 </div>

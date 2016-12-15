@@ -111,25 +111,6 @@ class MainController {
     this.$state.go('installation', { name: marker.name });
   }
 
-  loadHistoricData() {
-    const url = `/api/generations/historic`;
-    const data = this.filtersChosen;
-
-    return this.$http.get(url, {params: data})
-            .success(data => {
-              data.reverse();
-
-              this.graph.labels = data.map(item => {
-                return item.datetime;
-              });
-
-              this.graph.data = data.map(item => {
-                return item.generated;
-              });
-            });
-
-  }
-
   /**
    * Update map markers from this._installations
    * @return {Array} Map markers
@@ -344,7 +325,6 @@ class MainController {
     }
 
     this._setMapBounds();
-    this.loadHistoricData();
 
     if (!this.$state.is('installation')) {
       this.setPageTitle();
