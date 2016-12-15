@@ -124,7 +124,7 @@ class MainController {
               });
 
               this.graph.data = data.map(item => {
-                return item.generated;
+                return item.generated / 1000;
               });
             });
 
