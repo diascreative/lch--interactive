@@ -172,6 +172,8 @@ function queryHistoricSingle(installationName, redisKey) {
       return JSON.parse(cached);
     }
 
+    const aggregateType = (installationName === 'Osney Lock Hydro') ? 'avg' : 'sum';
+
     return Generation
       .findAll({
         where: {
@@ -179,7 +181,7 @@ function queryHistoricSingle(installationName, redisKey) {
         },
         attributes: [
           [sequelize.fn('date_format', sequelize.col('datetime'), '%Y-%m-%dT%h:00:00.000Z'), 'date'],
-          [sequelize.fn('avg', sequelize.col('generated')), 'generated']
+          [sequelize.fn(aggregateType, sequelize.col('generated')), 'generated']
         ],
         group: [
           'date'
