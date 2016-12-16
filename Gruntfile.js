@@ -26,6 +26,68 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+    realFavicon: {
+      favicons: {
+        src: '<%= yeoman.client %>/assets/images/favicon.png',
+        dest: '<%= yeoman.dist %>/<%= yeoman.client %>',
+        options: {
+        iconsPath: '/',
+        html: ['<%= yeoman.dist %>/<%= yeoman.client %>/index.html'],
+        design: {
+          ios: {
+          pictureAspect: 'backgroundAndMargin',
+          backgroundColor: '#ffffff',
+          margin: '25%',
+          assets: {
+            ios6AndPriorIcons: false,
+            ios7AndLaterIcons: false,
+            precomposedIcons: false,
+            declareOnlyDefaultIcon: true
+          }
+          },
+          desktopBrowser: {},
+          windows: {
+          pictureAspect: 'whiteSilhouette',
+          backgroundColor: '#00748d',
+          onConflict: 'override',
+          assets: {
+            windows80Ie10Tile: false,
+            windows10Ie11EdgeTiles: {
+            small: false,
+            medium: true,
+            big: false,
+            rectangle: false
+            }
+          }
+          },
+          androidChrome: {
+          pictureAspect: 'shadow',
+          themeColor: '#ffffff',
+          manifest: {
+            name: 'People\'s Power Station',
+            display: 'standalone',
+            orientation: 'notSet',
+            onConflict: 'override',
+            declared: true
+          },
+          assets: {
+            legacyIcon: false,
+            lowResolutionIcons: false
+          }
+          },
+          safariPinnedTab: {
+          pictureAspect: 'blackAndWhite',
+          threshold: 82.03125,
+          themeColor: '#5bbad5'
+          }
+        },
+        settings: {
+          scalingAlgorithm: 'Mitchell',
+          errorOnImageTooSmall: false
+        }
+        }
+      }
+    },
 
     // Project settings
     pkg: grunt.file.readJSON('package.json'),
@@ -906,7 +968,8 @@ module.exports = function (grunt) {
     'filerev',
     'usemin',
     'inline',
-    'htmlmin'
+    'htmlmin',
+    'realFavicon'
   ]);
 
   grunt.registerTask('default', [
