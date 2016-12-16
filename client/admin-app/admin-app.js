@@ -17,7 +17,7 @@ angular.module('lowcarbonhubAppAdmin', [
 
     $locationProvider
       .hashPrefix(false)
-      .html5Mode(true);
+      .html5Mode(false);
 
     $stateProvider
       .state('admin', {
