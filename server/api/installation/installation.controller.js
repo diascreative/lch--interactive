@@ -187,6 +187,7 @@ export function update(req, res) {
         _id: installationId
       }
     })
+    .then(Util.clearCache())
     .then(Util.respondWithResult(res))
     .catch(Util.handleError(res));
 }
