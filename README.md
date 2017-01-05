@@ -24,6 +24,8 @@ This project was initially generated with the [Angular Full-Stack Generator](htt
 
 ## Build & development
 
+Although the code is open source, the source of the data isn’t and is proprietary. This is why the import scripts are not fully included and are missing sensitive data. We have included part of them to guide you in creating your own data import scripts.
+
 Run `grunt build` for building and `grunt serve` for preview.
 
 1. Run `grunt serve:dist` to build and run the production-ready site.
