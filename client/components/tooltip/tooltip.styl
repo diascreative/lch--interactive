@@ -1,0 +1,42 @@
+@import '../_variables.styl'
+
+.tooltip
+  border-bottom 1px dashed #fff
+  cursor pointer
+  display inline-block
+  position relative
+
+  &__message
+    background rgba(#fff, .98)
+    box-shadow 0 0 6px 3px rgba(0, 0, 0, .15)
+    color $color-tertiary
+    font-size 14px
+    left 50%
+    margin-top -10px
+    opacity 0
+    padding 5px 10px
+    position absolute
+    text-align center
+    top 0
+    transform translate3d(-50%, -90%, 0)
+    transition all .3s ease-in .2s
+    visibility hidden
+    width 240px
+
+    &:after
+      border-color rgba(#fff, .98) transparent transparent transparent;
+      border-style solid
+      border-width 10px 10px 0 10px;
+      content ''
+      height 0
+      left calc(50% - 5px)
+      position absolute
+      top 100%
+      width 0
+
+    .tooltip:hover &
+      opacity 1
+      transform translate3d(-50%, -100%, 0)
+      transition all .3s ease-out
+      visibility visible
+
