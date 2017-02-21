@@ -378,6 +378,37 @@ $animation-timing = .3s
         top auto
         width 6px
 
+  &.combined-heat-and-power
+    .map-popup__capacity
+      color #F9A0CA
+
+      .large-text
+        border-bottom 1px dashed #F9A0CA
+
+    .map-popup__icon-section
+      background rgba(#F9A0CA, .6)
+
+    .map-popup__icon
+      border-color #F9A0CA
+
+      &:after
+        animation none
+        animation 2s linear infinite combined
+        content url(../assets/images/icon--combined-arrows.svg)
+        height 31px
+        margin 0 0 0 -15px
+        top -5px
+        width 30px
+
+      &:before
+        animation none
+        bottom 0
+        content url(../assets/images/icon--combined.svg)
+        height 60px
+        margin 0 0 0 -30px
+        top auto
+        width 60px
+
 @media $tablet
   .filters
     top $header-height--tablet
@@ -385,6 +416,33 @@ $animation-timing = .3s
   .map-section
     height 'calc(100vh - %s)' % $header-height--tablet
 
+// arrows are 6px tall
+@keyframes combined
+  0%
+    clip-path inset(0 0 24px 0)
+    transform translateY(0)
+
+  40%
+    clip-path inset(0 0 24px 0)
+    transform translateY(15px)
+
+  50%
+    clip-path inset(0 0 30px 0)
+    transform translateY(21px)
+
+  50.00001%
+    clip-path inset(31px 0 0 0)
+    transform translateY(16px)
+
+  60%
+    clip-path inset(25px 0 0 0)
+    transform translateY(21px)
+
+  100%
+    clip-path inset(25px 0 0 0)
+    transform translateY(40px)
+  // to
+  //   transform translateY(40px)
 
 @keyframes sun
   from
