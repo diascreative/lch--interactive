@@ -392,7 +392,6 @@ $animation-timing = .3s
       border-color #F9A0CA
 
       &:after
-        animation none
         animation 2s linear infinite combined
         content url(../assets/images/icon--combined-arrows.svg)
         height 31px
@@ -409,12 +408,92 @@ $animation-timing = .3s
         top auto
         width 60px
 
+  &.anaerobic-digestion
+    .map-popup__capacity
+      color #8F5F2E
+
+      .large-text
+        border-bottom 1px dashed #8F5F2E
+
+    .map-popup__icon-section
+      background rgba(#8F5F2E, .6)
+
+    .map-popup__icon
+      background #fff url(../assets/images/icon--anaerobic-digestion.svg) 50% calc(100% - 8px) no-repeat
+      border-color #8F5F2E
+
+      &:after
+        animation none
+        animation 3s linear infinite anaerobic
+        bottom 10px
+        content url(../assets/images/icon--anaerobic-digestion--fill.svg)
+        height 50px
+        margin 0 0 0 -19px
+        opacity 1
+        top auto
+        width 37px
+
+      &:before
+        animation 3s linear infinite anaerobic-content
+        bottom 14px
+        content url(../assets/images/icon--anaerobic-digestion--content.svg)
+        height 23px
+        margin 0 0 0 -14px
+        top auto
+        width 26px
+
 @media $tablet
   .filters
     top $header-height--tablet
 
   .map-section
     height 'calc(100vh - %s)' % $header-height--tablet
+
+@keyframes anaerobic-content
+  0%
+    transform translateY(0)
+
+  10%
+    transform translateY(3px)
+
+  40%
+    transform translateY(3px)
+
+  76%
+    transform translateY(0)
+
+  100%
+    transform translateY(0)
+
+@keyframes anaerobic
+  0%
+    clip-path inset(100% 0 0 0)
+    opacity .6
+
+  36%
+    clip-path inset(14px 0 0 0)
+
+  38%
+    clip-path inset(0 0 0 0)
+    opacity 1
+
+  52%
+    clip-path inset(0 0 0 0)
+
+  74%
+    clip-path inset(0 0 calc(100% - 14px) 0)
+
+  76%
+    clip-path inset(0 0 calc(100% - 14px) 0)
+    opacity 1
+
+  77%
+    clip-path inset(0 0 100% 0)
+    opacity 0
+
+  100%
+    clip-path inset(0 0 100% 0)
+    opacity 0
 
 // arrows are 6px tall
 @keyframes combined

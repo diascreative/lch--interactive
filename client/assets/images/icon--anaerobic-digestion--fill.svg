@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="37px" height="50px" viewBox="0 0 37 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2-Copy-7" transform="translate(-914.000000, -108.000000)">
+            <g id="STEP-6" transform="translate(863.000000, 67.000000)">
+                <g id="Group-4" transform="translate(51.000000, 41.000000)">
+                    <path d="M15,15.0810811 C15,15.0810811 17.5057292,15 19,15 C20.4942708,15 23,15.0810811 23,15.0810811 L23,18 L15,18 L15,15.0810811 Z" id="CAN-SPOUT-Copy" fill="#8F5F2E"></path>
+                    <path d="M1.01141727,21.6778954 C1.01141727,21.6778954 10.1333333,20 19,20 C27.8666667,20 36.9926946,21.6778954 36.9926946,21.6778954 L36.9926946,47.5373616 C36.9926946,47.5373616 29.1353893,49.9799925 19.0020559,49.9799925 C8.8687226,49.9799925 0.991434408,47.4943732 0.991434408,47.4943732 L1.01141727,21.6778954 Z" id="SLUDGE-Copy" fill="#8F5F2E"></path>
+                    <g id="GAS" transform="translate(13.000000, 0.000000)" fill="#8B572A" opacity="0.501807369">
+                        <circle id="Oval-Copy-4" cx="5.5" cy="10.5" r="3.5"></circle>
+                        <circle id="Oval-Copy-5" cx="7.5" cy="7.5" r="3.5"></circle>
+                        <circle id="Oval-Copy-6" cx="7.5" cy="3.5" r="3.5"></circle>
+                        <circle id="Oval-Copy-7" cx="3.5" cy="4.5" r="3.5"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
