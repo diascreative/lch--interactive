@@ -9,8 +9,11 @@ class QuickBaseComponent {
   }
 
   $onInit() {
-    this.startDate = new Date(2016, 9, 25);
-    this.endDate = new Date(2016, 10, 1);
+    this.startDate = new Date();
+    this.endDate = new Date();
+
+    this.endDate.setDate(this.endDate.getDate() - 1);
+    this.startDate.setDate(this.endDate.getDate() - 7);
   }
 
   downloadCSV() {
