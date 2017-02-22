@@ -40,12 +40,15 @@ function queryGetData(req) {
     }],
     where: {
       $and: [
-        {'date': { lt: endDate }},
-        {'date': { gte: startDate }}
+        { 'date': { lt: endDate } },
+        { 'date': { gte: startDate } }
       ]
     },
-    order: 'date ASC'
-  })
+    order: [
+      ['date', 'ASC'],
+      [Installation, 'quickbase', 'ASC']
+    ]
+  });
 }
 
 function parseData(req, res) {
