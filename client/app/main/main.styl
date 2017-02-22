@@ -442,6 +442,34 @@ $animation-timing = .3s
         top auto
         width 26px
 
+  &.solar-thermal
+    .map-popup__capacity
+      color #F6A623
+
+      .large-text
+        border-bottom 1px dashed #F6A623
+
+    .map-popup__icon-section
+      background rgba(#F6A623, .6)
+
+    .map-popup__icon
+      border-color #F6A623
+
+      &:after
+        animation 2.5s linear infinite thermal-waves
+        background url(../assets/images/icon--thermal-waves.svg) 50% 0 no-repeat
+        border-bottom solid 2px #9B9B9B
+        bottom 12px
+        content ''
+        height 16px
+        margin 0 0 0 -17px
+        top auto
+        width 34px
+
+      &:before
+        content url(../assets/images/icon--thermal-sun.svg)
+        margin -25px 0 0 -11px
+
 @media $tablet
   .filters
     top $header-height--tablet
@@ -449,18 +477,25 @@ $animation-timing = .3s
   .map-section
     height 'calc(100vh - %s)' % $header-height--tablet
 
+@keyframes thermal-waves
+  from
+    background-position 50% 0
+
+  to
+    background-position 50% -16px
+
 @keyframes anaerobic-content
   0%
     transform translateY(0)
 
   10%
-    transform translateY(3px)
+    transform translateY(2px)
 
   40%
-    transform translateY(3px)
+    transform translateY(2px) rotate3d(0, 0, 1, 5deg) scale(1.1)
 
   76%
-    transform translateY(0)
+    transform translateY(0) rotate3d(0, 0, 1, 5deg)
 
   100%
     transform translateY(0)
