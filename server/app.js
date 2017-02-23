@@ -18,6 +18,8 @@ if (config.seedDB) { require('./config/seed'); }
 var app = express();
 var server = http.createServer(app);
 
+app.use(require('prerender-node').set('prerenderServiceUrl', 'http://localhost:3000/').set('protocol', 'https'));
+
 require('./config/express').default(app);
 require('./routes').default(app);
 
