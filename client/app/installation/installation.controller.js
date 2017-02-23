@@ -29,6 +29,8 @@ class InstallationComponent {
       this.details = response.data;
 
       this.setPageDescription();
+
+      this.$rootScope.htmlReady();
     });
 
     this.loadGraphData();

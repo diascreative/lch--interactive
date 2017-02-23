@@ -20,7 +20,8 @@ angular.module('lowcarbonhubApp', [
   'chart.js',
   'validation.match',
   'leaflet-directive',
-  'lowcarbonhubApp.constants'
+  'lowcarbonhubApp.constants',
+  'seo'
 ])
   .run(function($filter, $rootScope) {
     /**

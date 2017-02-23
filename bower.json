@@ -22,7 +22,8 @@
     "angular-chart.js": "^1.0.2",
     "angular-socialshare": "angularjs-socialshare#^2.2.7",
     "angular-file-upload": "^2.3.4",
-    "angular-ui-notification": "^0.2.0"
+    "angular-ui-notification": "^0.2.0",
+    "angular-seo": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.0"
