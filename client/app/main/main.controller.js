@@ -172,6 +172,7 @@ class MainController {
 
   _setInstallation() {
     if (!this.$state.includes('installation')) {
+      window.prerenderReady = true;
       return;
     }
 

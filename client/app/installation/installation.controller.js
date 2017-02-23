@@ -30,7 +30,7 @@ class InstallationComponent {
 
       this.setPageDescription();
 
-      this.$rootScope.htmlReady();
+      window.prerenderReady = true;
     });
 
     this.loadGraphData();
