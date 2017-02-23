@@ -1,6 +1,15 @@
 'use strict';
 
-document.getElementById('page-description').setAttribute('content', '{{$ctrl.pageDescription()}}');
+const titles = document.getElementsByClassName('page-title');
+const descriptions = document.getElementsByClassName('page-description');
+
+for (let i = 0, length = titles.length; i < length; i++) {
+  titles[i].setAttribute('content', '{{$ctrl.pageTitle()}}');
+}
+
+for (let i = 0, length = descriptions.length; i < length; i++) {
+  descriptions[i].setAttribute('content', '{{$ctrl.pageDescription()}}');
+}
 
 angular.module('lowcarbonhubApp', [
   'ngResource',

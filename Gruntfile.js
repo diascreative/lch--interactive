@@ -465,6 +465,12 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
+      screenshot: {
+        expand: true,
+        cwd: '<%= yeoman.client %>',
+        dest: '<%= yeoman.dist %>/<%= yeoman.client %>',
+        src: ['assets/images/screenshot.*']
+      },
       dist: {
         files: [{
           expand: true,
@@ -969,7 +975,8 @@ module.exports = function (grunt) {
     'usemin',
     'inline',
     'htmlmin',
-    'realFavicon'
+    'realFavicon',
+    'copy:screenshot'
   ]);
 
   grunt.registerTask('default', [
