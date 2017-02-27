@@ -16,6 +16,13 @@ module.exports = {
       logging: true
     }
   },
+  quickbase: {
+    realm: false,
+    appToken: false,
+    username: false,
+    password: false,
+    dbid: false
+  },
   redis: {
     enabled: true,
     key: 'lch-development---'
