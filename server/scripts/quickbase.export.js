@@ -21,7 +21,7 @@ export function scheduleJobs() {
     return;
   }
 
-  console.log('schedules quickbase export jobs')
+  console.log('schedules quickbase export jobs');
   schedule.scheduleJob('45 4 * * *', exportYesterdayToQuickBase);
 }
 
@@ -75,7 +75,8 @@ function prepData(data) {
       date: item.date,
       incremental: item.incremental,
       installationId: item.Installation.quickbase[item.type],
-      performanceRatio: item.performanceRatio
+      performanceRatio: item.performanceRatio,
+      lastIndex:  item.Installation.lastIndex
     };
   });
 
@@ -104,7 +105,7 @@ function queryInstallations() {
     ],
     include: [{
       model: Installation,
-      attributes: ['quickbase']
+      attributes: ['lastIndex', 'quickbase']
     }],
     where: {
       $and: [
@@ -159,7 +160,8 @@ function apiCall(record) {
           { fid: 6, value: record.date },
           { fid: 7, value: record.incremental },
           { fid: 8, value: record.installationId },
-          { fid: 55, value: record.performanceRatio }
+          { fid: 55, value: record.performanceRatio },
+          { fid: 84, value: record.lastIndex }
         ]
       });
     });
