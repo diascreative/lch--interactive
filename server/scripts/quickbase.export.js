@@ -22,6 +22,7 @@ export function scheduleJobs() {
   }
 
   console.log('schedules quickbase export jobs');
+
   schedule.scheduleJob('45 4 * * *', exportYesterdayToQuickBase);
 }
 
@@ -76,7 +77,7 @@ function prepData(data) {
       incremental: item.incremental,
       installationId: item.Installation.quickbase[item.type],
       performanceRatio: item.performanceRatio,
-      lastIndex:  item.Installation.lastIndex
+      lastIndex:  (item.Installation.lastIndex / 1000)
     };
   });
 
