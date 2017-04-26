@@ -4,15 +4,26 @@ import request from 'request-promise';
 import schedule from 'node-schedule';
 import csv2array from '../components/csv2array';
 import { Generation, Installation, sequelize } from '../sqldb';
+import config from '../config/environment';
 
+const HASH = config.externalSites.olh.hash;
+const ROOT_URL = config.externalSites.olh.url;
 
 module.exports = {
   scheduleJobs: scheduleJobs
 };
 
 function scheduleJobs() {
+  if (!config.externalSites.olh.url ||
+      !config.externalSites.olh.hash) {
+    return;
+  }
+
+  console.log('Schedule OLH imports');
+  console.log('----------------------');
+
   // import data on server start
-  importData();
+  // importData();
 
   // import data every 15 mins
   schedule.scheduleJob('*/15 * * * *', importData);

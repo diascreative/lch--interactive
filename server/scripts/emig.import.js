@@ -3,15 +3,26 @@
 import request from 'request-promise';
 import schedule from 'node-schedule';
 import csv2array from '../components/csv2array';
-import {Generation,Installation,sequelize} from '../sqldb';
+import { Generation, Installation, sequelize } from '../sqldb';
+import config from '../config/environment';
 
 module.exports = {
   scheduleJobs: scheduleJobs
 };
 
+const LOGIN_DETAILS = config.externalSites.emig.account;
+const ROOT_URL = config.externalSites.emig.url;
+
 function scheduleJobs() {
+  if (!config.externalSites.emig.url || !config.externalSites.emig.account) {
+    return;
+  }
+
+  console.log('Schedule Emig imports');
+  console.log('----------------------');
+
   // import data on server start
-  importData();
+  // importData();
 
   // import data every 30 mins
   schedule.scheduleJob('1,31 * * * *', importData);
@@ -35,27 +46,26 @@ function importData() {
 function getEmigInstallations() {
   // our source countains emig:${emigId}
   // we need to grab the emigID from there to use in the http requests
-  return Installation
-    .findAll({
-      attributes: [
-        '_id',
-        'name',
-        [sequelize.fn('replace', sequelize.col('source'), 'emig:', ''), 'emigId'],
-        [sequelize.fn('max', sequelize.col('Generations.datetime')), 'lastUpdate']
-      ],
-      where: {
-        source: {
-          $like: 'emig:%'
-        }
-      },
-      include: [{
+  return Installation.findAll({
+    attributes: [
+      '_id',
+      'name',
+      [sequelize.fn('replace', sequelize.col('source'), 'emig:', ''), 'emigId'],
+      [sequelize.fn('max', sequelize.col('Generations.datetime')), 'lastUpdate']
+    ],
+    where: {
+      source: {
+        $like: 'emig:%'
+      }
+    },
+    include: [
+      {
         model: Generation,
         attributes: []
-      }],
-      group: [
-        '_id'
-      ]
-    });
+      }
+    ],
+    group: ['_id']
+  });
 }
 
 /**
@@ -105,7 +115,7 @@ function importInstallationsGeneration(installations) {
         importInstallationGeneration(cookie, installation);
       });
     }
-  }
+  };
 }
 
 /**
@@ -113,12 +123,12 @@ function importInstallationsGeneration(installations) {
  */
 function importInstallationGeneration(cookie, installation) {
   return request({
-      uri: `${ROOT_URL}e/readings/${installation.dataValues.emigId}.csv`,
-      headers: {
-        'Cookie': cookie
-      },
-      resolveWithFullResponse: true
-    })
+    uri: `${ROOT_URL}e/readings/${installation.dataValues.emigId}.csv`,
+    headers: {
+      Cookie: cookie
+    },
+    resolveWithFullResponse: true
+  })
     .then(parseInstallationData(installation))
     .then(storeInstallationData);
 }
@@ -145,14 +155,14 @@ function parseInstallationData(installation) {
         generated: generated,
         InstallationId: installation._id,
         InstallationName: installation.name
-      }
+      };
     });
 
     // only create object for those reading which occurred after the last import
     return parsed.filter(function(newReading) {
       return newReading && newReading.datetime > lastUpdate;
     });
-  }
+  };
 }
 
 /**
@@ -160,5 +170,6 @@ function parseInstallationData(installation) {
  */
 function storeInstallationData(data) {
   console.log('storing data!', data.length);
+
   return Generation.bulkCreate(data);
 }

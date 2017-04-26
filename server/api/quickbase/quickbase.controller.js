@@ -51,7 +51,7 @@ function queryGetData(req) {
   });
 }
 
-function parseData(req, res) {
+function parseData() {
   return function(data) {
     const list = data.map((item) => {
       const meter = item.Installation.quickbase[item.type];
@@ -66,6 +66,9 @@ function parseData(req, res) {
 
 function responsdCSV(req, res) {
   return function(data) {
-    return res.set('Content-Type', 'text/csv').set('Content-Disposition', 'attachment; filename="users.csv"').status(200).send(data);
+    return res.set('Content-Type', 'text/csv')
+      .set('Content-Disposition', 'attachment; filename="users.csv"')
+      .status(200)
+      .send(data);
   }
 }
