@@ -90,7 +90,7 @@ function prepData(data) {
  * @returns
  */
 function queryInstallations() {
-  const maxDelta = 1 * (1000 * 60 * 60 * 24);
+  const maxDelta = 2 * (1000 * 60 * 60 * 24);
   const endDate = new Date();
   endDate.setUTCHours(0, 0, 0, 0);
   const startDate = new Date(endDate - maxDelta);

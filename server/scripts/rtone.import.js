@@ -154,9 +154,8 @@ function buildUrl(installation, type = 'production', step = 'hour') {
   }
 
   if (type === 'production-radiation') {
-    // lets go back and update the last 20 days to see if we can fix some broken bits
-    // TODO: change to update the last 2 days in the future
-    const goBack = 20 * (1000 * 60 * 60 * 24);
+    // lets go back and update the last 2 days to make sure it's all up to date
+    const goBack = 2 * (1000 * 60 * 60 * 24);
     startDate = getDate(new Date(lastUpdate - goBack));
     // Get device production and radiation between dates
     url =
