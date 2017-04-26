@@ -5,8 +5,8 @@ import OLH from './olh.import';
 import RTONE from './rtone.import';
 import * as quickbase from './quickbase.export'
 
-  OLH.scheduleJobs();
 export function importAllData() {
+  OLH.scheduleJobs();
   RTONE.scheduleJobs();
   EMIG.scheduleJobs();
 }
