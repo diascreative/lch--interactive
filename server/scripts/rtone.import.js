@@ -164,6 +164,9 @@ function buildUrl(installation, type = 'production', step = 'hour') {
   }
 
   if (type === 'smart') {
+    // lets go back and update the last 2 days to make sure it's all up to date
+    const goBack = 2 * (1000 * 60 * 60 * 24);
+    startDate = getDate(new Date(lastUpdate - goBack));
     url =
       `${rootUrl}getDeviceSmartData?serialNumber=${deviceId}` +
       `&startDate=${startDate}&endDate=${endDate}&step=${step}`;
