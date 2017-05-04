@@ -22,7 +22,6 @@ export function scheduleJobs() {
   }
 
   console.log('schedules quickbase export jobs');
-
   schedule.scheduleJob('45 4 * * *', exportYesterdayToQuickBase);
 }
 
@@ -42,6 +41,7 @@ export function exportYesterdayToQuickBase() {
  * @returns Promise
  */
 function qbAuthenticate() {
+  console.log('authenticate');
   return quickbase.api('API_Authenticate', {
     username: config.quickbase.username,
     password: config.quickbase.password
@@ -55,13 +55,20 @@ function qbAuthenticate() {
  * @returns
  */
 function getInstallations(result) {
+  console.log('authentication attempted...');
   if (!result.ticket) {
+    console.log('..UNsuccessfully');
     return;
   }
 
+  console.log('..successfully');
+
   queryInstallations()
     .then(prepData)
-    .then(addRecords);
+    .then(addRecords)
+    .then((promises) => {
+      console.log(promises.length, 'records have been added');
+    });
 }
 
 /**
@@ -110,7 +117,7 @@ function queryInstallations() {
     }],
     where: {
       $and: [
-        { 'date': { lt: endDate } },
+        { 'date': { lte: endDate } },
         { 'date': { gte: startDate } }
       ]
     },
@@ -128,6 +135,7 @@ function queryInstallations() {
  * @returns Promise
  */
 function addRecords(records) {
+  console.log('check existing records');
   return Promise.all(records.map(apiCall));
 }
 
