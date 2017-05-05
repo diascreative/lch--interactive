@@ -3,7 +3,7 @@
 import request from 'request-promise';
 import schedule from 'node-schedule';
 import csv2array from '../components/csv2array';
-import { Generation, Installation, sequelize } from '../sqldb';
+import { Generation, Installation, Quickbase, sequelize } from '../sqldb';
 import config from '../config/environment';
 
 module.exports = {
@@ -23,6 +23,7 @@ function scheduleJobs() {
 
   // import data on server start
   // importData();
+  // importDailyData();
 
   // import data every 30 mins
   schedule.scheduleJob('1,31 * * * *', importData);
@@ -288,12 +289,16 @@ function parseInstallationDailyData(installation) {
     const readings = [{
       date: last3Midnights[0].date,
       incremental: last3Midnights[0].reading - last3Midnights[1].reading,
+      meterReading: last3Midnights[0].reading,
+      performanceRatio: 0,
       InstallationId: installation._id,
       type: 'generation'
     },
     {
       date: last3Midnights[1].date,
       incremental: last3Midnights[1].reading - last3Midnights[2].reading,
+      meterReading: last3Midnights[1].reading,
+      performanceRatio: 0,
       InstallationId: installation._id,
       type: 'generation'
     }];
@@ -304,5 +309,7 @@ function parseInstallationDailyData(installation) {
 
 function storeInstallationDailyData(data) {
   // TODO: store the incrementals for the last 2 days
-  console.log('done', data);
+  return Quickbase.bulkCreate(data, {
+    updateOnDuplicate: ['incremental', 'meterReading', 'performanceRatio']
+  });
 }
