@@ -22,6 +22,7 @@ export function scheduleJobs() {
   }
 
   console.log('schedules quickbase export jobs');
+  // exportYesterdayToQuickBase();
   schedule.scheduleJob('45 4 * * *', exportYesterdayToQuickBase);
 }
 
@@ -84,7 +85,7 @@ function prepData(data) {
       incremental: item.incremental,
       installationId: item.Installation.quickbase[item.type],
       performanceRatio: item.performanceRatio,
-      lastIndex:  (item.Installation.lastIndex / 1000)
+      meterReading:  (item.meterReading / 1000)
     };
   });
 
@@ -109,11 +110,12 @@ function queryInstallations() {
       [sequelize.fn('date_format', sequelize.col('date'), '%d/%m/%Y'), 'date'],
       'incremental',
       'type',
-      'performanceRatio'
+      'performanceRatio',
+      'meterReading'
     ],
     include: [{
       model: Installation,
-      attributes: ['lastIndex', 'quickbase']
+      attributes: ['quickbase']
     }],
     where: {
       $and: [
@@ -170,7 +172,7 @@ function apiCall(record) {
           { fid: 7, value: record.incremental },
           { fid: 8, value: record.installationId },
           { fid: 55, value: record.performanceRatio },
-          { fid: 84, value: record.lastIndex }
+          { fid: 84, value: record.meterReading }
         ]
       });
     });

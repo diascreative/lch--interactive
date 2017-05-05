@@ -349,6 +349,14 @@ function parseTotalGenerationData(installation) {
           lastIndex: lastIndex
         });
       }
+
+      Quickbase.bulkCreate([{
+        date: new Date(data.lastIndexDate).setUTCHours(0, 0, 0, 0),
+        meterReading: installation.lastIndex,
+        InstallationId: installation._id
+      }], {
+        updateOnDuplicate: ['meterReading']
+      });
     }
 
     return installation;
