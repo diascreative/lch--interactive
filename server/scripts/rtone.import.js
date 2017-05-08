@@ -19,6 +19,16 @@ function scheduleJobs() {
     return;
   }
 
+  // const TEST = {
+  //   _id: 216057754,
+  //   source: 'rtone',
+  //   dataValues: {lastUpdate: '2017-04-28 00:00:00'}
+  // }
+
+  // console.log(buildUrl(TEST, 'total'));
+  // // console.log(buildUrl(TEST, 'smart'));
+  // return;
+
   // import data on server start
   // quickBase();
   // importData();
@@ -350,11 +360,27 @@ function parseTotalGenerationData(installation) {
         });
       }
 
-      Quickbase.bulkCreate([{
-        date: new Date(data.lastIndexDate).setUTCHours(0, 0, 0, 0),
-        meterReading: installation.lastIndex,
-        InstallationId: installation._id
-      }], {
+      const qbReadings = [];
+
+      if (installation.quickbase.generation) {
+        qbReadings.push({
+          date: new Date(data.lastIndexDate).setUTCHours(0, 0, 0, 0),
+          meterReading: installation.lastIndex,
+          InstallationId: installation._id,
+          type: 'generation'
+        });
+      }
+
+      if (installation.quickbase.export) {
+        qbReadings.push({
+          date: new Date(data.lastIndexDate).setUTCHours(0, 0, 0, 0),
+          meterReading: installation.lastIndex,
+          InstallationId: installation._id,
+          type: 'export'
+        });
+      }
+
+      Quickbase.bulkCreate(qbReadings, {
         updateOnDuplicate: ['meterReading']
       });
     }
