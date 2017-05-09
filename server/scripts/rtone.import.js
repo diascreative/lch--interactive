@@ -248,7 +248,7 @@ function importQuickBaseData(installation) {
         // Date (in QB) = measureDate
         // Incremental Reading (QB) = measure/1000
         // Performance Ratio (QB) = (measure/[meter capacity])/radiation
-        const incrementalReading = item.measure / 1000;
+        const incrementalReading = item.measure;
         const performanceRatio = item.radiation && item.radiation / 1 !== 0 ?
           1000 * (item.measure / installation.capacity / item.radiation) :
           0;
@@ -279,7 +279,7 @@ function importQuickBaseData(installation) {
           // }
           // Date (in QB) = measureDate
           // Incremental Reading (QB) = out1/1000
-          const incrementalReading = item.out1 / 1000;
+          const incrementalReading = item.out1;
           // add the installation id for storing it
           return {
             date: item.measureDate.replace('T00', ' 00'),
