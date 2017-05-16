@@ -29,7 +29,7 @@ function scheduleJobs() {
   schedule.scheduleJob('1,31 * * * *', importData);
 
   // import daily data every day
-  schedule.scheduleJob('19 8 * * *', importDailyData);
+  schedule.scheduleJob('19 6 * * *', importDailyData);
 }
 
 /**

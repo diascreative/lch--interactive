@@ -23,7 +23,8 @@ export function scheduleJobs() {
 
   console.log('schedules quickbase export jobs');
   // exportYesterdayToQuickBase();
-  schedule.scheduleJob('45 4 * * *', exportYesterdayToQuickBase);
+  // exportYesterdayToQuickBase();
+  schedule.scheduleJob('0 7 * * *', exportYesterdayToQuickBase);
 }
 
 /**
@@ -149,6 +150,8 @@ function addRecords(records) {
  * @returns
  */
 function apiCall(record) {
+  console.log('calling API for', JSON.stringify(record));
+
   return quickbase.api('API_DoQuery', {
     dbid: config.quickbase.dbid,
     query: `{6.IR.'${record.date}'}AND{8.CT.'${record.installationId}'}`
