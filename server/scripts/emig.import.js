@@ -274,7 +274,7 @@ function parseInstallationDailyData(installation) {
         // instead of a string and kWh
         const dateString = reading[9] + ' GMT';
         const readingDate = new Date(Date.parse(dateString));
-        const totalReading = parseInt(reading[10], 10) * 1000;
+        const totalReading = parseFloat(reading[10], 10) * 1000;
 
         return {
           date: readingDate,

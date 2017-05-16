@@ -12,8 +12,8 @@ export default function(sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.DATE
     },
-    incremental: DataTypes.FLOAT,
-    meterReading: DataTypes.FLOAT,
+    incremental: DataTypes.INTEGER,
+    meterReading: DataTypes.INTEGER,
     type: DataTypes.ENUM('generation', 'export'),
     performanceRatio:DataTypes.FLOAT
   }, {
