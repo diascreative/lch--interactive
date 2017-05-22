@@ -23,13 +23,13 @@ function scheduleJobs() {
 
   // import data on server start
   // importData();
-  // importDailyData();
+  importDailyData();
 
   // import data every 30 mins
   schedule.scheduleJob('1,31 * * * *', importData);
 
   // import daily data every day
-  schedule.scheduleJob('19 6 * * *', importDailyData);
+  schedule.scheduleJob('25 8 * * *', importDailyData);
 }
 
 /**
@@ -104,6 +104,8 @@ function beginMigration(installations) {
  * Bring in the data
  */
 function storeDailyProduction(installations) {
+  console.log(`Importing emig daily date for ${installations.length} instalaltions`);
+
   if (installations) {
     return logIn()
       .then(importDailyProduction(installations))
@@ -201,6 +203,8 @@ function storeInstallationData(data) {
 
 function importDailyProduction(installations) {
   return function(res) {
+    console.log(`Emig: Logged in reponse is : ${res.statusCode}`);
+
     if (res.statusCode === 302) {
       const cookie = res.response.headers['set-cookie'][0].split(';')[0];
 
@@ -215,6 +219,8 @@ function importDailyProduction(installations) {
  * Parse each CSV and store its data for the historical generation
  */
 function importInstallationDaily(cookie, installation) {
+  console.log(`Emig: make the GET request for installation with id : ${installation._id}`);
+
   return request({
     uri: `${ROOT_URL}e/readings/reverse/${installation.dataValues.emigId}.csv`,
     headers: {
@@ -230,6 +236,8 @@ function importInstallationDaily(cookie, installation) {
  * Parse the CSV response and create a new object to store in Generations
  */
 function parseInstallationDailyData(installation) {
+  console.log(`Emig: parse GET request for installation with id : ${installation._id}`);
+
   return function(data) {
     const newData = csv2array.parse(data.body);
 
@@ -310,6 +318,9 @@ function parseInstallationDailyData(installation) {
 }
 
 function storeInstallationDailyData(data) {
+  console.log(`Emig: store data.`);
+  console.log(`Emig: there are ${data.length} new data points`);
+
   // TODO: store the incrementals for the last 2 days
   return Quickbase.bulkCreate(data, {
     updateOnDuplicate: ['incremental', 'meterReading', 'performanceRatio']
