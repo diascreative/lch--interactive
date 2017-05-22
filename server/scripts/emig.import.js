@@ -23,7 +23,7 @@ function scheduleJobs() {
 
   // import data on server start
   // importData();
-  importDailyData();
+  // importDailyData();
 
   // import data every 30 mins
   schedule.scheduleJob('1,31 * * * *', importData);
