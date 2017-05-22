@@ -37,13 +37,14 @@ function scheduleJobs() {
   console.log('Schedule Rtone imports');
   console.log('----------------------');
 
-  schedule.scheduleJob('45 3 * * *', quickBase);
+  // Remember that our data are updated twice a day between 00:00 and 02:00 GMT and 12:00 and 14:00 GMT, so you don't need to perform a lot off calls every day.
+  schedule.scheduleJob('15 4,16 * * *', importData);
 
   // import total generation for installations
-  schedule.scheduleJob('30 3 * * *', importTotalGeneration);
+  schedule.scheduleJob('30 4 * * *', importTotalGeneration);
 
-  // Remember that our data are updated twice a day between 00:00 and 02:00 GMT and 12:00 and 14:00 GMT, so you don't need to perform a lot off calls every day.
-  schedule.scheduleJob('0 3, 15 * * *', importData);
+  // import the quickbase data
+  schedule.scheduleJob('45 4 * * *', quickBase);
 }
 
 function importTotalGeneration() {
@@ -94,7 +95,7 @@ function beginMigration(installations) {
   installations.forEach(function(installation, index) {
     setTimeout(function() {
       importInstallationGeneration(installation);
-    }, 1000 * index);
+    }, 3000 * index);
   });
 }
 
@@ -104,7 +105,7 @@ function importTotal(installations) {
   installations.forEach(function(installation, index) {
     setTimeout(function() {
       importInstallationTotalGeneration(installation);
-    }, 1000 * index);
+    }, 3000 * index);
   });
 }
 
