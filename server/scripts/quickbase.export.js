@@ -24,7 +24,7 @@ export function scheduleJobs() {
   console.log('schedules quickbase export jobs');
   // exportYesterdayToQuickBase();
   // exportYesterdayToQuickBase();
-  schedule.scheduleJob('0 7 * * *', exportYesterdayToQuickBase);
+  schedule.scheduleJob('0 9 * * *', exportYesterdayToQuickBase);
 }
 
 /**
