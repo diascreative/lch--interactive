@@ -83,10 +83,10 @@ function prepData(data) {
   const list = data.map((item) => {
     return {
       date: item.date,
-      incremental: (item.incremental / 1000),
+      incremental: item.incremental ? (item.incremental / 1000) : 0,
       installationId: item.Installation.quickbase[item.type],
       performanceRatio: item.performanceRatio,
-      meterReading:  (item.meterReading / 1000)
+      meterReading:  item.meterReading ? (item.meterReading / 1000) : 0
     };
   });
 
