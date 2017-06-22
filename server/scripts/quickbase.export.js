@@ -85,7 +85,7 @@ function prepData(data) {
       date: item.date,
       incremental: item.incremental ? (item.incremental / 1000) : 0,
       installationId: item.Installation.quickbase[item.type],
-      performanceRatio: item.performanceRatio,
+      performanceRatio: item.performanceRatio ? item.performanceRatio : 0,
       meterReading:  item.meterReading ? (item.meterReading / 1000) : 0
     };
   });
