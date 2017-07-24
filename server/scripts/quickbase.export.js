@@ -154,7 +154,7 @@ function apiCall(record) {
 
   return quickbase.api('API_DoQuery', {
     dbid: config.quickbase.dbid,
-    query: `{6.IR.'${record.date}'}AND{44.EX.'false'}AND{8.CT.'${record.installationId}'}`
+    query: `{6.IR.'${record.date}'}AND{44.EX.'false'}AND{8.TV.'${record.installationId}'}`
   })
     .then((res) => {
       if (res.table.records.length) {
