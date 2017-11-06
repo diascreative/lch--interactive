@@ -39,7 +39,9 @@ function scheduleJobs() {
 function importData() {
   console.log('Import from Emig', new Date());
 
-  return getEmigInstallations().catch(handleSqlError).then(beginMigration);
+  return getEmigInstallations()
+    .catch(handleSqlError)
+    .then(beginMigration);
 }
 
 /**
@@ -239,79 +241,101 @@ function parseInstallationDailyData(installation) {
   console.log(`Emig: parse GET request for installation with id : ${installation._id}`);
 
   return function(data) {
-    const newData = csv2array.parse(data.body);
+    const rows = csv2array.parse(data.body);
 
     // we want to update this for the last 2 days - to make sure any fixes in 24h were missed
     // the script will run in the morning
-    // so the enddate is the start of today
+    // so the end date is the start of today
     const startToday = new Date();
     startToday.setUTCHours(0, 0, 0, 0);
+    const tomorrow = new Date(startToday.getTime() + 24 * 60 * 60 * 1000);
 
     // the first reading for yesterday
     const startYesterday = new Date();
     startYesterday.setDate(startYesterday.getDate() - 1);
     startYesterday.setUTCHours(0, 0, 0, 0);
 
-    // the first reading for the day before yesterdya
+    // the first reading for the day before yesterday
     const startDayBeforeYesterday = new Date();
     startDayBeforeYesterday.setDate(startDayBeforeYesterday.getDate() - 2);
     startDayBeforeYesterday.setUTCHours(0, 0, 0, 0);
 
-    const last3Midnights = newData
-      .filter(function(reading) {
-        if (reading.length < 9) {
-          // remove if we have fewer than 9 columns
-          return false;
-        }
 
-        if (reading[9].indexOf('00:00') < 0) {
-          // remove if it's not a midnight reading
-          return false;
-        }
-
+    const last3Midnights = rows
+      // remove if we have fewer than 9 columns
+      .filter(reading => reading.length > 9)
+      // lets build objects with proper dates and days
+      .map(reading => {
         // make sure the midnight reading is between last midnight and 2 nights ago
         const dateString = reading[9] + ' GMT';
         const readingDate = new Date(Date.parse(dateString));
-
-        return (
-          readingDate >= startDayBeforeYesterday && readingDate <= startToday
-        );
-      })
-      .map(reading => {
-        // clean up the row to use Date time objects and return the reading as Wh
-        // instead of a string and kWh
-        const dateString = reading[9] + ' GMT';
-        const readingDate = new Date(Date.parse(dateString));
+        const dayDate = new Date(Date.parse(dateString));
         const totalReading = parseFloat(reading[10], 10) * 1000;
 
         return {
           date: readingDate,
+          day: dayDate.setUTCHours(0, 0, 0, 0),
           reading: totalReading
         };
-      });
+      })
+      // only get the readings from the last 3 days
+      .filter(row => row.day >= startDayBeforeYesterday)
+      // group the readings by their day
+      .reduce((acc, row) => {
+        if (!acc[row.day]) {
+          acc[row.day] = {
+            last: {
+              date: 0
+            },
+            first: {
+              date: tomorrow
+            }
+          };
+        }
 
-    if (last3Midnights.length !== 3) {
-      // something bad's happened, we don't want to parse this data
+        // if the last reading for this day is before the row's day... update it!
+        if (acc[row.day].last.date < row.day) {
+          acc[row.day].last = Object.assign({}, row);
+        }
+
+        // if the first reading for this day is after the row's day... update it!
+        if (acc[row.day].first.date > row.day) {
+          acc[row.day].first = Object.assign({}, row);
+        }
+
+        return acc;
+      }, {});
+
+    const firstReadingsOfLastDays = [];
+
+    for (let date in last3Midnights) {
+      firstReadingsOfLastDays.push(last3Midnights[date].first);
+    }
+
+    if (firstReadingsOfLastDays.length !== 3) {
+      // something bad has happened, we don't want to parse this data
       return false;
     }
 
     // build the readings to be stored for the last 2 days
-    const readings = [{
-      date: last3Midnights[0].date,
-      incremental: last3Midnights[0].reading - last3Midnights[1].reading,
-      meterReading: last3Midnights[0].reading,
-      performanceRatio: 0,
-      InstallationId: installation._id,
-      type: 'generation'
-    },
-    {
-      date: last3Midnights[1].date,
-      incremental: last3Midnights[1].reading - last3Midnights[2].reading,
-      meterReading: last3Midnights[1].reading,
-      performanceRatio: 0,
-      InstallationId: installation._id,
-      type: 'generation'
-    }];
+    const readings = [
+      {
+        date: firstReadingsOfLastDays[0].date,
+        incremental: firstReadingsOfLastDays[0].reading - firstReadingsOfLastDays[1].reading,
+        meterReading: firstReadingsOfLastDays[0].reading,
+        performanceRatio: 0,
+        InstallationId: installation._id,
+        type: 'generation'
+      },
+      {
+        date: firstReadingsOfLastDays[1].date,
+        incremental: firstReadingsOfLastDays[1].reading - firstReadingsOfLastDays[2].reading,
+        meterReading: firstReadingsOfLastDays[1].reading,
+        performanceRatio: 0,
+        InstallationId: installation._id,
+        type: 'generation'
+      }
+    ];
 
     return readings;
   };
