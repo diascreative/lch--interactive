@@ -103,6 +103,7 @@ function queryInstallations() {
   const endDate = new Date();
   endDate.setUTCHours(0, 0, 0, 0);
   const startDate = new Date(endDate - maxDelta);
+  endDate.setUTCHours(0, 59, 0, 0);
 
   return Quickbase.findAll({
     attributes: [
